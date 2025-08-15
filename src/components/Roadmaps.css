@@ -434,9 +434,10 @@
   backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 20px;
+  padding-top: 120px; /* Add space from top for desktop to avoid header */
   /* Prevent any scrolling within overlay */
   overflow: hidden;
   /* Ensure it covers the entire viewport */
@@ -452,7 +453,7 @@
   border-radius: 25px;
   max-width: 600px;
   width: 100%;
-  max-height: 80vh;
+  max-height: calc(100vh - 160px); /* Adjusted for desktop padding-top */
   overflow-y: auto;
   overflow-x: hidden;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
@@ -785,6 +786,7 @@
 
   .node-modal-overlay {
     padding: 10px;
+    padding-bottom: 40px; /* Add bottom spacing to prevent touching screen bottom */
     align-items: flex-start;
     justify-content: center;
     padding-top: 80px; /* Increased from 60px to move modal down */
@@ -792,7 +794,7 @@
 
   .node-modal {
     margin: 0;
-    max-height: calc(100vh - 100px); /* Adjusted to maintain bottom spacing */
+    max-height: calc(100vh - 140px); /* Adjusted for both top and bottom spacing */
     border-radius: 20px;
     width: calc(100% - 20px);
   }
@@ -939,6 +941,7 @@
 
   .node-modal-overlay {
     padding: 5px;
+    padding-bottom: 50px; /* Add bottom spacing to prevent touching screen bottom */
     align-items: flex-start;
     justify-content: center;
     padding-top: 90px; /* Increased from 70px to move modal down */
@@ -946,7 +949,7 @@
 
   .node-modal {
     margin: 0;
-    max-height: calc(100vh - 110px); /* Adjusted to maintain bottom spacing */
+    max-height: calc(100vh - 160px); /* Adjusted for both top and bottom spacing */
     border-radius: 15px;
     width: calc(100% - 10px);
   }
