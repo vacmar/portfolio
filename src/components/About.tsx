@@ -156,7 +156,7 @@ const About: React.FC = () => {
                 onClick={() => {
                   try {
                     const link = document.createElement('a');
-                    link.href = '/resume.pdf';
+                    link.href = '/Vaaheesan-Resume.pdf';
                     link.download = 'Vaaheesan-Resume.pdf';
                     link.target = '_blank';
                     document.body.appendChild(link);
@@ -165,7 +165,7 @@ const About: React.FC = () => {
                   } catch (error) {
                     console.error('Error downloading resume:', error);
                     // Fallback: open in new tab
-                    window.open('/resume.pdf', '_blank');
+                    window.open('/Vaaheesan-Resume.pdf', '_blank');
                   }
                 }}
               >

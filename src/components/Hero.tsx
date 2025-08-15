@@ -154,7 +154,7 @@ const Hero: React.FC = () => {
               onClick={async () => {
                 try {
                   // Check if resume file exists
-                  const response = await fetch('/resume.pdf');
+                  const response = await fetch('/Vaaheesan-Resume.pdf');
                   if (!response.ok) {
                     // If file doesn't exist, show a message
                     alert('Resume is currently being updated. Please contact me directly for the latest version!');

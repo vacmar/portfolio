@@ -110,7 +110,7 @@ export const API_ENDPOINTS = {
 // File paths and assets
 export const ASSETS = {
   profile: '/src/assets/profile.jpg',
-  resume: '/resume.pdf',
+  resume: '/Vaaheesan-Resume.pdf',
   music: '/music/ambient-focus.mp3'
 };
 

@@ -103,16 +103,14 @@ const Header: React.FC = () => {
     
     try {
       const link = document.createElement('a');
-      link.href = '/resume.pdf';
+      link.href = '/Vaaheesan-Resume.pdf';
       link.download = 'Vaaheesan-Resume.pdf';
       link.style.display = 'none'; // Hide the link
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      console.log('Resume download initiated with filename: Vaaheesan-Resume.pdf');
     } catch (error) {
-      console.error('Download failed, using fallback:', error);
-      window.open('/resume.pdf', '_blank');
+      window.open('/Vaaheesan-Resume.pdf', '_blank');
     }
   };
 

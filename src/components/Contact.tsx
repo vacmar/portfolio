@@ -128,7 +128,7 @@ const Contact: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => {
                 const link = document.createElement('a');
-                link.href = '/resume.pdf';
+                link.href = '/Vaaheesan-Resume.pdf';
                 link.download = 'Vaaheesan-Resume.pdf';
                 link.click();
               }}
