@@ -1,0 +1,162 @@
+@import './styles/utilities.css';
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Portfolio Color Scheme - Black and Lavender */
+  --primary-black: #000000;
+  --secondary-black: #1a1a1a;
+  --tertiary-black: #2a2a2a;
+  --primary-lavender: #8B5CF6;
+  --secondary-lavender: #A78BFA;
+  --tertiary-lavender: #C4B5FD;
+  --lavender-glow: rgba(139, 92, 246, 0.2);
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a1a1a1;
+
+  color: var(--text-primary);
+  background-color: var(--primary-black);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+  overflow-x: hidden;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-lavender);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-lavender);
+  text-shadow: 0 0 8px var(--lavender-glow);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2.4em;
+  line-height: 1.2;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.8em;
+  line-height: 1.3;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+button {
+  border-radius: 12px;
+  border: 2px solid var(--primary-lavender);
+  padding: 0.8em 1.6em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background: linear-gradient(45deg, var(--primary-lavender), var(--secondary-lavender));
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--lavender-glow);
+  border-color: var(--secondary-lavender);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--tertiary-lavender);
+  outline-offset: 2px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-lavender);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-lavender);
+}
+
+/* Selection Styling */
+::selection {
+  background: var(--lavender-glow);
+  color: var(--text-primary);
+}
+
+/* Glow Animation Utilities */
+.glow-text {
+  text-shadow: 0 0 10px var(--lavender-glow);
+}
+
+.glow-border {
+  box-shadow: 0 0 20px var(--lavender-glow);
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
