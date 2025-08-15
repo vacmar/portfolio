@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer';
 import type { Variants } from 'framer-motion';
 import { useIsMobile } from '../hooks';
+import { useScrollLock } from '../hooks';
 import { ANIMATION_VARIANTS, TRANSITIONS } from '../constants';
 import './Roadmaps.css';
 
@@ -33,6 +34,7 @@ const Roadmaps: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const { lockScroll, unlockScroll } = useScrollLock();
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -113,6 +115,20 @@ const Roadmaps: React.FC = () => {
     setVisibleItems(new Set());
   }, [filter]);
 
+  // Disable body scrolling when modal is open
+  useEffect(() => {
+    if (selectedItem) {
+      lockScroll();
+    } else {
+      unlockScroll();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      unlockScroll();
+    };
+  }, [selectedItem, lockScroll, unlockScroll]);
+
   const timelineItems: TimelineItem[] = [
     // Learning Journey
     {
@@ -123,7 +139,7 @@ const Roadmaps: React.FC = () => {
       type: 'learning',
       category: 'Frontend',
       skills: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design', 'Flexbox', 'Grid'],
-      duration: '3 months',
+      duration: '10 months',
       date: 'Jan 2024',
       position: { x: 15, y: 10 },
       connections: [2, 3]
@@ -137,7 +153,7 @@ const Roadmaps: React.FC = () => {
       category: 'Frontend',
       skills: ['React', 'Redux', 'React Router', 'Hooks', 'Context API', 'JSX'],
       duration: '4 months',
-      date: 'Apr 2024',
+      date: 'Nov 2024',
       position: { x: 35, y: 15 },
       connections: [4, 5]
     },
@@ -150,7 +166,7 @@ const Roadmaps: React.FC = () => {
       category: 'Design',
       skills: ['Tailwind CSS', 'Framer Motion', 'SCSS', 'CSS Animations', 'Material-UI'],
       duration: '2 months',
-      date: 'Mar 2024',
+      date: 'Jan 2025',
       position: { x: 25, y: 25 },
       connections: [4]
     },
@@ -163,7 +179,7 @@ const Roadmaps: React.FC = () => {
       category: 'Language',
       skills: ['TypeScript', 'Type Systems', 'Generics', 'Interfaces', 'Advanced Types'],
       duration: '3 months',
-      date: 'Jul 2024',
+      date: 'Mar 2025',
       position: { x: 55, y: 20 },
       connections: [6, 7]
     },
@@ -176,7 +192,7 @@ const Roadmaps: React.FC = () => {
       category: 'Backend',
       skills: ['Node.js', 'Express', 'Django', 'RESTful APIs', 'Authentication'],
       duration: '6 months',
-      date: 'Oct 2024',
+      date: 'Jun 2025',
       position: { x: 15, y: 40 },
       connections: [8, 9]
     },
@@ -184,7 +200,7 @@ const Roadmaps: React.FC = () => {
       id: 6,
       title: "Database Systems",
       description: "SQL and NoSQL databases, data modeling, and optimization techniques",
-      status: 'current',
+      status: 'completed',
       type: 'learning',
       category: 'Database',
       skills: ['PostgreSQL', 'MongoDB', 'Redis', 'Database Design', 'Query Optimization'],
@@ -204,12 +220,11 @@ const Roadmaps: React.FC = () => {
       category: 'Full-Stack App',
       skills: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'Socket.io'],
       techStack: ['React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'Socket.io', 'JWT'],
-      features: ['Workout Tracking', 'Social Feed', 'Real-time Chat', 'Progress Analytics', 'Nutrition Tracking'],
-      duration: '4 months',
-      date: 'Dec 2024',
-      progress: 65,
-      github: 'https://github.com/yourusername/elevatr',
-      demo: 'https://elevatr-demo.vercel.app',
+      features: ['Auth System', 'User Roles', 'Profiles Mgmt', 'Job Posts', 'Bookmarks', 'Resume Upload'],
+      duration: '8 months',
+      date: 'May 2025',
+      progress: 26,
+      github: 'https://github.com/vacmar/elevatr',
       position: { x: 45, y: 50 },
       connections: [8, 11]
     },
@@ -217,15 +232,16 @@ const Roadmaps: React.FC = () => {
       id: 8,
       title: "Spendly",
       description: "Smart expense tracking and budget management application",
-      status: 'planned',
+      status: 'current',
       type: 'project',
       category: 'Financial App',
       skills: ['React Native', 'TypeScript', 'Node.js', 'PostgreSQL', 'Chart.js'],
       techStack: ['React Native', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Chart.js', 'Plaid API'],
       features: ['Expense Tracking', 'Budget Planning', 'Financial Analytics', 'Receipt Scanning', 'Bank Integration'],
-      duration: '3 months',
-      date: 'Mar 2025',
-      progress: 0,
+      duration: '8 months',
+      date: 'May 2025',
+      progress: 30,
+      github: 'https://github.com/vacmar/spendly',
       position: { x: 25, y: 65 },
       connections: [9, 12]
     },
@@ -256,7 +272,7 @@ const Roadmaps: React.FC = () => {
       category: 'DevOps',
       skills: ['Docker', 'AWS', 'CI/CD', 'Kubernetes', 'Terraform'],
       duration: '5 months',
-      date: 'Feb 2025',
+      date: 'Sept 2025',
       position: { x: 85, y: 55 },
       connections: [11, 12]
     },
@@ -267,9 +283,9 @@ const Roadmaps: React.FC = () => {
       status: 'planned',
       type: 'learning',
       category: 'Mobile',
-      skills: ['React Native', 'Expo', 'Mobile UI/UX', 'App Store Deployment'],
-      duration: '4 months',
-      date: 'May 2025',
+      skills: ['React Native', 'Kotlin', 'Expo', 'Mobile UI/UX', 'App Store Deployment'],
+      duration: '6 months',
+      date: 'Jan 2026',
       position: { x: 35, y: 80 },
       connections: [13]
     },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useScrolled, useMenuToggle, useSmoothScroll } from '../hooks';
+import { useScrolled, useMenuToggle, useSmoothScroll, useIsMobile, useScrollLock } from '../hooks';
 import { NAV_ITEMS, ANIMATION_VARIANTS, TRANSITIONS } from '../constants';
 import './Header.css';
 
@@ -8,7 +8,8 @@ const Header: React.FC = () => {
   const isScrolled = useScrolled(50);
   const { isOpen: isMenuOpen, toggleMenu, closeMenu } = useMenuToggle();
   const { scrollToElement } = useSmoothScroll();
-  const [activeSection, setActiveSection] = useState('hero'); // Fixed: Changed from 'home' to 'hero'
+  const { lockScroll, unlockScroll } = useScrollLock();
+  const [activeSection, setActiveSection] = useState('home'); // Fixed: Changed from 'hero' to 'home'
 
   useEffect(() => {
     // Detect active section based on scroll position
@@ -19,21 +20,35 @@ const Header: React.FC = () => {
         requestAnimationFrame(() => {
           const sections = NAV_ITEMS.map(item => item.id);
           
-          // Special handling for hero section when at top
-          if (window.scrollY < 100) {
-            setActiveSection('hero');
+          // Special handling for home section when at top
+          if (window.scrollY < 200) {
+            setActiveSection('home');
             ticking = false;
             return;
           }
           
-          const currentSection = sections.find(sectionId => {
+          // Find the section that's currently in the "active zone"
+          let currentSection = null;
+          
+          sections.forEach(sectionId => {
             const element = document.getElementById(sectionId);
             if (element) {
               const rect = element.getBoundingClientRect();
-              const headerOffset = 80; // Account for fixed header height
-              return rect.top <= headerOffset && rect.bottom >= headerOffset;
+              const headerHeight = 60; // Reduced from 100 to 60
+              
+              // A section is active if its content area is in the viewport
+              // We want the section to be active when its content starts showing below the header
+              const sectionTop = rect.top;
+              const sectionBottom = rect.bottom;
+              
+              // Section is active if:
+              // 1. Section top is above the header and bottom is below the header (section spans the trigger point)
+              // 2. Or section top is within a reasonable distance below the header (about to become visible)
+              if ((sectionTop <= headerHeight && sectionBottom >= headerHeight) ||
+                  (sectionTop > headerHeight && sectionTop <= headerHeight + 50)) {
+                currentSection = sectionId;
+              }
             }
-            return false;
           });
           
           if (currentSection) {
@@ -53,15 +68,33 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock/unlock scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      lockScroll();
+    } else {
+      unlockScroll();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      unlockScroll();
+    };
+  }, [isMenuOpen, lockScroll, unlockScroll]);
+
   const handleNavClick = (id: string) => {
-    // Close menu immediately (synchronously)
-    closeMenu();
+    // Set active section immediately to show correct state
     setActiveSection(id);
     
-    // Small delay to allow menu to start closing before scroll
-    setTimeout(() => {
-      scrollToElement(id, 80);
-    }, 50); // 50ms delay to let the close animation start
+    // Close menu immediately (synchronously)
+    closeMenu();
+    
+    // Use requestAnimationFrame to ensure DOM updates before scrolling
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        scrollToElement(id, 60); // Reduced offset from 100 to 60
+      }, isMenuOpen ? 100 : 0); // Longer delay if menu is open
+    });
   };
 
   const downloadResume = () => {

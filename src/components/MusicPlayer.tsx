@@ -24,7 +24,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
     const startMusic = async () => {
       try {
         setHasAttempted(true);
-        audio.volume = 0.1; // 30% volume for ambient background
+        audio.volume = 1; // 100% volume for ambient background
         audio.loop = true;
         
         await audio.play();

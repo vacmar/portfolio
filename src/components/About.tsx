@@ -232,7 +232,7 @@ const About: React.FC = () => {
                 <h4>{education.degree}</h4>
                 <p className="college-name">{education.college}</p>
                 <p className="duration">{education.duration}</p>
-                <p className="cgpa">CGPA: {education.cgpa}</p>
+                <p className="cgpa">CGPA: {education.cgpa} ( Till 4th Sem )</p>
               </div>
               <div className="coursework">
                 <h5>Relevant Coursework:</h5>

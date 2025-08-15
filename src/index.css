@@ -160,3 +160,8 @@ button:focus-visible {
 .pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Scroll lock utility class */
+body.scroll-locked {
+  overflow: hidden !important;
+}

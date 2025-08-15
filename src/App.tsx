@@ -28,17 +28,27 @@ function App() {
 
   // Track scroll position to show/hide scroll to top button
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      const scrollTop = window.pageYOffset;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      
-      // Show button when user is near the bottom (within 200px)
-      const nearBottom = scrollTop + windowHeight >= documentHeight - 200;
-      setShowScrollTop(nearBottom);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollTop = window.pageYOffset;
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.scrollHeight;
+          
+          // Only show button when user is actually near the bottom AND has scrolled significantly
+          const nearBottom = scrollTop + windowHeight >= documentHeight - 200;
+          const hasScrolledDown = scrollTop > windowHeight * 1.5; // Must scroll at least 1.5 viewport heights
+          
+          setShowScrollTop(nearBottom && hasScrolledDown);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

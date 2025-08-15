@@ -162,3 +162,56 @@ export const usePrefersReducedMotion = () => {
 
   return prefersReducedMotion;
 };
+
+/**
+ * Hook to lock/unlock body scrolling (for modals, overlays, etc.)
+ */
+export const useScrollLock = () => {
+  const lockScroll = () => {
+    // Store current scroll position
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+    
+    // Store in data attributes for restoration
+    document.body.dataset.scrollY = scrollY.toString();
+    document.body.dataset.scrollX = scrollX.toString();
+    
+    // Get scrollbar width to prevent layout shift
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    // Apply overflow hidden and padding to compensate for scrollbar
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+    document.documentElement.style.overflow = 'hidden';
+    
+    // Add utility class
+    document.body.classList.add('scroll-locked');
+  };
+
+  const unlockScroll = () => {
+    // Get stored scroll position
+    const scrollY = parseInt(document.body.dataset.scrollY || '0', 10);
+    const scrollX = parseInt(document.body.dataset.scrollX || '0', 10);
+    
+    // Remove scroll lock styles
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    document.documentElement.style.overflow = '';
+    
+    // Remove utility class and data attributes
+    document.body.classList.remove('scroll-locked');
+    delete document.body.dataset.scrollY;
+    delete document.body.dataset.scrollX;
+    
+    // Restore scroll position
+    if (scrollY !== 0 || scrollX !== 0) {
+      window.scrollTo({
+        top: scrollY,
+        left: scrollX,
+        behavior: 'auto'
+      });
+    }
+  };
+
+  return { lockScroll, unlockScroll };
+};
