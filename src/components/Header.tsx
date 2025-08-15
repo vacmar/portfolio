@@ -104,7 +104,7 @@ const Header: React.FC = () => {
     try {
       const link = document.createElement('a');
       link.href = '/resume.pdf';
-      link.download = 'vaaheesan-resume.pdf';
+      link.download = 'Vaaheesan-Resume.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

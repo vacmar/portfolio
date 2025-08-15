@@ -157,7 +157,7 @@ const About: React.FC = () => {
                   try {
                     const link = document.createElement('a');
                     link.href = '/resume.pdf';
-                    link.download = 'vaaheesan-resume.pdf';
+                    link.download = 'Vaaheesan-Resume.pdf';
                     link.target = '_blank';
                     document.body.appendChild(link);
                     link.click();
