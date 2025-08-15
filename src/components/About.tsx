@@ -157,7 +157,7 @@ const About: React.FC = () => {
                   try {
                     const link = document.createElement('a');
                     link.href = '/resume.pdf';
-                    link.download = 'Vaaheesan_S_Resume.pdf';
+                    link.download = 'vaaheesan-resume.pdf';
                     link.target = '_blank';
                     document.body.appendChild(link);
                     link.click();
@@ -201,26 +201,21 @@ const About: React.FC = () => {
                         {category === 'tools' && ' & Platforms'}
                         {category === 'fundamentals' && ' & CS'}
                       </h4>
-                      <div className="skill-bars">
+                      <div className="skill-badges">
                         {skillList.map((skill, index) => (
-                          <div key={skill.name} className="skill-item">
-                            <div className="skill-info">
-                              <span className="skill-name">{skill.name}</span>
-                              <span className="skill-percentage">{skill.level}%</span>
-                            </div>
-                            <div className="skill-bar">
-                              <motion.div 
-                                className="skill-progress"
-                                initial={{ width: 0 }}
-                                animate={isVisible ? { width: `${skill.level}%` } : { width: 0 }}
-                                transition={{ 
-                                  delay: index * 0.1,
-                                  duration: 1.2,
-                                  ease: "easeOut"
-                                }}
-                              />
-                            </div>
-                          </div>
+                          <motion.div 
+                            key={skill.name} 
+                            className="skill-badge"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                            transition={{ 
+                              delay: index * 0.1,
+                              duration: 0.4,
+                              ease: "easeOut"
+                            }}
+                          >
+                            {skill.name}
+                          </motion.div>
                         ))}
                       </div>
                     </motion.div>

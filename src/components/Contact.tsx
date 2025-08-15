@@ -129,7 +129,7 @@ const Contact: React.FC = () => {
               onClick={() => {
                 const link = document.createElement('a');
                 link.href = '/resume.pdf';
-                link.download = 'Vaaheesan_S_Resume.pdf';
+                link.download = 'vaaheesan-resume.pdf';
                 link.click();
               }}
             >

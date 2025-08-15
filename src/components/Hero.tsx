@@ -175,7 +175,7 @@ const Hero: React.FC = () => {
                   // Create download link
                   const link = document.createElement('a');
                   link.href = url;
-                  link.download = 'Vaaheesan_S_Resume.pdf';
+                  link.download = 'vaaheesan-resume.pdf';
                   document.body.appendChild(link);
                   link.click();
                   

@@ -181,62 +181,51 @@
   border-radius: 2px;
 }
 
-.skill-bars {
+.skill-badges {
   display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
 }
 
-.skill-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.skill-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.skill-name {
+.skill-badge {
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 25px;
   color: var(--text-primary);
   font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.skill-percentage {
-  color: var(--primary-lavender);
-  font-weight: 700;
   font-size: 0.9rem;
-}
-
-.skill-bar {
-  height: 8px;
-  background: rgba(139, 92, 246, 0.1);
-  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: default;
+  position: relative;
   overflow: hidden;
-  position: relative;
 }
 
-.skill-progress {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary-lavender), var(--secondary-lavender));
-  border-radius: 4px;
-  position: relative;
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+.skill-badge:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
 }
 
-.skill-progress::after {
+.skill-badge::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 2s infinite;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
 }
+
+.skill-badge:hover::before {
+  left: 100%;
+}
+
+/* Skills section styles completed above */
+
+/* Contact section styles */
 
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
@@ -491,12 +480,9 @@
     font-size: 0.9rem;
   }
   
-  .skill-percentage {
+  .skill-badge {
+    padding: 0.5rem 1rem;
     font-size: 0.85rem;
-  }
-  
-  .skill-bar {
-    height: 6px;
   }
   
   .skills-grid {
@@ -554,8 +540,9 @@
     font-size: 0.75rem;
   }
   
-  .skill-bar {
-    height: 5px;
+  .skill-badge {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
   }
   
   .about-summary,

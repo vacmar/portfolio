@@ -71,7 +71,7 @@ const Header: React.FC = () => {
     try {
       const link = document.createElement('a');
       link.href = '/resume.pdf';
-      link.download = 'Resume.pdf';
+      link.download = 'vaaheesan-resume.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -94,7 +94,7 @@ const Header: React.FC = () => {
             onClick={() => handleNavClick('home')}
             whileHover={{ scale: 1.05 }}
           >
-            Portfolio
+            <img src="/VACMAR_LOGO.png" alt="VACMAR Portfolio" />
           </motion.div>
 
           {/* Desktop Navigation */}
