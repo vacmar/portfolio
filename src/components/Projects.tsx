@@ -18,7 +18,7 @@ const Projects: React.FC = () => {
   useEffect(() => {
     const observerOptions = {
       threshold: 0.3,
-      rootMargin: '100px'
+      rootMargin: '50px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -26,6 +26,13 @@ const Projects: React.FC = () => {
         const projectIndex = parseInt(entry.target.getAttribute('data-project-index') || '0');
         if (entry.isIntersecting) {
           setVisibleProjects(prev => new Set([...prev, projectIndex]));
+        } else {
+          // Allow removal for flickering effect during fast scrolling
+          setVisibleProjects(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(projectIndex);
+            return newSet;
+          });
         }
       });
     }, observerOptions);

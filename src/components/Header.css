@@ -67,6 +67,12 @@
   font-weight: 500;
   position: relative;
   overflow: hidden;
+  
+  /* Remove mobile tap highlight */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .nav-link::before {
@@ -114,6 +120,12 @@
   font-family: inherit;
   transition: all 0.3s ease;
   box-shadow: 0 2px 10px rgba(147, 51, 234, 0.3);
+  
+  /* Remove mobile tap highlight */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .resume-btn:hover {
@@ -135,6 +147,12 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  
+  /* Remove mobile tap highlight */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .menu-toggle:hover {

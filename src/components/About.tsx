@@ -25,6 +25,13 @@ const About: React.FC = () => {
         const skillGroup = entry.target.getAttribute('data-skill-group') || '';
         if (entry.isIntersecting) {
           setVisibleSkills(prev => new Set([...prev, skillGroup]));
+        } else {
+          // Allow removal for flickering effect during fast scrolling
+          setVisibleSkills(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(skillGroup);
+            return newSet;
+          });
         }
       });
     }, observerOptions);

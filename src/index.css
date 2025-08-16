@@ -30,6 +30,72 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
+  /* Remove blue tap highlight on mobile devices */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove tap highlights and callouts specifically for interactive elements */
+button, 
+a, 
+[role="button"], 
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-resume,
+.nav-link,
+.hamburger,
+.welcome-screen,
+.interaction-prompt,
+.fullscreen-prompt,
+.mobile-fullscreen-hint,
+.fullscreen-button,
+.resume-download-btn,
+.contact-link,
+.roadmap-node,
+.modal,
+[data-interactive] {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection for content areas */
+p, 
+span, 
+.hero-description,
+.about-description,
+.project-description,
+.education-text,
+.skills-text,
+input,
+textarea {
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Custom touch feedback for mobile - subtle and on-brand */
+@media (hover: none) and (pointer: coarse) {
+  button:active,
+  a:active,
+  .btn:active,
+  .nav-link:active,
+  [role="button"]:active {
+    background-color: rgba(139, 92, 246, 0.1) !important;
+    transform: scale(0.98);
+    transition: all 0.1s ease;
+  }
+  
+  .welcome-screen:active {
+    background-color: rgba(139, 92, 246, 0.05) !important;
+  }
 }
 
 html {
