@@ -195,7 +195,7 @@ const Projects: React.FC = () => {
               boxShadow: "0 0 25px var(--lavender-glow)"
             }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => window.open('https://github.com/vaaheesan', '_blank')}
+            onClick={() => window.open('https://github.com/vacmar', '_blank')}
           >
             Visit My GitHub
           </motion.button>
