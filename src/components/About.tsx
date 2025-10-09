@@ -56,8 +56,8 @@ const About: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.8,
-        staggerChildren: 0.2
+        duration: 0.5,
+        staggerChildren: 0.15
       }
     }
   };
@@ -68,7 +68,7 @@ const About: React.FC = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.5,
         ease: [0.6, -0.05, 0.01, 0.99]
       }
     }
@@ -201,7 +201,7 @@ const About: React.FC = () => {
                       data-skill-group={category}
                       initial={{ opacity: 0, y: 30 }}
                       animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
                     >
                       <h4 className="skill-group-title">
                         {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -216,8 +216,8 @@ const About: React.FC = () => {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                             transition={{ 
-                              delay: index * 0.1,
-                              duration: 0.4,
+                              delay: index * 0.08,
+                              duration: 0.3,
                               ease: "easeOut"
                             }}
                           >

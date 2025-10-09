@@ -50,7 +50,7 @@ html {
 
 /* Global transitions for page elements */
 .fade-in {
-  animation: fadeIn 0.8s ease-out;
+  animation: fadeIn 0.5s ease-out;
 }
 
 @keyframes fadeIn {
@@ -129,12 +129,12 @@ html {
   z-index: 1000;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
   padding: 0;
   margin: 0;
   outline: none;
-  animation: gentleFloat 4s ease-in-out infinite;
+  animation: gentleFloat 3s ease-in-out infinite;
 }
 
 .scroll-to-top:hover {

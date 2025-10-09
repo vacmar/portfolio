@@ -70,7 +70,7 @@ const Projects: React.FC = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.5,
         ease: "easeOut"
       }
     }
@@ -82,7 +82,7 @@ const Projects: React.FC = () => {
       scale: 1,
       opacity: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.4,
         ease: "easeOut"
       }
     }
@@ -121,7 +121,7 @@ const Projects: React.FC = () => {
                 whileHover={{
                   y: -10,
                   scale: 1.02,
-                  transition: { duration: 0.3 }
+                  transition: { duration: 0.2 }
                 }}
               >
               <div className="project-card-inner">

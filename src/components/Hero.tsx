@@ -21,9 +21,9 @@ const Hero: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.8,
-        staggerChildren: 0.2,
-        delayChildren: 0.3
+        duration: 0.5,
+        staggerChildren: 0.15,
+        delayChildren: 0.2
       }
     }
   };
@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.5,
         ease: [0.6, -0.05, 0.01, 0.99]
       }
     }
@@ -46,9 +46,9 @@ const Hero: React.FC = () => {
       scale: 1,
       opacity: 1,
       transition: {
-        duration: 1,
+        duration: 0.6,
         ease: [0.6, -0.05, 0.01, 0.99],
-        delay: 0.5
+        delay: 0.3
       }
     }
   };
@@ -59,9 +59,9 @@ const Hero: React.FC = () => {
       scale: 1,
       opacity: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.4,
         ease: [0.6, -0.05, 0.01, 0.99],
-        delay: 1.2
+        delay: 0.8
       }
     }
   };
@@ -70,7 +70,7 @@ const Hero: React.FC = () => {
     floating: {
       y: [-10, 10, -10],
       transition: {
-        duration: 3,
+        duration: 2.5,
         repeat: Infinity,
         ease: "easeInOut"
       }
@@ -83,7 +83,7 @@ const Hero: React.FC = () => {
         className="hero-background"
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1, ease: "easeOut" }}
       >
         <div className="gradient-orb orb-1"></div>
         <div className="gradient-orb orb-2"></div>

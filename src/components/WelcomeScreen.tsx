@@ -229,8 +229,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
           animate={{ opacity: 1 }}
           exit={{ scale: 20, opacity: 0 }}
           transition={{ 
-            opacity: { duration: 0.5 },
-            scale: { duration: 1.5, ease: "easeInOut" }
+            opacity: { duration: 0.3 },
+            scale: { duration: 1, ease: "easeInOut" }
           }}
           onClick={handleInteraction}
           onTouchEnd={handleInteraction}
@@ -243,7 +243,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
               className="welcome-message"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
             >
               Welcome to my Portfolio and to Experience
               <span className="typing-cursor">|</span>
@@ -254,15 +254,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
               className="interaction-prompt"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 1.5 }}
+              transition={{ duration: 0.4, delay: 1.0 }}
             >
-              {/* Fullscreen prompt for desktop - FIRST (1.8s) */}
+              {/* Fullscreen prompt for desktop - FIRST (1.2s) */}
               {showFullscreenPrompt && isDesktop && !fullscreenAttempted && (
                 <motion.div
                   className="fullscreen-prompt"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.8 }}
+                  transition={{ duration: 0.3, delay: 1.2 }}
                 >
                   <div className="fullscreen-text">
                     Will enter fullscreen for immersive experience
@@ -273,13 +273,13 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 </motion.div>
               )}
               
-              {/* Universal fullscreen hint for mobile - FIRST (1.8s) */}
+              {/* Universal fullscreen hint for mobile - FIRST (1.2s) */}
               {!isDesktop && !fullscreenAttempted && (
                 <motion.div
                   className="mobile-fullscreen-hint"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.8 }}
+                  transition={{ duration: 0.3, delay: 1.2 }}
                 >
                   <div className="mobile-hint-text">
                     Will attempt immersive mode for best experience
@@ -287,17 +287,17 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                 </motion.div>
               )}
               
-              {/* Ambient audio alert - SECOND (2.2s) */}
+              {/* Ambient audio alert - SECOND (1.5s) */}
               <motion.div
                 className="audio-alert"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 2.2 }}
+                transition={{ duration: 0.3, delay: 1.5 }}
               >
                 (ambient audio alert)
               </motion.div>
               
-              {/* Interact to start - THIRD/LAST (2.6s) */}
+              {/* Interact to start - THIRD/LAST (1.8s) */}
               <motion.div
                 className="prompt-text"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -306,10 +306,10 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                   scale: [0.8, 1, 1.05, 1],
                 }}
                 transition={{ 
-                  duration: 0.8,
-                  delay: 2.6,
+                  duration: 0.5,
+                  delay: 1.8,
                   scale: {
-                    duration: 2,
+                    duration: 1.5,
                     repeat: Infinity,
                     ease: "easeInOut",
                     times: [0, 0.3, 0.7, 1]
@@ -329,11 +329,11 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 0.3, scale: 1 }}
                   transition={{
-                    duration: 0.5,
-                    delay: 3 + i * 0.2,
+                    duration: 0.3,
+                    delay: 2 + i * 0.1,
                     repeat: Infinity,
                     repeatType: "reverse",
-                    repeatDelay: 2
+                    repeatDelay: 1.5
                   }}
                 />
               ))}
@@ -351,7 +351,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
               ]
             }}
             transition={{
-              duration: 6,
+              duration: 4,
               repeat: Infinity,
               repeatType: "reverse"
             }}
@@ -364,7 +364,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
           transition={{ 
-            duration: 1,
+            duration: 0.6,
             ease: "easeInOut"
           }}
         />

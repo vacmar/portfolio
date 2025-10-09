@@ -35,13 +35,9 @@ function App() {
         requestAnimationFrame(() => {
           const scrollTop = window.pageYOffset;
           const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.scrollHeight;
           
-          // Only show button when user is actually near the bottom AND has scrolled significantly
-          const nearBottom = scrollTop + windowHeight >= documentHeight - 200;
-          const hasScrolledDown = scrollTop > windowHeight * 1.5; // Must scroll at least 1.5 viewport heights
-          
-          setShowScrollTop(nearBottom && hasScrolledDown);
+          // Show button right after passing the home/hero section (1 full viewport height)
+          setShowScrollTop(scrollTop > windowHeight);
           ticking = false;
         });
         ticking = true;
@@ -74,7 +70,7 @@ function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ 
-                duration: 1,
+                duration: 0.6,
                 ease: "easeInOut"
               }}
             >
@@ -103,7 +99,7 @@ function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
