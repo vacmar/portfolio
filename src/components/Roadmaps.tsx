@@ -388,6 +388,9 @@ const Roadmaps: React.FC = () => {
           <p className="section-subtitle">
             My development path from foundations to full-stack mastery, plus the exciting projects bringing it all together
           </p>
+          <p className="section-instruction" style={{ fontSize: '0.9rem', color: 'var(--lavender)', marginTop: '0.5rem', fontStyle: 'italic' }}>
+            💡 Tap on the dots to know more
+          </p>
         </motion.div>
 
         {/* Filter Tabs */}

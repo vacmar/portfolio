@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowUp } from 'react-icons/fa';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import About from './components/About';
-import Experience from './components/Experience';
-import Roadmaps from './components/Roadmaps';
-import Contact from './components/Contact';
-import MusicPlayer from './components/MusicPlayer';
 import WelcomeScreen from './components/WelcomeScreen';
 
-// Import Projects separately to isolate the issue
-import Projects from './components/Projects';
+// Lazy load heavy components
+const About = lazy(() => import('./components/About'));
+const Experience = lazy(() => import('./components/Experience'));
+const Projects = lazy(() => import('./components/Projects'));
+const Roadmaps = lazy(() => import('./components/Roadmaps'));
+const Contact = lazy(() => import('./components/Contact'));
+const MusicPlayer = lazy(() => import('./components/MusicPlayer'));
 
 import './App.css';
 
@@ -28,24 +28,26 @@ function App() {
 
   // Track scroll position to show/hide scroll to top button
   useEffect(() => {
-    let ticking = false;
+    let timeoutId: NodeJS.Timeout;
     
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollTop = window.pageYOffset;
-          const windowHeight = window.innerHeight;
-          
-          // Show button right after passing the home/hero section (1 full viewport height)
-          setShowScrollTop(scrollTop > windowHeight);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      // Clear previous timeout
+      if (timeoutId) clearTimeout(timeoutId);
+      
+      // Throttle scroll events
+      timeoutId = setTimeout(() => {
+        const scrollTop = window.pageYOffset;
+        
+        // Show button after scrolling past hero section (500px)
+        setShowScrollTop(scrollTop > 500);
+      }, 100);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -77,15 +79,19 @@ function App() {
               <Header />
               <main>
                 <Hero />
-                <About />
-                <Experience />
-                <Projects />
-                <Roadmaps />
-                <Contact />
+                <Suspense fallback={<div className="section-loader" />}>
+                  <About />
+                  <Experience />
+                  <Projects />
+                  <Roadmaps />
+                  <Contact />
+                </Suspense>
               </main>
               
               {/* Only render MusicPlayer after welcome interaction */}
-              {startMusic && <MusicPlayer shouldStart={true} />}
+              <Suspense fallback={null}>
+                {startMusic && <MusicPlayer shouldStart={true} />}
+              </Suspense>
             </motion.div>
           )}
         </AnimatePresence>

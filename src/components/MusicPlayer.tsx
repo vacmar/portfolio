@@ -9,7 +9,6 @@ interface MusicPlayerProps {
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasAttempted, setHasAttempted] = useState(false);
   const [wasPlayingBeforeHidden, setWasPlayingBeforeHidden] = useState(false);
   const isMobile = useIsMobile();
 
@@ -22,24 +21,21 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
 
   // Handle page visibility and focus changes for mobile/tablet
   useEffect(() => {
-    if (!isMobile) return; // Only apply this behavior on mobile/tablet
+    if (!isMobile) return;
 
     const handleVisibilityChange = () => {
       const audio = audioRef.current;
       if (!audio) return;
 
       if (document.hidden) {
-        // Page is hidden (tab switched or app backgrounded)
         if (!audio.paused) {
           setWasPlayingBeforeHidden(true);
           audio.pause();
           setIsPlaying(false);
         }
       } else {
-        // Page is visible again
         if (wasPlayingBeforeHidden) {
-          // Ensure correct volume when resuming
-          audio.volume = isMobile ? 0.4 : 1.0;
+          audio.volume = isMobile ? 0.4 : 0.6;
           audio.play().then(() => {
             setIsPlaying(true);
             setWasPlayingBeforeHidden(false);
@@ -52,7 +48,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
     };
 
     const handleBlur = () => {
-      // Window lost focus (switched to another app)
       const audio = audioRef.current;
       if (!audio) return;
 
@@ -64,13 +59,11 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
     };
 
     const handleFocus = () => {
-      // Window gained focus
       const audio = audioRef.current;
       if (!audio) return;
 
       if (wasPlayingBeforeHidden) {
-        // Ensure correct volume when resuming on focus
-        audio.volume = isMobile ? 0.4 : 1.0;
+        audio.volume = isMobile ? 0.4 : 0.6;
         audio.play().then(() => {
           setIsPlaying(true);
           setWasPlayingBeforeHidden(false);
@@ -81,7 +74,6 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
       }
     };
 
-    // Add event listeners
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('blur', handleBlur);
     window.addEventListener('focus', handleFocus);
@@ -93,53 +85,67 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ shouldStart = false }) => {
     };
   }, [isMobile, wasPlayingBeforeHidden]);
 
+  // Initialize audio settings
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !shouldStart || hasAttempted) return;
+    if (!audio) return;
 
-    const startMusic = async () => {
-      try {
-        setHasAttempted(true);
-        // Set volume based on device type
-        // Desktop: 100% volume (speakers usually have good control)
-        // Mobile/Tablet: 40% volume (device speakers can be loud)
-        audio.volume = isMobile ? 0.4 : 1.0;
-        audio.loop = true;
-        
+    audio.volume = isMobile ? 0.4 : 0.6;
+    audio.loop = true;
+  }, [isMobile]);
+
+  const togglePlay = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+        console.log("⏸️ Music paused");
+      } else {
+        audio.volume = isMobile ? 0.4 : 0.6;
         await audio.play();
         setIsPlaying(true);
-        console.log(`🎵 Ambient music started successfully! Volume: ${isMobile ? '40%' : '100%'} (${isMobile ? 'Mobile' : 'Desktop'})`);
-      } catch (error) {
-        console.log("🔇 Music failed to start:", error);
-        setIsPlaying(false);
-        
-        // Simple retry after a short delay
-        setTimeout(async () => {
-          try {
-            // Ensure volume is set correctly on retry as well
-            audio.volume = isMobile ? 0.4 : 1.0;
-            await audio.play();
-            setIsPlaying(true);
-            console.log(`🎵 Music started on retry! Volume: ${isMobile ? '40%' : '100%'}`);
-          } catch (retryError) {
-            console.log("🔇 Music failed on retry:", retryError);
-            setIsPlaying(false);
-          }
-        }, 1000);
+        console.log(`🎵 Music playing! Volume: ${isMobile ? '40%' : '60%'}`);
       }
-    };
-
-    startMusic();
-  }, [shouldStart, hasAttempted]);
+    } catch (error) {
+      console.log("❌ Error toggling music:", error);
+      setIsPlaying(false);
+    }
+  };
 
   return (
-    <audio
-      ref={audioRef}
-      src={tracks[0].src}
-      preload="auto"
-      loop
-      className="hidden-audio"
-    />
+    <>
+      <audio
+        ref={audioRef}
+        src={tracks[0].src}
+        preload="auto"
+        loop
+        className="hidden-audio"
+      />
+      <div className="music-player">
+        <button
+          className="music-toggle"
+          onClick={togglePlay}
+          aria-label={isPlaying ? "Pause music" : "Play music"}
+          title={isPlaying ? "Pause ambient music" : "Play ambient music"}
+        >
+          <div className="music-icon">
+            {isPlaying ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="6" y="4" width="4" height="16" fill="currentColor" />
+                <rect x="14" y="4" width="4" height="16" fill="currentColor" />
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" />
+              </svg>
+            )}
+          </div>
+        </button>
+      </div>
+    </>
   );
 };
 
