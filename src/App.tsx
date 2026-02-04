@@ -28,7 +28,7 @@ function App() {
 
   // Track scroll position to show/hide scroll to top button
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: number;
     
     const handleScroll = () => {
       // Clear previous timeout
