@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import profileImage from '../assets/profile.jpg';
+import { resumeData } from '../data/resumeData';
 import './Hero.css';
 
 const Hero: React.FC = () => {
@@ -108,24 +109,22 @@ const Hero: React.FC = () => {
             className="hero-name"
             variants={nameVariants}
           >
-            <span className="name-text">Vaaheesan S</span>
+            <span className="name-text">{resumeData.personalInfo.name}</span>
           </motion.h1>
 
           <motion.div
             className="hero-titles"
             variants={itemVariants}
           >
-            <h2 className="title-primary">Aspiring Software Engineer</h2>
-            <h3 className="title-secondary">Full-Stack Developer (Next.js, Django, MERN)</h3>
+            <h2 className="title-primary">Full Stack Developer</h2>
+            <h3 className="title-secondary">{resumeData.personalInfo.title}</h3>
           </motion.div>
 
           <motion.p
             className="hero-description"
             variants={itemVariants}
           >
-            Passionate about solving real-world problems and building scalable web systems. 
-            Experienced in Next.js, Django REST, and MERN stack with a focus on developing 
-            socially impactful products and innovative solutions.
+            {resumeData.summary}
           </motion.p>
 
           <motion.div
@@ -233,9 +232,9 @@ const Hero: React.FC = () => {
             variants={floatingVariants}
             animate="floating"
           >
-            <div className="tech-badge">Next.js</div>
-            <div className="tech-badge">Django</div>
-            <div className="tech-badge">MERN</div>
+            <div className="tech-badge">Python</div>
+            <div className="tech-badge">React.js</div>
+            <div className="tech-badge">Node.js</div>
           </motion.div>
         </motion.div>
       </motion.div>

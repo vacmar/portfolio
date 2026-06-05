@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { resumeData } from '../data/resumeData';
 import './About.css';
 
 const About: React.FC = () => {
@@ -26,7 +27,6 @@ const About: React.FC = () => {
         if (entry.isIntersecting) {
           setVisibleSkills(prev => new Set([...prev, skillGroup]));
         } else {
-          // Allow removal for flickering effect during fast scrolling
           setVisibleSkills(prev => {
             const newSet = new Set(prev);
             newSet.delete(skillGroup);
@@ -74,63 +74,6 @@ const About: React.FC = () => {
     }
   };
 
-  const skills = {
-    frontend: [
-      { name: 'React.js', level: 90 },
-      { name: 'Next.js', level: 85 },
-      { name: 'JavaScript', level: 88 },
-      { name: 'HTML5/CSS3', level: 92 },
-      { name: 'Tailwind CSS', level: 85 }
-    ],
-    backend: [
-      { name: 'Python', level: 90 },
-      { name: 'Django', level: 85 },
-      { name: 'FastAPI', level: 78 },
-      { name: 'Node.js', level: 75 }
-    ],
-    databases: [
-      { name: 'PostgreSQL', level: 82 },
-      { name: 'MongoDB', level: 78 },
-      { name: 'MySQL', level: 80 }
-    ],
-    tools: [
-      { name: 'Git/GitHub', level: 88 },
-      { name: 'Docker', level: 75 },
-      { name: 'VS Code', level: 95 },
-      { name: 'AWS Basics', level: 65 }
-    ],
-    fundamentals: [
-      { name: 'Data Structures', level: 85 },
-      { name: 'Algorithms', level: 82 },
-      { name: 'OOP', level: 88 },
-      { name: 'System Design', level: 70 }
-    ]
-  };
-
-  const education = {
-    degree: 'B.E. Computer Science and Engineering',
-    college: 'Velammal Engineering College, Chennai',
-    cgpa: '8.41',
-    duration: '2023 – 2027',
-    coursework: ['DSA', 'OOP', 'DBMS', 'OS', 'SE', 'Computer Networks', 'Web Development']
-  };
-
-  const achievements = [
-    '2nd Place – App Development, Velammal Engg College (Apr 2025)',
-    '4th Place – Python Symposium, Sai Ram Engineering College',
-    'Finalist – Figma UI/UX Design Challenge, Amrita College',
-    'NPTEL Certifications (Java, IoT, C++, DBMS)',
-    'Forage Certifications (JPMorgan, Deloitte)',
-    'Udemy Python Bootcamps'
-  ];
-
-  const interests = [
-    'Language Learning – Japanese & German (Duolingo – 6K+ XP)',
-    'Tech Curiosity – Problem Solving, Coding Mini-Games',
-    'Creativity – Drawing, UI Sketching, Personal Website Design',
-    'Sports & Mindfulness – Badminton, Cricket, F1, Music'
-  ];
-
   return (
     <section id="about" className="about" ref={ref}>
       <motion.div
@@ -142,7 +85,7 @@ const About: React.FC = () => {
         <motion.div className="about-header" variants={itemVariants}>
           <h2 className="section-title">About Me</h2>
           <p className="section-subtitle">
-            Aspiring software developer with strong full-stack development experience
+            Computer Science Engineering student with hands-on full-stack & backend experience
           </p>
         </motion.div>
 
@@ -150,9 +93,7 @@ const About: React.FC = () => {
           <motion.div className="about-summary" variants={itemVariants}>
             <h3>Summary</h3>
             <p>
-              Aspiring software developer with strong full-stack development experience using Next.js, 
-              Django REST, and MERN stack. Passionate about solving real-world problems, building 
-              scalable web systems, and developing socially impactful products like MindSync+.
+              {resumeData.summary}
             </p>
             
             <div className="resume-download-section">
@@ -171,7 +112,6 @@ const About: React.FC = () => {
                     document.body.removeChild(link);
                   } catch (error) {
                     console.error('Error downloading resume:', error);
-                    // Fallback: open in new tab
                     window.open('/Vaaheesan-Resume.pdf', '_blank');
                   }
                 }}
@@ -191,7 +131,7 @@ const About: React.FC = () => {
             
             <div className="skills-container" ref={skillsRef}>
               <div className="skills-scroll">
-                {Object.entries(skills).map(([category, skillList]) => {
+                {Object.entries(resumeData.skills).map(([category, skillList]) => {
                   const isVisible = visibleSkills.has(category);
                   
                   return (
@@ -204,14 +144,12 @@ const About: React.FC = () => {
                       transition={{ duration: 0.4, ease: "easeOut" }}
                     >
                       <h4 className="skill-group-title">
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
-                        {category === 'tools' && ' & Platforms'}
-                        {category === 'fundamentals' && ' & CS'}
+                        {category === 'aiml' ? 'AI / ML' : category === 'devops' ? 'DevOps & Cloud' : category.charAt(0).toUpperCase() + category.slice(1)}
                       </h4>
                       <div className="skill-badges">
                         {skillList.map((skill, index) => (
                           <motion.div 
-                            key={skill.name} 
+                            key={skill} 
                             className="skill-badge"
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
@@ -221,7 +159,7 @@ const About: React.FC = () => {
                               ease: "easeOut"
                             }}
                           >
-                            {skill.name}
+                            {skill}
                           </motion.div>
                         ))}
                       </div>
@@ -234,34 +172,40 @@ const About: React.FC = () => {
 
           <motion.div className="education-section" variants={itemVariants}>
             <h3>Education</h3>
-            <div className="education-card">
-              <div className="education-info">
-                <h4>{education.degree}</h4>
-                <p className="college-name">{education.college}</p>
-                <p className="duration">{education.duration}</p>
-                <p className="cgpa">CGPA: {education.cgpa} ( Till 4th Sem )</p>
-              </div>
-              <div className="coursework">
-                <h5>Relevant Coursework:</h5>
-                <div className="coursework-tags">
-                  {education.coursework.map((course) => (
-                    <span key={course} className="coursework-tag">{course}</span>
-                  ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {resumeData.education.map((edu) => (
+                <div key={edu.id} className="education-card">
+                  <div className="education-info">
+                    <h4>{edu.degree}</h4>
+                    <p className="college-name">{edu.school}</p>
+                    <p className="duration">{edu.graduationDate}</p>
+                    <p className="cgpa">{edu.gpa}</p>
+                  </div>
+                  {edu.relevantCourses && edu.relevantCourses.length > 0 && (
+                    <div className="coursework">
+                      <h5>Relevant Courses & Certifications:</h5>
+                      <div className="coursework-tags">
+                        {edu.relevantCourses.map((course) => (
+                          <span key={course} className="coursework-tag">{course}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              ))}
             </div>
           </motion.div>
 
           <motion.div className="achievements-section" variants={itemVariants}>
-            <h3>Achievements & Certifications</h3>
+            <h3>Achievements</h3>
             <div className="achievements-list">
-              {achievements.map((achievement, index) => (
+              {resumeData.achievements.map((achievement, index) => (
                 <motion.div
                   key={index}
                   className="achievement-item"
                   initial={{ x: -50, opacity: 0 }}
                   animate={inView ? { x: 0, opacity: 1 } : { x: -50, opacity: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.07 }}
                 >
                   <span className="achievement-bullet">🏆</span>
                   <span>{achievement}</span>
@@ -273,7 +217,7 @@ const About: React.FC = () => {
           <motion.div className="interests-section" variants={itemVariants}>
             <h3>Interests</h3>
             <div className="interests-list">
-              {interests.map((interest, index) => (
+              {resumeData.interests.map((interest, index) => (
                 <motion.div
                   key={index}
                   className="interest-item"
