@@ -185,7 +185,6 @@ export const resumeData = {
   ],
 
   interests: [
-    "Language Learning – Japanese & German (Duolingo – 6K+ XP)",
     "Tech Curiosity – Problem Solving, Coding Mini-Games",
     "Creativity – Drawing, UI Sketching, Personal Website Design",
     "Sports & Mindfulness – Badminton, Cricket, F1, Music"
