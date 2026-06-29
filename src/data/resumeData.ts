@@ -25,7 +25,7 @@ export interface Experience {
 export const resumeData = {
   personalInfo: {
     name: "Vaaheesan S",
-    title: "(Python • React.js • Node.js)",
+    title: "(C++ • Python • Software Engineering • Backend Systems)",
     email: "vaahee21@gmail.com",
     phone: "+91-9499941994",
     location: "Chennai, Tamil Nadu, India",
@@ -34,19 +34,19 @@ export const resumeData = {
     leetcode: "https://leetcode.com/u/VAAHEESAN",
     portfolio: "https://vaaheesan.vercel.app"
   },
-  
+
   summary: `Computer Science Engineering student with hands-on experience in software engineering, backend development, and Generative AI applications. Experienced in building scalable APIs, integrating LLM workflows, and developing production-ready applications serving thousands of concurrent users. Strong foundation in full-stack engineering, team leadership, and collaborative development.`,
-  
+
   skills: {
-    languages: ["Python", "JavaScript", "TypeScript", "Java", "SQL"],
-    frontend: ["React.js", "Next.js", "Tailwind CSS", "Vite", "HTML5", "CSS3"],
-    backend: ["Node.js", "Express.js", "FastAPI"],
-    databases: ["MongoDB", "PostgreSQL", "MySQL"],
-    aiml: ["LLMs", "LangSmith", "LangChain", "GenAI Applications"],
-    devops: ["AWS", "Docker", "Git", "GitHub", "CI/CD"],
-    tools: ["VS Code", "Postman", "Redis", "Alembic", "Ruff"]
+    languages: ["C++", "Python", "Java", "SQL", "JavaScript", "TypeScript"],
+    frontend: ["React.js", "Next.js", "HTML5", "CSS3", "Tailwind CSS", "Vite"],
+    backend: ["FastAPI", "Flask", "Express.js", "Node.js", "REST APIs"],
+    databases: ["PostgreSQL", "MySQL", "MongoDB", "SQLite"],
+    aiml: ["LLM", "LangChain", "Azure OpenAI", "LangSmith", "Prompt Engineering"],
+    devops: ["Docker", "AWS", "Git", "CI/CD"],
+    tools: ["Postman", "VS Code", "GitHub", "Redis", "Alembic", "Ruff"]
   },
-  
+
   experience: [
     {
       id: 1,
@@ -55,11 +55,11 @@ export const resumeData = {
       location: "Chennai, India",
       startDate: "Feb 2026",
       endDate: "Present",
-      description: "Led a 3-member backend sub-team within a 9-member backend organization, handling task distribution and integration workflows; additionally on-boarded and mentored 3 newly joined engineers as senior on the project.",
+      description: "Led a 3-member backend sub-team within a 12-member engineering team, coordinating feature implementation, backend integration, and onboarding new developers.",
       achievements: [
-        "Designed and implemented REST APIs, schema-driven architectures, and database workflows using Python and FastAPI to serve approximately 3,000 concurrent users under production load.",
-        "Built asynchronous AI evaluation pipelines using Redis queues and asyncio for LLM-driven answer processing, with Alembic managing version-controlled schema migrations and Ruff enforcing code quality standards.",
-        "Contributed to CI/CD pipelines, production monitoring, and deployment validation, achieving a 3% reduction in backend performance overhead."
+        "Designed and implemented RESTful APIs, schema-driven backend services, and database workflows using Python and FastAPI, supporting applications serving 3,000 concurrent users.",
+        "Developed asynchronous AI evaluation pipelines using Redis queues and asyncio, integrated Alembic for version-controlled database migrations, and maintained code quality using Ruff.",
+        "Contributed to deployment validation, CI/CD workflows, production monitoring, and backend optimization, reducing application performance overhead by approximately 3%."
       ],
       technologies: ["Python", "FastAPI", "Redis", "Alembic", "Ruff", "asyncio", "CI/CD", "PostgreSQL"]
     },
@@ -70,57 +70,57 @@ export const resumeData = {
       location: "Chennai, India",
       startDate: "Aug 2025",
       endDate: "Jan 2026",
-      description: "Developed and deployed 8+ full-stack web applications including an e-commerce platform and an IoT-integrated software system, working across frontend, backend, and database layers.",
+      description: "Developed and deployed 8+ full-stack applications, including an e-commerce platform and an IoT-integrated management system, working across frontend, backend, and database components.",
       achievements: [
-        "Optimized database performance under high-traffic conditions through strategic indexing and query restructuring, reducing load on critical application endpoints.",
-        "Improved frontend performance and accessibility by implementing lazy loading, WCAG compliance, and responsive UI patterns, resulting in measurable load time reductions across multiple projects."
+        "Identified database performance bottlenecks during testing of the e-commerce platform, analyzed SQL query execution, and improved application response time through indexing and query restructuring.",
+        "Improved frontend performance and accessibility by implementing lazy loading, responsive UI design, and WCAG-compliant interfaces, reducing load time across multiple projects."
       ],
       technologies: ["HTML5", "CSS3", "JavaScript", "TypeScript", "React.js", "Node.js", "Express.js", "MongoDB", "MySQL", "WCAG", "Lazy Loading"]
     },
     {
       id: 3,
       position: "Software Development Intern",
-      company: "J7 Technology Solutions Pvt. Ltd",
+      company: "J7 Technology Solutions Pvt. Ltd.",
       location: "Chennai, India",
       startDate: "Aug 2025",
       endDate: "Sept 2025",
-      description: "Contributed to a school CRM project as part of a 5-member team, working on student, teacher, and parent-facing modules using Next.js, Node.js/Express, MongoDB, and AWS.",
+      description: "Developed student, teacher, and parent-facing modules for a cloud-based School CRM platform using Next.js, Node.js, Express.js, MongoDB, and AWS.",
       achievements: [
-        "Owned and built the student, parent, and teacher-facing modules including attendance, communication, and academic tracking features.",
-        "Collaborated with frontend and backend developers to integrate different CRM modules seamlessly."
+        "Collaborated within a 5-member engineering team to build scalable backend APIs, integrate role-based functionality, and deliver production-ready modules across multiple user roles."
       ],
       technologies: ["Next.js", "Node.js", "Express.js", "MongoDB", "AWS", "JavaScript"]
     }
   ],
-  
+
   education: [
     {
       id: 1,
-      degree: "B.E Computer Science Engineering",
+      degree: "B.E. Computer Science and Engineering",
       school: "Velammal Engineering College",
       location: "Chennai, India",
-      graduationDate: "2027",
-      gpa: "8.42 CGPA",
+      graduationDate: "2023 – 2027",
+      gpa: "CGPA: 8.33",
       relevantCourses: [
-        "Natural Language Processing (NPTEL)",
-        "Deep Learning (NPTEL)",
-        "Modern C++ (NPTEL)",
-        "Programming in Java (NPTEL)",
-        "Complete Python Course (Udemy)"
+        "NPTEL – Programming in Modern C++",
+        "NPTEL – Programming in Java",
+        "NPTEL – Deep Learning",
+        "NPTEL – Natural Language Processing",
+        "NPTEL – Introduction to Internet of Things",
+        "Udemy – Complete Python Course"
       ]
     }
   ],
-  
+
   projects: [
     {
       id: 1,
       name: "School CRM Platform",
-      description: "Full-Scale Digital School System that digitalized end-to-end school operations across 7 roles — students, parents, teachers, HR, principal, support staff, and payment workflows.",
+      description: "Full-Scale Digital School Management System supporting seven user roles including students, teachers, parents, HR, principal, support staff, and finance.",
       technologies: ["Next.js", "Node.js", "Express.js", "MongoDB", "AWS"],
       features: [
-        "Digitalized operations across student, parent, teacher, HR, principal, support staff, and payment roles.",
-        "Owned student, parent, and teacher-facing modules with attendance, communication, and academic tracking.",
-        "Deployed on AWS with MongoDB managing relational school data across operational modules."
+        "Contributed to the development of a full-scale school management platform supporting seven user roles including students, teachers, parents, HR, principal, support staff, and finance.",
+        "Designed and implemented student, parent, and teacher modules featuring attendance management, academic records, communication workflows, and administrative operations.",
+        "Built scalable backend APIs with Node.js and Express.js, integrated MongoDB for data management, and deployed the application on AWS."
       ],
       github: "",
       demo: "",
@@ -130,12 +130,13 @@ export const resumeData = {
     {
       id: 2,
       name: "Spendly",
-      description: "Personal Expense Tracker with CRUD operations, budget management, and interactive dashboard comparisons.",
-      technologies: ["React 18", "Vite", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "Framer Motion"],
+      description: "Personal Expense Tracker supporting expense tracking, category-based budgeting, analytics dashboards, and spending insights.",
+      technologies: ["React 18", "Node.js", "Express.js", "MongoDB", "Vite", "Tailwind CSS", "Framer Motion"],
       features: [
-        "Full-stack expense tracker with CRUD for expenses and per-category budget management.",
-        "Dual authentication (JWT with bcrypt and Google OAuth) and Nodemailer password reset.",
-        "API secured with Helmet, rate limiting, and JWT; supports paginated/filterable searches."
+        "Built a full-stack expense management platform supporting expense tracking, category-based budgeting, analytics dashboards, and spending insights.",
+        "Implemented JWT authentication, Google OAuth integration, secure password reset using Nodemailer, and role-based authentication workflows.",
+        "Designed secure backend APIs with validation, Helmet security middleware, rate limiting, pagination, filtering, sorting, and search capabilities.",
+        "Built a responsive React frontend using Context API for centralized state management, enabling seamless CRUD operations and interactive dashboards."
       ],
       github: "https://github.com/vacmar/Spendly",
       demo: "",
@@ -145,12 +146,13 @@ export const resumeData = {
     {
       id: 3,
       name: "Elevatr",
-      description: "Job and Internship Portal with role-based dashboards connecting students and recruiters.",
+      description: "Two-sided recruitment platform enabling students to discover opportunities, bookmark jobs, apply online, and monitor application status while recruiters manage hiring pipelines.",
       technologies: ["Next.js", "TypeScript", "FastAPI", "PostgreSQL", "Tailwind CSS"],
       features: [
-        "Two-sided platform: students browse/bookmark roles, recruiters post/monitor pipelines.",
-        "Role-based dashboards with real-time API data and summary metric cards.",
-        "FastAPI backend with PBKDF2-SHA256 password hashing and optimized API paths."
+        "Built a two-sided recruitment platform enabling students to discover opportunities, bookmark jobs, apply online, and monitor application status while recruiters manage hiring pipelines.",
+        "Implemented recruiter dashboards with real-time statistics, application tracking, optimistic UI updates, and role-based authorization.",
+        "Designed and developed a FastAPI backend with PostgreSQL, implementing secure PBKDF2-SHA256 password hashing, JWT authentication, and role-based access control.",
+        "Developed the frontend using Next.js and TypeScript, resolved API routing inconsistencies, and maintained a modular and production-ready codebase following ESLint best practices."
       ],
       github: "https://github.com/vacmar/Elevatr",
       demo: "",
@@ -159,6 +161,22 @@ export const resumeData = {
     },
     {
       id: 4,
+      name: "MindSync+",
+      description: "AI-Assisted Mental Wellness Platform (MSME 5.0 Funded) designed to connect users with peer supporters and provide an intelligent conversational fallback.",
+      technologies: ["Next.js", "FastAPI", "PostgreSQL", "LLMs", "LangChain"],
+      features: [
+        "Conceptualizing an AI-assisted mental wellness platform that aims to connect users with peer supporters while providing an intelligent conversational fallback when volunteers are unavailable.",
+        "Designing the backend architecture using FastAPI and PostgreSQL to support secure authentication, conversation workflows, and scalable request handling.",
+        "Exploring LLM-assisted conversational support with moderation and escalation mechanisms to deliver context-aware and empathetic interactions.",
+        "Selected under the MSME 5.0 Government Funding Scheme for its innovative approach to AI-assisted mental health support."
+      ],
+      github: "",
+      demo: "",
+      status: "In Progress (MSME 5.0 Funded)",
+      type: "Solo Project"
+    },
+    {
+      id: 5,
       name: "Arya Productions",
       description: "Multi-section responsive company website for an industrial storage solutions firm.",
       technologies: ["HTML", "CSS", "JavaScript"],
@@ -173,21 +191,19 @@ export const resumeData = {
       type: "Client Project"
     }
   ],
-  
+
   achievements: [
-    "Selected – MSME 5.0 Government Funding Scheme | MindSync+ (2026)",
+    "Selected for the MSME 5.0 Government Funding Scheme for the project MindSync+ (2026)",
     "1st Place – QR Debugging Event (Namma VEC 2026)",
     "2nd Place – App Development (Namma VEC 2025)",
     "Participant – Cognizant Technoverse Hackathon 2026",
-    "Participant – VISA 24 Hours AI Hackathon (IITM, 2025)",
-    "Participant – Web Designing Contest (Amrita, 2025)",
-    "Participant – Python Event (SaiRam Engineering, 2024)"
+    "Participant – VISA 24 Hours AI Hackathon (IITM, 2025)"
   ],
 
   interests: [
-    "Tech Curiosity – Problem Solving, Coding Mini-Games",
-    "Creativity – Drawing, UI Sketching, Personal Website Design",
-    "Sports & Mindfulness – Badminton, Cricket, F1, Music"
+    "Traveling",
+    "Badminton",
+    "Technology Exploration"
   ]
 };
 

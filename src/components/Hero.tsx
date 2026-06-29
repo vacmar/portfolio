@@ -116,7 +116,7 @@ const Hero: React.FC = () => {
             className="hero-titles"
             variants={itemVariants}
           >
-            <h2 className="title-primary">Full Stack Developer</h2>
+            <h2 className="title-primary">Software Engineer</h2>
             <h3 className="title-secondary">{resumeData.personalInfo.title}</h3>
           </motion.div>
 
