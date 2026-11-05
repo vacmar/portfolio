@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { LuFlower2, LuSun, LuCloudRain, LuLeaf, LuSnowflake } from 'react-icons/lu';
+import { LuFlower2, LuSun, LuCloudLightning, LuLeaf, LuSnowflake } from 'react-icons/lu';
 import { SeasonTheme } from '../App';
 import './Footer.css';
 
@@ -85,11 +85,11 @@ const Footer: React.FC<FooterProps> = ({
   };
 
   const seasonDisplayNames: Record<string, string> = {
-    spring: 'spring',
-    summer: 'summer',
-    rainy: 'monsoon / rainy',
-    autumn: 'autumn',
-    winter: 'winter'
+    spring: 'spring (blossom)',
+    summer: 'summer (warm sun)',
+    rainy: 'monsoon (storm cloud)',
+    autumn: 'autumn (amber leaf)',
+    winter: 'winter (frost snow)'
   };
 
   return (
@@ -503,9 +503,9 @@ const Footer: React.FC<FooterProps> = ({
           <span>season: {currentWeather && seasonDisplayNames[currentWeather]}</span>
           {currentWeather === 'spring' && <LuFlower2 style={{ color: '#ec4899' }} />}
           {currentWeather === 'summer' && <LuSun style={{ color: '#eab308' }} />}
-          {currentWeather === 'rainy' && <LuCloudRain style={{ color: '#3b82f6' }} />}
+          {currentWeather === 'rainy' && <LuCloudLightning style={{ color: '#60a5fa' }} />}
           {currentWeather === 'autumn' && <LuLeaf style={{ color: '#ea580c' }} />}
-          {currentWeather === 'winter' && <LuSnowflake style={{ color: '#38bdf8' }} />}
+          {currentWeather === 'winter' && <LuSnowflake style={{ color: '#0284c7' }} />}
         </button>
 
         {onCalmToggle && (

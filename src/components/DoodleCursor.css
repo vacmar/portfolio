@@ -28,24 +28,24 @@
 }
 
 /* Midnight / Dark Theme Paper Glider (Crisp Starlight White & Luminous Glow) */
-[data-weather="winter"] .custom-paper-airplane-cursor ,
+[data-weather="rainy"] .custom-paper-airplane-cursor ,
 [data-weather="midnight"] .custom-paper-airplane-cursor {
   filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.75)) drop-shadow(0 0 14px rgba(56, 189, 248, 0.5));
 }
 
-[data-weather="winter"] .paper-airplane-svg polygon:first-child ,
+[data-weather="rainy"] .paper-airplane-svg polygon:first-child ,
 [data-weather="midnight"] .paper-airplane-svg polygon:first-child {
   fill: #ffffff !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .paper-airplane-svg polygon:nth-child(2) ,
+[data-weather="rainy"] .paper-airplane-svg polygon:nth-child(2) ,
 [data-weather="midnight"] .paper-airplane-svg polygon:nth-child(2) {
   fill: #94a3b8 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .paper-airplane-svg line ,
+[data-weather="rainy"] .paper-airplane-svg line ,
 [data-weather="midnight"] .paper-airplane-svg line {
   stroke: #f8fafc !important;
 }
@@ -74,7 +74,7 @@
   animation: stickerLife 3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-[data-weather="winter"] .stamped-screen-sticker ,
+[data-weather="rainy"] .stamped-screen-sticker ,
 [data-weather="midnight"] .stamped-screen-sticker {
   border-color: #f8fafc;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);

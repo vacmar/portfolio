@@ -23,7 +23,7 @@
   box-shadow: 0 16px 0 var(--ink), 0 24px 34px var(--shadow) !important;
 }
 
-[data-weather="winter"] .stack-grid .group:hover ,
+[data-weather="rainy"] .stack-grid .group:hover ,
 [data-weather="midnight"] .stack-grid .group:hover {
   box-shadow: 0 16px 0 #f8fafc, 0 24px 34px rgba(0, 0, 0, 0.85) !important;
 }

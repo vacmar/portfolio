@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LuFlower2, LuSun, LuCloudRain, LuLeaf, LuSnowflake, LuPenTool, LuX } from 'react-icons/lu';
+import { LuFlower2, LuSun, LuCloudLightning, LuLeaf, LuSnowflake, LuPenTool, LuX } from 'react-icons/lu';
 import { SeasonTheme } from '../App';
 import './Header.css';
 
@@ -9,11 +9,11 @@ interface HeaderProps {
 }
 
 const SEASON_MODES: { id: SeasonTheme; icon: React.ReactNode; label: string }[] = [
-  { id: 'spring', icon: <LuFlower2 className="weather-icon-svg" />, label: 'spring' },
-  { id: 'summer', icon: <LuSun className="weather-icon-svg" />, label: 'summer' },
-  { id: 'rainy', icon: <LuCloudRain className="weather-icon-svg" />, label: 'monsoon / rainy' },
-  { id: 'autumn', icon: <LuLeaf className="weather-icon-svg" />, label: 'autumn' },
-  { id: 'winter', icon: <LuSnowflake className="weather-icon-svg" />, label: 'winter' }
+  { id: 'spring', icon: <LuFlower2 className="weather-icon-svg" />, label: 'Spring (Blossom)' },
+  { id: 'summer', icon: <LuSun className="weather-icon-svg" />, label: 'Summer (Warm Sun)' },
+  { id: 'rainy', icon: <LuCloudLightning className="weather-icon-svg" />, label: 'Monsoon (Dark Storm)' },
+  { id: 'autumn', icon: <LuLeaf className="weather-icon-svg" />, label: 'Autumn (Amber Leaf)' },
+  { id: 'winter', icon: <LuSnowflake className="weather-icon-svg" />, label: 'Winter (Crisp Frost)' }
 ];
 
 const SIDE_SECTIONS = [

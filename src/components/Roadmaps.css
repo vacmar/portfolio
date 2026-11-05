@@ -78,7 +78,7 @@
   transition: background-color 0.25s, transform 0.15s ease;
 }
 
-[data-weather="winter"] .walker-chapter-bubble ,
+[data-weather="rainy"] .walker-chapter-bubble ,
 [data-weather="midnight"] .walker-chapter-bubble {
   background: #1e293b;
   color: #ffffff;
@@ -294,7 +294,7 @@
 }
 
 /* Midnight / Dark Theme overrides */
-[data-weather="winter"] .finish ,
+[data-weather="rainy"] .finish ,
 [data-weather="midnight"] .finish {
   background: #1a2233;
   color: #f8fafc;
@@ -302,12 +302,12 @@
   box-shadow: 2px 3px 0 #f8fafc;
 }
 
-[data-weather="winter"] .finish:hover ,
+[data-weather="rainy"] .finish:hover ,
 [data-weather="midnight"] .finish:hover {
   box-shadow: 0 16px 0 #f8fafc, 0 24px 34px rgba(0, 0, 0, 0.85) !important;
 }
 
-[data-weather="winter"] .btn-restock-confetti ,
+[data-weather="rainy"] .btn-restock-confetti ,
 [data-weather="midnight"] .btn-restock-confetti {
   background: #243048;
   color: #f8fafc;
@@ -315,15 +315,15 @@
   box-shadow: 2px 3px 0 #f8fafc;
 }
 
-[data-weather="winter"] .btn-restock-confetti:hover ,
+[data-weather="rainy"] .btn-restock-confetti:hover ,
 [data-weather="midnight"] .btn-restock-confetti:hover {
   background: #1e293b;
   box-shadow: 0 16px 0 #f8fafc, 0 24px 34px rgba(0, 0, 0, 0.85) !important;
 }
 
-[data-weather="winter"] .stop .card:hover,
+[data-weather="rainy"] .stop .card:hover,
 [data-weather="midnight"] .stop .card:hover,
-[data-weather="winter"] .stop.a .card:hover ,
+[data-weather="rainy"] .stop.a .card:hover ,
 [data-weather="midnight"] .stop.a .card:hover {
   box-shadow: 0 18px 0 #f8fafc, 0 28px 38px rgba(0, 0, 0, 0.85) !important;
 }

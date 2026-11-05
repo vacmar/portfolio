@@ -540,29 +540,29 @@
    Night Theme (Midnight Stars) Customizations for Footer
    ========================================================================== */
 
-[data-weather="winter"] .scene-sun-group ,
+[data-weather="rainy"] .scene-sun-group ,
 [data-weather="midnight"] .scene-sun-group {
   display: none !important;
 }
 
-[data-weather="winter"] .scene-moon-group ,
+[data-weather="rainy"] .scene-moon-group ,
 [data-weather="midnight"] .scene-moon-group {
   display: block !important;
 }
 
-[data-weather="winter"] .lamp-light-cone ,
+[data-weather="rainy"] .lamp-light-cone ,
 [data-weather="midnight"] .lamp-light-cone {
   display: block !important;
   opacity: 0.16 !important;
 }
 
-[data-weather="winter"] .lamp-glow-pulse ,
+[data-weather="rainy"] .lamp-glow-pulse ,
 [data-weather="midnight"] .lamp-glow-pulse {
   opacity: 0.65 !important;
   filter: drop-shadow(0 0 10px #fef08a);
 }
 
-[data-weather="winter"] .scene-cottage-group rect:nth-of-type(3) ,
+[data-weather="rainy"] .scene-cottage-group rect:nth-of-type(3) ,
 [data-weather="midnight"] .scene-cottage-group rect:nth-of-type(3) {
   /* Window in cottage lights up warm yellow at night */
   fill: #fef08a !important;
@@ -570,166 +570,166 @@
   filter: drop-shadow(0 0 8px rgba(254, 240, 138, 0.85));
 }
 
-[data-weather="winter"] .scene-cottage-group rect:nth-of-type(2) ,
+[data-weather="rainy"] .scene-cottage-group rect:nth-of-type(2) ,
 [data-weather="midnight"] .scene-cottage-group rect:nth-of-type(2) {
   fill: #1a2233 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-cottage-group polygon ,
+[data-weather="rainy"] .scene-cottage-group polygon ,
 [data-weather="midnight"] .scene-cottage-group polygon {
   fill: #222f47 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-cottage-group .smoke-puff ,
+[data-weather="rainy"] .scene-cottage-group .smoke-puff ,
 [data-weather="midnight"] .scene-cottage-group .smoke-puff {
   fill: #cbd5e1 !important;
   opacity: 0.55;
 }
 
-[data-weather="winter"] .scene-cottage-group path ,
+[data-weather="rainy"] .scene-cottage-group path ,
 [data-weather="midnight"] .scene-cottage-group path {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-cloud path ,
+[data-weather="rainy"] .scene-cloud path ,
 [data-weather="midnight"] .scene-cloud path {
   fill: #1a2233 !important;
   stroke: #94a3b8 !important;
 }
 
-[data-weather="winter"] .scene-bird ,
+[data-weather="rainy"] .scene-bird ,
 [data-weather="midnight"] .scene-bird {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-rainbow path:nth-child(1) ,
+[data-weather="rainy"] .scene-rainbow path:nth-child(1) ,
 [data-weather="midnight"] .scene-rainbow path:nth-child(1) { stroke: #c084fc !important; opacity: 0.9 !important; }
-[data-weather="winter"] .scene-rainbow path:nth-child(2) ,
+[data-weather="rainy"] .scene-rainbow path:nth-child(2) ,
 [data-weather="midnight"] .scene-rainbow path:nth-child(2) { stroke: #38bdf8 !important; opacity: 0.9 !important; }
-[data-weather="winter"] .scene-rainbow path:nth-child(3) ,
+[data-weather="rainy"] .scene-rainbow path:nth-child(3) ,
 [data-weather="midnight"] .scene-rainbow path:nth-child(3) { stroke: #f472b6 !important; opacity: 0.9 !important; }
-[data-weather="winter"] .scene-rainbow path:nth-child(4) ,
+[data-weather="rainy"] .scene-rainbow path:nth-child(4) ,
 [data-weather="midnight"] .scene-rainbow path:nth-child(4) { stroke: #34d399 !important; opacity: 0.9 !important; }
 
-[data-weather="winter"] .scene-tree-group path:first-child ,
+[data-weather="rainy"] .scene-tree-group path:first-child ,
 [data-weather="midnight"] .scene-tree-group path:first-child {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-tree-group path:nth-child(2) ,
+[data-weather="rainy"] .scene-tree-group path:nth-child(2) ,
 [data-weather="midnight"] .scene-tree-group path:nth-child(2) {
   fill: #133324 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-mailbox-group path:first-child ,
+[data-weather="rainy"] .scene-mailbox-group path:first-child ,
 [data-weather="midnight"] .scene-mailbox-group path:first-child {
   fill: #831843 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-mailbox-group path:nth-child(3) ,
+[data-weather="rainy"] .scene-mailbox-group path:nth-child(3) ,
 [data-weather="midnight"] .scene-mailbox-group path:nth-child(3) {
   fill: #133324 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-signpost polygon ,
+[data-weather="rainy"] .scene-signpost polygon ,
 [data-weather="midnight"] .scene-signpost polygon {
   fill: #243048 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-signpost text ,
+[data-weather="rainy"] .scene-signpost text ,
 [data-weather="midnight"] .scene-signpost text {
   fill: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-signpost line ,
+[data-weather="rainy"] .scene-signpost line ,
 [data-weather="midnight"] .scene-signpost line {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-mailbox-group line ,
+[data-weather="rainy"] .scene-mailbox-group line ,
 [data-weather="midnight"] .scene-mailbox-group line {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-ground ,
+[data-weather="rainy"] .scene-ground ,
 [data-weather="midnight"] .scene-ground {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-road-dashes ,
+[data-weather="rainy"] .scene-road-dashes ,
 [data-weather="midnight"] .scene-road-dashes {
   stroke: #64748b !important;
 }
 
-[data-weather="winter"] .scene-grass-tufts path ,
+[data-weather="rainy"] .scene-grass-tufts path ,
 [data-weather="midnight"] .scene-grass-tufts path {
   stroke: #94a3b8 !important;
 }
 
-[data-weather="winter"] .scene-postman * ,
+[data-weather="rainy"] .scene-postman * ,
 [data-weather="midnight"] .scene-postman * {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-postman text ,
+[data-weather="rainy"] .scene-postman text ,
 [data-weather="midnight"] .scene-postman text {
   stroke: none !important;
 }
 
-[data-weather="winter"] .scene-postman .leg-left,
+[data-weather="rainy"] .scene-postman .leg-left,
 [data-weather="midnight"] .scene-postman .leg-left,
-[data-weather="winter"] .scene-postman .leg-right ,
+[data-weather="rainy"] .scene-postman .leg-right ,
 [data-weather="midnight"] .scene-postman .leg-right {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-postman rect:first-of-type ,
+[data-weather="rainy"] .scene-postman rect:first-of-type ,
 [data-weather="midnight"] .scene-postman rect:first-of-type {
   fill: #2563eb !important;
 }
 
-[data-weather="winter"] .scene-dog rect ,
+[data-weather="rainy"] .scene-dog rect ,
 [data-weather="midnight"] .scene-dog rect {
   fill: #fef3c7 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-dog circle ,
+[data-weather="rainy"] .scene-dog circle ,
 [data-weather="midnight"] .scene-dog circle {
   fill: #fef3c7 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-dog path ,
+[data-weather="rainy"] .scene-dog path ,
 [data-weather="midnight"] .scene-dog path {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .scene-dog line ,
+[data-weather="rainy"] .scene-dog line ,
 [data-weather="midnight"] .scene-dog line {
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .patrol-bubble-rect,
+[data-weather="rainy"] .patrol-bubble-rect,
 [data-weather="midnight"] .patrol-bubble-rect,
-[data-weather="winter"] .patrol-bubble-arrow ,
+[data-weather="rainy"] .patrol-bubble-arrow ,
 [data-weather="midnight"] .patrol-bubble-arrow {
   fill: #1a2233 !important;
   stroke: #f8fafc !important;
 }
 
-[data-weather="winter"] .patrol-bubble-text ,
+[data-weather="rainy"] .patrol-bubble-text ,
 [data-weather="midnight"] .patrol-bubble-text {
   fill: #f8fafc !important;
 }
 
-[data-weather="winter"] .lift-btn ,
+[data-weather="rainy"] .lift-btn ,
 [data-weather="midnight"] .lift-btn {
   background: #1a2233 !important;
   color: #f8fafc !important;
@@ -737,7 +737,7 @@
   box-shadow: 2px 3px 0 #f8fafc, 0 3px 8px rgba(0, 0, 0, 0.6) !important;
 }
 
-[data-weather="winter"] .lift-btn:hover ,
+[data-weather="rainy"] .lift-btn:hover ,
 [data-weather="midnight"] .lift-btn:hover {
   background: #131c2e !important;
   color: #ffffff !important;
@@ -745,18 +745,18 @@
   box-shadow: 0 11px 0 #f8fafc, 0 18px 24px rgba(0, 0, 0, 0.8) !important;
 }
 
-[data-weather="winter"] .lift-btn:active ,
+[data-weather="rainy"] .lift-btn:active ,
 [data-weather="midnight"] .lift-btn:active {
   transform: translateY(-2px) scale(1.01) !important;
   box-shadow: 0 3px 0 #f8fafc, 0 5px 10px rgba(0, 0, 0, 0.8) !important;
 }
 
-[data-weather="winter"] .footer-copyright-text ,
+[data-weather="rainy"] .footer-copyright-text ,
 [data-weather="midnight"] .footer-copyright-text {
   color: #f8fafc !important;
 }
 
-[data-weather="winter"] .footer-sub-quote ,
+[data-weather="rainy"] .footer-sub-quote ,
 [data-weather="midnight"] .footer-sub-quote {
   color: #94a3b8 !important;
 }
@@ -811,26 +811,26 @@
   }
 
   /* Midnight Dark Mode Scrollbar */
-  [data-weather="winter"] .landscape-scene-wrapper ,
+  [data-weather="rainy"] .landscape-scene-wrapper ,
 [data-weather="midnight"] .landscape-scene-wrapper {
-    scrollbar-color: #f472b6 rgba(248, 250, 252, 0.12);
+    scrollbar-color: var(--accent) rgba(248, 250, 252, 0.12);
   }
 
-  [data-weather="winter"] .landscape-scene-wrapper::-webkit-scrollbar-track ,
+  [data-weather="rainy"] .landscape-scene-wrapper::-webkit-scrollbar-track ,
 [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-track {
     background: rgba(248, 250, 252, 0.08);
     border-color: rgba(248, 250, 252, 0.35);
   }
 
-  [data-weather="winter"] .landscape-scene-wrapper::-webkit-scrollbar-thumb ,
+  [data-weather="rainy"] .landscape-scene-wrapper::-webkit-scrollbar-thumb ,
 [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-thumb {
-    background: #f472b6;
+    background: var(--accent);
     border-color: #0b0f19;
   }
 
-  [data-weather="winter"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:hover,
+  [data-weather="rainy"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:hover,
 [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:hover,
-  [data-weather="winter"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:active ,
+  [data-weather="rainy"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:active ,
 [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:active {
     background: #fb7185;
   }

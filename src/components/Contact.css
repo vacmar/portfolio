@@ -184,7 +184,7 @@
   box-shadow: 0 14px 0 var(--ink), 0 22px 30px var(--shadow) !important;
 }
 
-[data-weather="winter"] .elsewhere a:hover ,
+[data-weather="rainy"] .elsewhere a:hover ,
 [data-weather="midnight"] .elsewhere a:hover {
   box-shadow: 0 14px 0 #f8fafc, 0 22px 30px rgba(0, 0, 0, 0.85) !important;
 }
