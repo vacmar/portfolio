@@ -398,10 +398,10 @@ p {
 
 /* Wobbly Hand-Drawn Sketch Pen Border */
 .sk {
-  border: 2.2px solid var(--ink);
+  border: 2.4px solid var(--ink);
   border-radius: 9px 24px 11px 26px / 24px 10px 26px 9px;
   background: var(--panel);
-  box-shadow: 4px 6px 0 var(--shadow);
+  box-shadow: 3px 5px 0 var(--shadow);
   transition: transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.48s cubic-bezier(0.16, 1, 0.3, 1),
               background-color 0.3s ease;

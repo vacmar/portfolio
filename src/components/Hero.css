@@ -151,24 +151,28 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 7px 14px;
+  padding: 8px 16px;
   font-size: 0.95rem;
   font-family: var(--font-body);
   background: var(--pastel-yellow);
   color: var(--ink);
   text-decoration: none;
-  border-radius: 8px 16px 8px 14px / 14px 8px 16px 8px;
-  transition: transform 0.15s ease, background-color 0.2s;
+  border: 2px solid var(--ink);
+  border-radius: 9px 18px 10px 16px / 16px 10px 18px 9px !important;
+  box-shadow: 2px 3px 0 var(--shadow);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s;
   width: fit-content;
 }
 
 .comp-stat-badge:nth-child(2) {
   background: var(--pastel-mint);
   transform: rotate(-0.5deg);
+  border-radius: 16px 9px 18px 10px / 10px 18px 9px 16px !important;
 }
 
 .comp-stat-badge:hover {
-  transform: scale(1.04) rotate(0.8deg);
+  transform: scale(1.03) rotate(-1deg);
+  box-shadow: 3px 4px 0 var(--ink);
 }
 
 .badge-icon {
@@ -198,15 +202,15 @@
   top: 10px;
   right: -4px;
   background: var(--pastel-yellow);
-  border: 2px solid var(--ink);
+  border: 2.2px solid var(--ink);
   padding: 13px 12px 10px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
   line-height: 1.1;
-  border-radius: 4px;
+  border-radius: 9px 18px 11px 16px / 16px 11px 18px 9px;
   --final-tilt: 5deg;
-  box-shadow: 3px 6px 12px var(--shadow);
+  box-shadow: 3px 5px 0 var(--shadow);
   z-index: 15;
   color: var(--ink);
   text-align: center;
@@ -272,7 +276,9 @@
   --final-tilt: 1.2deg;
   position: relative;
   width: min(340px, 94%);
-  box-shadow: 4px 12px 24px rgba(0, 0, 0, 0.14), 0 2px 5px rgba(0, 0, 0, 0.08);
+  border: 2.6px solid var(--ink) !important;
+  border-radius: 14px 28px 16px 26px / 26px 14px 28px 16px !important;
+  box-shadow: 4px 6px 0 var(--ink), 6px 14px 24px var(--shadow) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   animation: eyeFlowPopIn 2.0s cubic-bezier(0.16, 1, 0.3, 1) 1.3s both,
              sketchBorderBoilRect 0.42s steps(1) infinite;
@@ -283,8 +289,8 @@
   aspect-ratio: 1 / 1;
   position: relative;
   overflow: hidden;
-  border: 2px solid var(--ink);
-  border-radius: 4px;
+  border: 2.2px solid var(--ink);
+  border-radius: 12px 22px 14px 20px / 20px 12px 22px 14px;
   background: #f0f0ee;
   cursor: crosshair;
   animation: sketchBorderBoilRect 0.42s steps(1) infinite;
@@ -409,18 +415,21 @@
 .stat:nth-child(1) {
   background: var(--pastel-yellow);
   --final-tilt: -1.5deg;
+  border-radius: 12px 24px 14px 22px / 22px 14px 24px 12px !important;
   animation: eyeFlowPopIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 2.4s both;
 }
 
 .stat:nth-child(2) {
   background: var(--pastel-blue);
   --final-tilt: 1deg;
+  border-radius: 20px 12px 22px 14px / 12px 22px 14px 20px !important;
   animation: eyeFlowPopIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 2.6s both;
 }
 
 .stat:nth-child(3) {
   background: var(--pastel-pink);
   --final-tilt: -0.5deg;
+  border-radius: 14px 22px 12px 24px / 22px 12px 24px 14px !important;
   animation: eyeFlowPopIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 2.8s both;
 }
 
