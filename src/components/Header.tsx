@@ -11,9 +11,9 @@ interface HeaderProps {
 const SEASON_MODES: { id: SeasonTheme; icon: React.ReactNode; label: string }[] = [
   { id: 'spring', icon: <LuFlower2 className="weather-icon-svg" />, label: 'Spring (Blossom)' },
   { id: 'summer', icon: <LuSun className="weather-icon-svg" />, label: 'Summer (Warm Sun)' },
-  { id: 'rainy', icon: <LuCloudLightning className="weather-icon-svg" />, label: 'Monsoon (Dark Storm)' },
   { id: 'autumn', icon: <LuLeaf className="weather-icon-svg" />, label: 'Autumn (Amber Leaf)' },
-  { id: 'winter', icon: <LuSnowflake className="weather-icon-svg" />, label: 'Winter (Crisp Frost)' }
+  { id: 'winter', icon: <LuSnowflake className="weather-icon-svg" />, label: 'Winter (Crisp Frost)' },
+  { id: 'rainy', icon: <LuCloudLightning className="weather-icon-svg" />, label: 'Monsoon (Dark Storm)' }
 ];
 
 const SIDE_SECTIONS = [

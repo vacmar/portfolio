@@ -75,9 +75,9 @@ const Footer: React.FC<FooterProps> = ({
     const seasonOrder: SeasonTheme[] = [
       'spring',
       'summer',
-      'rainy',
       'autumn',
-      'winter'
+      'winter',
+      'rainy'
     ];
     const currentIndex = seasonOrder.indexOf(currentWeather as SeasonTheme);
     const nextSeason = seasonOrder[(currentIndex + 1) % seasonOrder.length];

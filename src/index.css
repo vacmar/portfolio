@@ -96,7 +96,7 @@
   color-scheme: light;
 }
 
-[data-weather="rainy"] {
+[data-weather="winter"] {
   --paper: #f1f7fc; /* Luminous Crisp Frosted Ice White */
   --panel: #ffffff;
   --rule: rgba(56, 189, 248, 0.3);
