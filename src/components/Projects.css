@@ -406,11 +406,14 @@
 
 /* Coming Soon Dashed Border Box */
 .project-coming-soon-card {
-  min-height: 280px;
+  min-height: 380px;
+  height: 380px;
+  box-sizing: border-box;
+  overflow: hidden;
   border: 2.5px dashed var(--ink) !important;
   border-radius: 8px;
   background: var(--panel) !important;
-  padding: 28px 24px;
+  padding: 24px 20px;
   display: flex;
   align-items: center;
   justify-content: center;

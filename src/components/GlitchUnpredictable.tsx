@@ -17,7 +17,7 @@ const GlitchUnpredictable: React.FC<GlitchUnpredictableProps> = ({
   arrowPosition = 'bottom',
   className = ''
 }) => {
-  // Generate random cryptic scramble strings
+  // Generate random cryptic scramble strings with strictly constant length to prevent layout shift
   const [glitchTitle, setGlitchTitle] = useState('§#?_Ω-DELTA');
   const [glitchDesc, setGlitchDesc] = useState('░▒▓ decoding future signals... ▓▒░');
   const [glitchTag, setGlitchTag] = useState('COMING SOON');
@@ -32,14 +32,16 @@ const GlitchUnpredictable: React.FC<GlitchUnpredictableProps> = ({
     };
 
     const interval = setInterval(() => {
-      setGlitchTitle(() => scramble(10 + Math.floor(Math.random() * 4)));
+      // Fixed 12-char title so it never changes length
+      setGlitchTitle(() => scramble(12));
+      // Fixed length segments so description never wraps to 2 lines or changes height
       setGlitchDesc(() => {
         const seg1 = scramble(6);
         const seg2 = scramble(8);
         const seg3 = scramble(6);
         return `${seg1} · ${seg2} · ${seg3}`;
       });
-      // Occasionally flicker between 'COMING SOON' and scrambled glyphs
+      // Fixed 11-char tag matching length of 'COMING SOON'
       setGlitchTag(() => {
         if (Math.random() > 0.4) return 'COMING SOON';
         return scramble(11);
