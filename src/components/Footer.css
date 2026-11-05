@@ -1,0 +1,837 @@
+/* ==========================================================================
+   Interactive Sketchbook Footer & Hand-Drawn Animated Landscape
+   ========================================================================== */
+
+.footer-notebook {
+  border-top: 1.8px dashed var(--rule);
+  padding: 40px 16px 50px;
+  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+/* 1. Landscape Scene Wrapper */
+.landscape-scene-wrapper {
+  width: 100%;
+  max-width: 980px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.landscape-svg {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  display: block;
+  overflow: visible;
+}
+
+/* Clouds floating gently */
+.scene-cloud-1 {
+  animation: cloudDrift 7s ease-in-out infinite alternate;
+}
+
+.scene-cloud-2 {
+  animation: cloudDrift 9s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes cloudDrift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(18px); }
+}
+
+/* Flying Bird */
+.scene-bird {
+  animation: birdHover 4s ease-in-out infinite alternate;
+}
+
+@keyframes birdHover {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(8px, -4px); }
+  100% { transform: translate(16px, 2px); }
+}
+
+/* Celestial Elements: Sun (Day) vs Moon (Night) */
+.scene-sun-group {
+  display: block;
+}
+
+.scene-moon-group {
+  display: none;
+}
+
+.lamp-light-cone {
+  display: none;
+}
+
+/* Smiling Sun Rays Pulsing */
+.scene-sun-rays {
+  transform-origin: 770px 62px;
+  animation: sunRayPulse 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes sunRayPulse {
+  0% {
+    transform: scale(0.96) rotate(-4deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.06) rotate(6deg);
+    opacity: 1;
+  }
+}
+
+/* Night Moon Halo & Twinkling Stars */
+.twinkle-star {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: starTwinkle 2.8s ease-in-out infinite alternate;
+}
+
+.star-1 { animation-delay: 0s; }
+.star-2 { animation-delay: 0.7s; }
+.star-3 { animation-delay: 1.4s; }
+.star-4 { animation-delay: 2.1s; }
+.star-5 { animation-delay: 0.35s; }
+
+@keyframes starTwinkle {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+    filter: drop-shadow(0 0 5px #bae6fd);
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+.moon-halo-pulse {
+  animation: moonHalo 4s ease-in-out infinite alternate;
+}
+
+@keyframes moonHalo {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.12;
+    transform-origin: 770px 62px;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0.28;
+    transform-origin: 770px 62px;
+  }
+}
+
+/* Chimney Smoke Puffs Rising */
+.smoke-puff {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.smoke-puff-1 {
+  animation: chimneyPuff 2.4s ease-out infinite;
+}
+
+.smoke-puff-2 {
+  animation: chimneyPuff 2.4s ease-out 0.8s infinite;
+}
+
+.smoke-puff-3 {
+  animation: chimneyPuff 2.4s ease-out 1.6s infinite;
+}
+
+@keyframes chimneyPuff {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate(-4px, -10px) scale(1);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate(-10px, -24px) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Lamp Glow Soft Pulse */
+.lamp-glow-pulse {
+  animation: lampGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes lampGlow {
+  0% { opacity: 0.2; transform: scale(0.95); transform-origin: 290px 103px; }
+  100% { opacity: 0.45; transform: scale(1.15); transform-origin: 290px 103px; }
+}
+
+/* Tree Falling Leaf */
+.scene-drifting-leaf {
+  animation: leafFlutter 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes leafFlutter {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(6px, 14px) rotate(45deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(2px, 30px) rotate(90deg);
+    opacity: 0;
+  }
+}
+
+/* Butterfly Wing Flap */
+.scene-butterfly .wing-left {
+  transform-origin: 0 0;
+  animation: wingFlap 0.24s ease-in-out infinite alternate;
+}
+
+.scene-butterfly .wing-right {
+  transform-origin: 0 0;
+  animation: wingFlap 0.24s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes wingFlap {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0.2); }
+}
+
+/* ==========================================================================
+   Walking Companions Patrol: Postman and Dog walk left to right & vice versa
+   ========================================================================== */
+
+/* 1. Walker Group: Translates in X across the scene (Never flips scaleX) */
+.scene-patrol-walker {
+  animation: patrolWalkTranslate 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes patrolWalkTranslate {
+  /* Walk from cottage fence on left to mailbox on right */
+  0% {
+    transform: translateX(-160px);
+  }
+  43% {
+    transform: translateX(140px);
+  }
+  /* Turnaround pause at mailbox */
+  50% {
+    transform: translateX(140px);
+  }
+  /* Walk from mailbox back to cottage fence */
+  93% {
+    transform: translateX(-160px);
+  }
+  /* Turnaround pause at fence */
+  100% {
+    transform: translateX(-160px);
+  }
+}
+
+/* 2. Actors Group: Flips direction WITHOUT flipping speech bubbles */
+.scene-patrol-actors {
+  transform-origin: 520px 140px;
+  animation: patrolActorsFlip 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes patrolActorsFlip {
+  /* Facing Right towards mailbox */
+  0%, 43% {
+    transform: scaleX(1);
+  }
+  /* Turnaround at mailbox */
+  45% {
+    transform: scaleX(0.05);
+  }
+  47% {
+    transform: scaleX(-1);
+  }
+  /* Facing Left towards cottage fence */
+  50%, 93% {
+    transform: scaleX(-1);
+  }
+  /* Turnaround at cottage fence */
+  95% {
+    transform: scaleX(-0.05);
+  }
+  97%, 100% {
+    transform: scaleX(1);
+  }
+}
+
+/* 3. Speech Bubbles: Track Character Positions but NEVER get flipped (scaleX is always +1) */
+.scene-patrol-bubbles {
+  pointer-events: none;
+}
+
+.patrol-bubble-track {
+  pointer-events: none;
+  will-change: transform;
+}
+
+.postman-track {
+  animation: postmanBubblePosition 22s ease-in-out infinite;
+}
+
+@keyframes postmanBubblePosition {
+  /* Facing right: postman head is at x=504 */
+  0%, 43% {
+    transform: translate(504px, 86px);
+  }
+  /* Turnaround: compressed towards center */
+  45% {
+    transform: translate(520px, 86px);
+  }
+  /* Facing left: flipped postman head is at x=536 */
+  47%, 93% {
+    transform: translate(536px, 86px);
+  }
+  /* Turnaround: compressed towards center */
+  95% {
+    transform: translate(520px, 86px);
+  }
+  97%, 100% {
+    transform: translate(504px, 86px);
+  }
+}
+
+.dog-track {
+  animation: dogBubblePosition 22s ease-in-out infinite;
+}
+
+@keyframes dogBubblePosition {
+  /* Facing right: dog head is at x=550 */
+  0%, 43% {
+    transform: translate(550px, 102px);
+  }
+  /* Turnaround: compressed towards center */
+  45% {
+    transform: translate(520px, 102px);
+  }
+  /* Facing left: flipped dog head is at x=490 */
+  47%, 93% {
+    transform: translate(490px, 102px);
+  }
+  /* Turnaround: compressed towards center */
+  95% {
+    transform: translate(520px, 102px);
+  }
+  97%, 100% {
+    transform: translate(550px, 102px);
+  }
+}
+
+/* Postman Legs Stride & Arm Waving */
+.scene-postman {
+  cursor: pointer;
+}
+
+.scene-postman .leg-left {
+  transform-origin: 500px 139px;
+  animation: postmanStride1 0.75s ease-in-out infinite alternate;
+}
+
+.scene-postman .leg-right {
+  transform-origin: 508px 139px;
+  animation: postmanStride2 0.75s ease-in-out infinite alternate;
+}
+
+@keyframes postmanStride1 {
+  0% { transform: rotate(-9deg); }
+  100% { transform: rotate(11deg); }
+}
+
+@keyframes postmanStride2 {
+  0% { transform: rotate(11deg); }
+  100% { transform: rotate(-9deg); }
+}
+
+.scene-postman.waving .postman-waving-arm {
+  transform-origin: 512px 126px;
+  animation: armWaveBack 0.28s ease-in-out 6 alternate;
+}
+
+@keyframes armWaveBack {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-36deg); }
+}
+
+/* Whistling Music Notes */
+.scene-music-note {
+  animation: noteFloat 2.6s ease-out infinite;
+}
+
+.scene-music-note.note-2 {
+  animation-delay: 1.3s;
+}
+
+@keyframes noteFloat {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(6px, -20px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* Dog Trotting & Tail Wagging */
+.scene-dog {
+  cursor: pointer;
+  transform-origin: 538px 146px;
+  transition: transform 0.2s ease;
+}
+
+.scene-dog .dog-tail {
+  transform-origin: 526px 136px;
+  animation: dogTailSwish 0.26s ease-in-out infinite alternate;
+}
+
+@keyframes dogTailSwish {
+  0% { transform: rotate(-14deg); }
+  100% { transform: rotate(22deg); }
+}
+
+.scene-dog .dog-leg-back {
+  transform-origin: 530px 146px;
+  animation: dogTrot1 0.45s ease-in-out infinite alternate;
+}
+.scene-dog .dog-leg-back2 {
+  transform-origin: 535px 146px;
+  animation: dogTrot2 0.45s ease-in-out infinite alternate;
+}
+.scene-dog .dog-leg-front {
+  transform-origin: 542px 146px;
+  animation: dogTrot2 0.45s ease-in-out infinite alternate;
+}
+.scene-dog .dog-leg-front2 {
+  transform-origin: 546px 146px;
+  animation: dogTrot1 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes dogTrot1 {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(10deg); }
+}
+
+@keyframes dogTrot2 {
+  0% { transform: rotate(10deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+/* Excited Dog Hop on click / pet button */
+.scene-dog.happy-dog {
+  animation: dogHopBounce 0.36s ease-in-out 4 alternate;
+}
+
+@keyframes dogHopBounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-9px) rotate(4deg); }
+}
+
+.scene-dog.happy-dog .dog-tail {
+  animation-duration: 0.12s !important;
+}
+
+/* Speech / Bark Bubbles inside Patrol Group */
+.bubble-content-pop {
+  transform-origin: 0 0;
+  animation: bubblePopFade 3.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+.patrol-bubble-rect,
+.patrol-bubble-arrow {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  filter: drop-shadow(0 2px 5px var(--shadow));
+}
+
+.patrol-bubble-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11.5px;
+  fill: var(--ink);
+  user-select: none;
+}
+
+@keyframes bubblePopFade {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  85% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.85) translateY(-6px);
+    opacity: 0;
+  }
+}
+
+/* 2. Interactive 3D Tactile Paper Lift Button Deck */
+.footer-button-deck {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px 18px;
+  max-width: 900px;
+  margin-top: 4px;
+}
+
+/* 3. Footer Credits Text */
+.footer-credits-section {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  max-width: 820px;
+}
+
+.footer-copyright-text {
+  font-family: var(--font-body);
+  font-size: 1.18rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.footer-sub-quote {
+  font-family: var(--font-code);
+  font-size: 0.96rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+}
+
+/* ==========================================================================
+   Night Theme (Midnight Stars) Customizations for Footer
+   ========================================================================== */
+
+[data-weather="midnight"] .scene-sun-group {
+  display: none !important;
+}
+
+[data-weather="midnight"] .scene-moon-group {
+  display: block !important;
+}
+
+[data-weather="midnight"] .lamp-light-cone {
+  display: block !important;
+  opacity: 0.16 !important;
+}
+
+[data-weather="midnight"] .lamp-glow-pulse {
+  opacity: 0.65 !important;
+  filter: drop-shadow(0 0 10px #fef08a);
+}
+
+[data-weather="midnight"] .scene-cottage-group rect:nth-of-type(3) {
+  /* Window in cottage lights up warm yellow at night */
+  fill: #fef08a !important;
+  stroke: #f8fafc !important;
+  filter: drop-shadow(0 0 8px rgba(254, 240, 138, 0.85));
+}
+
+[data-weather="midnight"] .scene-cottage-group rect:nth-of-type(2) {
+  fill: #1a2233 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-cottage-group polygon {
+  fill: #222f47 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-cottage-group .smoke-puff {
+  fill: #cbd5e1 !important;
+  opacity: 0.55;
+}
+
+[data-weather="midnight"] .scene-cottage-group path {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-cloud path {
+  fill: #1a2233 !important;
+  stroke: #94a3b8 !important;
+}
+
+[data-weather="midnight"] .scene-bird {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-rainbow path:nth-child(1) { stroke: #c084fc !important; opacity: 0.9 !important; }
+[data-weather="midnight"] .scene-rainbow path:nth-child(2) { stroke: #38bdf8 !important; opacity: 0.9 !important; }
+[data-weather="midnight"] .scene-rainbow path:nth-child(3) { stroke: #f472b6 !important; opacity: 0.9 !important; }
+[data-weather="midnight"] .scene-rainbow path:nth-child(4) { stroke: #34d399 !important; opacity: 0.9 !important; }
+
+[data-weather="midnight"] .scene-tree-group path:first-child {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-tree-group path:nth-child(2) {
+  fill: #133324 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-mailbox-group path:first-child {
+  fill: #831843 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-mailbox-group path:nth-child(3) {
+  fill: #133324 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-signpost polygon {
+  fill: #243048 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-signpost text {
+  fill: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-signpost line {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-mailbox-group line {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-ground {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-road-dashes {
+  stroke: #64748b !important;
+}
+
+[data-weather="midnight"] .scene-grass-tufts path {
+  stroke: #94a3b8 !important;
+}
+
+[data-weather="midnight"] .scene-postman * {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-postman text {
+  stroke: none !important;
+}
+
+[data-weather="midnight"] .scene-postman .leg-left,
+[data-weather="midnight"] .scene-postman .leg-right {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-postman rect:first-of-type {
+  fill: #2563eb !important;
+}
+
+[data-weather="midnight"] .scene-dog rect {
+  fill: #fef3c7 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-dog circle {
+  fill: #fef3c7 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-dog path {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .scene-dog line {
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .patrol-bubble-rect,
+[data-weather="midnight"] .patrol-bubble-arrow {
+  fill: #1a2233 !important;
+  stroke: #f8fafc !important;
+}
+
+[data-weather="midnight"] .patrol-bubble-text {
+  fill: #f8fafc !important;
+}
+
+[data-weather="midnight"] .lift-btn {
+  background: #1a2233 !important;
+  color: #f8fafc !important;
+  border: 2px solid #f8fafc !important;
+  box-shadow: 2px 3px 0 #f8fafc, 0 3px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-weather="midnight"] .lift-btn:hover {
+  background: #131c2e !important;
+  color: #ffffff !important;
+  transform: translateY(-9px) scale(1.025) !important;
+  box-shadow: 0 11px 0 #f8fafc, 0 18px 24px rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-weather="midnight"] .lift-btn:active {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 3px 0 #f8fafc, 0 5px 10px rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-weather="midnight"] .footer-copyright-text {
+  color: #f8fafc !important;
+}
+
+[data-weather="midnight"] .footer-sub-quote {
+  color: #94a3b8 !important;
+}
+
+/* Responsive adjustments & Custom Theme-Based Scrollbar */
+.landscape-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .footer-notebook {
+    padding-inline: 12px;
+    gap: 18px;
+  }
+
+  .landscape-svg {
+    min-width: 540px;
+  }
+
+  .landscape-scene-wrapper {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    /* Firefox custom theme scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink) rgba(45, 42, 38, 0.08);
+  }
+
+  /* WebKit (Chrome, Safari, Edge, Android) custom theme scrollbar */
+  .landscape-scene-wrapper::-webkit-scrollbar {
+    height: 7px;
+  }
+
+  .landscape-scene-wrapper::-webkit-scrollbar-track {
+    background: rgba(45, 42, 38, 0.06);
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    margin-inline: 18px;
+  }
+
+  .landscape-scene-wrapper::-webkit-scrollbar-thumb {
+    background: var(--ink);
+    border-radius: 999px;
+    border: 1.5px solid var(--paper);
+  }
+
+  .landscape-scene-wrapper::-webkit-scrollbar-thumb:hover,
+  .landscape-scene-wrapper::-webkit-scrollbar-thumb:active {
+    background: var(--accent);
+  }
+
+  /* Midnight Dark Mode Scrollbar */
+  [data-weather="midnight"] .landscape-scene-wrapper {
+    scrollbar-color: #f472b6 rgba(248, 250, 252, 0.12);
+  }
+
+  [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-track {
+    background: rgba(248, 250, 252, 0.08);
+    border-color: rgba(248, 250, 252, 0.35);
+  }
+
+  [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-thumb {
+    background: #f472b6;
+    border-color: #0b0f19;
+  }
+
+  [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:hover,
+  [data-weather="midnight"] .landscape-scene-wrapper::-webkit-scrollbar-thumb:active {
+    background: #fb7185;
+  }
+
+  .landscape-scroll-hint {
+    display: block;
+    font-family: var(--font-note);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+    margin-top: -6px;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+    user-select: none;
+    opacity: 0.85;
+  }
+
+  .footer-button-deck {
+    gap: 10px 12px;
+  }
+
+  .lift-btn {
+    font-size: 1.05rem;
+    padding: 7px 14px;
+  }
+
+  .footer-copyright-text {
+    font-size: 1.05rem;
+  }
+
+  .footer-sub-quote {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .landscape-svg {
+    min-width: 490px;
+  }
+
+  .footer-button-deck {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .lift-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

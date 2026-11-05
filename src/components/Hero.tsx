@@ -1,243 +1,279 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import profileImage from '../assets/profile.jpg';
+import React, { useEffect, useRef, useState } from 'react';
+import { LuSparkles, LuCat, LuHeart, LuZap, LuStar, LuMail, LuFileText, LuX } from 'react-icons/lu';
+import { GiStrawberry } from 'react-icons/gi';
 import { resumeData } from '../data/resumeData';
 import './Hero.css';
 
+const POOKIE_STICKERS = [
+  { id: 'sparkles', icon: <LuSparkles />, label: 'sparkle', top: '10%', left: '8%' },
+  { id: 'catpaw', icon: <LuCat />, label: 'purr', top: '75%', left: '4%' },
+  { id: 'strawberry', icon: <GiStrawberry />, label: 'berry sweet', top: '12%', right: '8%' },
+  { id: 'ribbon', icon: <LuHeart />, label: 'pookie', top: '78%', right: '6%' }
+];
+
 const Hero: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const { ref } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
+  const photoCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [photoDoodleColor, setPhotoDoodleColor] = useState('#f87171');
+  const [photoPenSize, setPhotoPenSize] = useState(3);
+  const isDrawing = useRef(false);
+  const lastPhotoPos = useRef<{ x: number; y: number } | null>(null);
+
+  const [stats, setStats] = useState({
+    projects: 0,
+    internships: 0,
+    tools: 0
   });
 
+  const totalTools =
+    resumeData.skills.languages.length +
+    resumeData.skills.backend.length +
+    resumeData.skills.databases.length +
+    resumeData.skills.aiml.length;
+
   useEffect(() => {
-    setIsVisible(true);
+    const duration = 2200;
+    // Delay counter until stats section smoothly fades in
+    const timer = setTimeout(() => {
+      const startTime = performance.now();
+      const animateStats = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+        setStats({
+          projects: Math.round(resumeData.projects.length * easeProgress),
+          internships: Math.round(resumeData.experience.length * easeProgress),
+          tools: Math.round(totalTools * easeProgress)
+        });
+
+        if (progress < 1) {
+          requestAnimationFrame(animateStats);
+        }
+      };
+
+      requestAnimationFrame(animateStats);
+    }, 2400);
+
+    return () => clearTimeout(timer);
+  }, [totalTools]);
+
+  // Handle doodle on profile photo
+  useEffect(() => {
+    const cv = photoCanvasRef.current;
+    if (!cv) return;
+    const d = window.devicePixelRatio || 1;
+    const rect = cv.getBoundingClientRect();
+    cv.width = rect.width * d;
+    cv.height = rect.height * d;
+    const ctx = cv.getContext('2d');
+    if (ctx) {
+      ctx.setTransform(d, 0, 0, d, 0, 0);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
   }, []);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
+  const getPhotoPos = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const cv = photoCanvasRef.current;
+    if (!cv) return { x: 0, y: 0 };
+    const r = cv.getBoundingClientRect();
+    return {
+      x: e.clientX - r.left,
+      y: e.clientY - r.top
+    };
+  };
+
+  const handlePhotoPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    isDrawing.current = true;
+    const p = getPhotoPos(e);
+    lastPhotoPos.current = p;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
     }
   };
 
-  const itemVariants: Variants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
-    }
+  const handlePhotoPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isDrawing.current || !lastPhotoPos.current) return;
+    const cv = photoCanvasRef.current;
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+
+    const p = getPhotoPos(e);
+    ctx.strokeStyle = photoDoodleColor;
+    ctx.lineWidth = photoPenSize;
+    ctx.beginPath();
+    ctx.moveTo(lastPhotoPos.current.x, lastPhotoPos.current.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+
+    lastPhotoPos.current = p;
   };
 
-  const nameVariants: Variants = {
-    hidden: { scale: 0.8, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.6, -0.05, 0.01, 0.99],
-        delay: 0.3
-      }
-    }
+  const handlePhotoPointerEnd = () => {
+    isDrawing.current = false;
+    lastPhotoPos.current = null;
   };
 
-  const buttonVariants: Variants = {
-    hidden: { scale: 0.8, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.4,
-        ease: [0.6, -0.05, 0.01, 0.99],
-        delay: 0.8
-      }
-    }
-  };
-
-  const floatingVariants: Variants = {
-    floating: {
-      y: [-10, 10, -10],
-      transition: {
-        duration: 2.5,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+  const handleClearPhotoDoodles = () => {
+    const cv = photoCanvasRef.current;
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, cv.width, cv.height);
   };
 
   return (
-    <section id="home" className="hero" ref={ref}>
-      <motion.div
-        className="hero-background"
-        initial={{ scale: 1.1 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      >
-        <div className="gradient-orb orb-1"></div>
-        <div className="gradient-orb orb-2"></div>
-        <div className="gradient-orb orb-3"></div>
-      </motion.div>
+    <section id="home" className="hero-section">
+      <div className="hero">
+        <div className="hero-intro">
+          <div className="notebook-edition-tag">
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <LuSparkles style={{ color: 'var(--accent)', fontSize: '0.9rem' }} /> notebook no. 21
+            </span> • <span>backend craft</span> • <span>2026</span>
+          </div>
 
-      <motion.div
-        className="hero-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate={isVisible ? "visible" : "hidden"}
-      >
-        <motion.div className="hero-content">
-          <motion.div
-            className="greeting"
-            variants={itemVariants}
-          >
-            <span className="greeting-text">Hello, I'm</span>
-          </motion.div>
-
-          <motion.h1
-            className="hero-name"
-            variants={nameVariants}
-          >
-            <span className="name-text">{resumeData.personalInfo.name}</span>
-          </motion.h1>
-
-          <motion.div
-            className="hero-titles"
-            variants={itemVariants}
-          >
-            <h2 className="title-primary">Software Engineer</h2>
-            <h3 className="title-secondary">{resumeData.personalInfo.title}</h3>
-          </motion.div>
-
-          <motion.p
-            className="hero-description"
-            variants={itemVariants}
-          >
-            {resumeData.summary}
-          </motion.p>
-
-          <motion.div
-            className="hero-buttons"
-            variants={buttonVariants}
-          >
-            <motion.button
-              className="btn-primary"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 0 25px var(--lavender-glow)"
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              View My Work
-            </motion.button>
-            
-            <motion.button
-              className="btn-resume"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 0 25px var(--lavender-glow)"
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={async () => {
-                try {
-                  // Check if resume file exists
-                  const response = await fetch('/Vaaheesan-Resume.pdf');
-                  if (!response.ok) {
-                    // If file doesn't exist, show a message
-                    alert('Resume is currently being updated. Please contact me directly for the latest version!');
-                    return;
-                  }
-                  
-                  // Convert to blob for proper download
-                  const blob = await response.blob();
-                  
-                  // Check if the blob is actually a PDF
-                  if (blob.type !== 'application/pdf' && blob.size < 1000) {
-                    alert('Resume file is currently unavailable. Please contact me directly!');
-                    return;
-                  }
-                  
-                  const url = window.URL.createObjectURL(blob);
-                  
-                  // Create download link
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.download = 'Vaaheesan-Resume.pdf';
-                  document.body.appendChild(link);
-                  link.click();
-                  
-                  // Cleanup
-                  document.body.removeChild(link);
-                  window.URL.revokeObjectURL(url);
-                } catch (error) {
-                  console.error('Error downloading resume:', error);
-                  alert('Resume download temporarily unavailable. Please contact me directly for my resume!');
-                }
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7,10 12,15 17,10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+          <h1 className="hero-title">
+            Hi, I'm{' '}
+            <span className="circled-name">
+              {resumeData.personalInfo.name}
+              <svg viewBox="0 0 260 110" preserveAspectRatio="none" aria-hidden="true" className="ink-circle-svg">
+                <path d="M22 54 C12 24 120 6 198 18 C252 28 248 82 134 96 C48 104 2 78 24 42 C38 18 90 10 130 10" />
               </svg>
-              Download Resume
-            </motion.button>
-            
-            <motion.button
-              className="btn-secondary"
-              whileHover={{ 
-                scale: 1.05,
-                borderColor: "var(--secondary-lavender)"
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Get In Touch
-            </motion.button>
-          </motion.div>
-        </motion.div>
+            </span>
+            .
+          </h1>
 
-        <motion.div
-          className="hero-visual"
-          variants={itemVariants}
-        >
-          <motion.div
-            className="profile-container"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="profile-image">
-              <img 
-                src={profileImage} 
-                alt="Vaaheesan S - Profile" 
-                className="profile-img"
+          <p className="hero-role-lead">
+            <strong>Backend Software Developer</strong> building resilient APIs, payment flows, and microservices with Python, FastAPI, PostgreSQL, and AWS ECS Fargate, wrapped in deterministic AI guardrails.
+          </p>
+
+          <div className="competitive-pill-row">
+            <a
+              href="https://leetcode.com/u/VAAHEESAN"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="comp-stat-badge sk"
+            >
+              <span className="badge-icon"><LuZap /></span>
+              <span>LeetCode Contest Rating: <strong>1655</strong> (Top 17.5%)</span>
+            </a>
+            <a
+              href="https://www.hackerrank.com/profile/vaahee21"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="comp-stat-badge sk"
+            >
+              <span className="badge-icon"><LuStar /></span>
+              <span>HackerRank: <strong>5-Star Gold Badge</strong> in Python (<span style={{ display: 'inline-flex', gap: '2px', verticalAlign: '-1px' }}><LuStar /><LuStar /><LuStar /><LuStar /><LuStar /></span>)</span>
+            </a>
+          </div>
+
+          <div className="cta-row">
+            <a className="btn primary" href="#projects">
+              see my projects ↓
+            </a>
+            <a className="btn" href="#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span>write to me</span>
+              <LuMail />
+            </a>
+            <a
+              className="btn small"
+              href="/Vaaheesan-Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Vaaheesan_Resume.pdf"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <LuFileText />
+              <span>download resume</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Polaroid Photo Column with Left-side Curved Arrow & Right-side Sticky Note */}
+        <div className="polaroid-wrapper">
+          <div className="arrow-pointer-container" aria-hidden="true">
+            <span className="arrow-text">this is me →</span>
+            <svg className="hand-drawn-arrow" viewBox="0 0 150 110" aria-hidden="true">
+              <path d="M8 96 C30 40 80 20 128 38 M128 38 L104 26 M128 38 L112 62" />
+            </svg>
+          </div>
+
+          <div className="sticky-post-it">
+            currently: open to work!
+          </div>
+
+          <figure className="polaroid-frame sk">
+            <i className="washi-tape-strip" aria-hidden="true" />
+            
+            <div className="photo-container">
+              <img
+                src="/Image.jpg"
+                alt="Vaaheesan S"
+                className="profile-photo"
+              />
+              {/* Overlay Canvas allowing users to draw glasses, hats, mustaches, or hearts on profile */}
+              <canvas
+                ref={photoCanvasRef}
+                className="photo-doodle-canvas"
+                onPointerDown={handlePhotoPointerDown}
+                onPointerMove={handlePhotoPointerMove}
+                onPointerUp={handlePhotoPointerEnd}
+                onPointerCancel={handlePhotoPointerEnd}
               />
             </div>
-          </motion.div>
 
-          <motion.div
-            className="floating-elements"
-            variants={floatingVariants}
-            animate="floating"
-          >
-            <div className="tech-badge">Python</div>
-            <div className="tech-badge">React.js</div>
-            <div className="tech-badge">Node.js</div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+            <figcaption className="polaroid-caption">
+              Vaaheesan S · Chennai, India
+            </figcaption>
+
+            {/* Doodle controls for profile photo */}
+            <div className="photo-doodle-toolbar">
+              <div className="photo-color-dots">
+                {['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa', '#2d2a26'].map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    className="photo-color-dot"
+                    style={{ background: color, outline: photoDoodleColor === color ? '2px solid #2d2a26' : 'none' }}
+                    onClick={() => setPhotoDoodleColor(color)}
+                    aria-label={`Color ${color}`}
+                  />
+                ))}
+                <button
+                  type="button"
+                  className="btn-clear-photo"
+                  onClick={handleClearPhotoDoodles}
+                  title="Wipe doodle"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}
+                >
+                  <span>clear</span>
+                  <LuX style={{ fontSize: '0.85rem' }} />
+                </button>
+              </div>
+            </div>
+          </figure>
+        </div>
+      </div>
+
+      {/* Stats with count-up banner */}
+      <div className="stats" aria-label="At a glance">
+        <div className="stat sk">
+          <b>{stats.projects}</b>
+          <span>projects built</span>
+        </div>
+        <div className="stat sk">
+          <b>{stats.internships}</b>
+          <span>internships</span>
+        </div>
+        <div className="stat sk">
+          <b>{stats.tools}</b>
+          <span>tools in my kit</span>
+        </div>
+      </div>
     </section>
   );
 };

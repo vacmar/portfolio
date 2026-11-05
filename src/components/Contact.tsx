@@ -1,152 +1,223 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import React, { useState } from 'react';
+import { LuSend, LuMail, LuCheck, LuCopy } from 'react-icons/lu';
+import { resumeData } from '../data/resumeData';
 import './Contact.css';
 
+const TOPICS = ['job or internship', 'project together', 'a question', 'just saying hi'];
+
 const Contact: React.FC = () => {
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
+  const [topic, setTopic] = useState(TOPICS[0]);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [readyNote, setReadyNote] = useState('');
+  const [isFlying, setIsFlying] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedNote, setCopiedNote] = useState(false);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        staggerChildren: 0.2
-      }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim()) {
+      setError('Write a line or two first.');
+      return;
     }
+    setError('');
+
+    const formattedNote = `Topic: ${topic}
+From: ${name || '(no name)'} ${email ? `<${email}>` : ''}
+
+${message}`;
+
+    setReadyNote(formattedNote);
+    setIsFlying(true);
+
+    const subject = encodeURIComponent(`[${topic}] Note from ${name || 'Portfolio Visitor'}`);
+    const body = encodeURIComponent(
+      `Hi Vaaheesan,\n\n${message}\n\n---\nTopic: ${topic}\nFrom: ${name || 'Anonymous'}\nEmail: ${email || 'Not provided'}`
+    );
+    const mailtoUrl = `mailto:${resumeData.personalInfo.email}?subject=${subject}&body=${body}`;
+
+    setTimeout(() => {
+      setIsFlying(false);
+      window.location.href = mailtoUrl;
+    }, 600);
   };
 
-  const itemVariants: Variants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
-    }
+  const handleOpenEmailApp = () => {
+    const subject = encodeURIComponent(`[${topic}] Note from ${name || 'Portfolio Visitor'}`);
+    const body = encodeURIComponent(
+      `Hi Vaaheesan,\n\n${message}\n\n---\nTopic: ${topic}\nFrom: ${name || 'Anonymous'}\nEmail: ${email || 'Not provided'}`
+    );
+    window.location.href = `mailto:${resumeData.personalInfo.email}?subject=${subject}&body=${body}`;
   };
 
-  const contactLinks = [
-    {
-      name: 'Email',
-      href: 'mailto:vaahee21@gmail.com',
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-          <polyline points="22,6 12,13 2,6"/>
-        </svg>
-      )
-    },
-    {
-      name: 'LinkedIn',
-      href: 'https://linkedin.com/in/vaaheesan-s',
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-          <rect x="2" y="9" width="4" height="12"/>
-          <circle cx="4" cy="4" r="2"/>
-        </svg>
-      )
-    },
-    {
-      name: 'GitHub',
-      href: 'https://github.com/vacmar',
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-      )
-    },
-    {
-      name: 'Phone',
-      href: 'tel:+919499941994',
-      icon: (
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-        </svg>
-      )
-    }
-  ];
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(resumeData.personalInfo.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const handleCopyNote = () => {
+    navigator.clipboard.writeText(readyNote);
+    setCopiedNote(true);
+    setTimeout(() => setCopiedNote(false), 2000);
+  };
 
   return (
-    <section id="contact" className="contact" ref={ref}>
-      <motion.div
-        className="contact-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-      >
-        <motion.div className="contact-header" variants={itemVariants}>
-          <h2 className="section-title">Get In Touch</h2>
-          <p className="section-subtitle">
-            Let's connect and discuss opportunities, projects, or just have a great conversation!
-          </p>
-        </motion.div>
+    <section id="contact" className="contact-section">
+      <div className="sh">
+        <span className="note-label">contact</span>
+        <h2>Write me a note</h2>
+        <p>Drop a line about a role, collaborative project, or an engineering inquiry.</p>
+      </div>
 
-        <motion.div className="contact-content" variants={itemVariants}>
-          <div className="contact-grid">
-            {contactLinks.map((contact, index) => (
-              <motion.a
-                key={contact.name}
-                href={contact.href}
-                className="contact-card"
-                target={contact.href.startsWith('http') ? '_blank' : '_self'}
-                rel={contact.href.startsWith('http') ? 'noopener noreferrer' : ''}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 10px 40px rgba(139, 92, 246, 0.2)"
-                }}
-                whileTap={{ scale: 0.95 }}
-                title={contact.name}
-              >
-                <div className="contact-icon">{contact.icon}</div>
-                <span className="contact-label">{contact.name}</span>
-              </motion.a>
-            ))}
+      <div className="contact-grid-layout">
+        <div>
+          <form className="letter sk" onSubmit={handleSubmit} noValidate>
+            <div className="field">
+              <span className="lab">What's it about?</span>
+              <div className="topics" role="group" aria-label="Topics">
+                {TOPICS.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    className="btn small"
+                    aria-pressed={topic === t}
+                    onClick={() => setTopic(t)}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="two-cols">
+              <div className="field">
+                <label htmlFor="fromName">Your name</label>
+                <input
+                  id="fromName"
+                  type="text"
+                  placeholder="Ada Lovelace"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="fromMail">Your email</label>
+                <input
+                  id="fromMail"
+                  type="email"
+                  placeholder="ada@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="field">
+              <label htmlFor="msg">Message</label>
+              <textarea
+                id="msg"
+                placeholder="Hi Vaaheesan, let's talk about..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+            </div>
+
+            {error && <p className="err" aria-live="polite">{error}</p>}
+
+            <button className="btn primary" type="submit" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <span>fold it into a paper plane</span>
+              <LuSend />
+            </button>
+
+            <svg className={`plane ${isFlying ? 'fly' : ''}`} viewBox="0 0 80 50" aria-hidden="true">
+              <path d="M4 22 L76 4 L50 46 L38 30 Z" />
+              <path d="M38 30 L76 4" />
+            </svg>
+          </form>
+
+          {readyNote && (
+            <div className="ready sk">
+              <h3>Your note is folded and ready</h3>
+              <p>
+                Copy this formatted note and email it straight to{' '}
+                <span className="email">{resumeData.personalInfo.email}</span>:
+              </p>
+              <textarea readOnly value={readyNote} aria-label="Formatted note" />
+              <div style={{ marginTop: '12px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button className="btn small primary" type="button" onClick={handleOpenEmailApp} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span>open in email app</span>
+                  <LuMail />
+                </button>
+                <button className="btn small" type="button" onClick={handleCopyNote} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  {copiedNote ? (
+                    <>
+                      <LuCheck />
+                      <span>copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <LuCopy />
+                      <span>copy note</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="postcard sk">
+            <h3>Or write straight to</h3>
+            <p className="email">{resumeData.personalInfo.email}</p>
+            <p className="phone">Phone: {resumeData.personalInfo.phone}</p>
+            <p className="loc">Location: {resumeData.personalInfo.location}</p>
+            <button className="btn small" type="button" onClick={handleCopyEmail} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              {copiedEmail ? (
+                <>
+                  <LuCheck />
+                  <span>address copied!</span>
+                </>
+              ) : (
+                <>
+                  <LuCopy />
+                  <span>copy address</span>
+                </>
+              )}
+            </button>
           </div>
 
-          <motion.div 
-            className="contact-cta"
-            variants={itemVariants}
-          >
-            <motion.button
-              className="resume-download-btn"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 0 25px var(--lavender-glow)"
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                const link = document.createElement('a');
-                link.href = '/Vaaheesan-Resume.pdf';
-                link.download = 'Vaaheesan-Resume.pdf';
-                link.click();
-              }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7,10 12,15 17,10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Download My Resume
-            </motion.button>
-          </motion.div>
-        </motion.div>
-
-        <motion.div className="contact-footer" variants={itemVariants}>
-          <p>Thank you for visiting my portfolio! Looking forward to hearing from you.</p>
-        </motion.div>
-      </motion.div>
+          <ul className="elsewhere">
+            <li>
+              <a className="sk" href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer">
+                <span>GitHub</span>
+                <span>github.com/vacmar</span>
+              </a>
+            </li>
+            <li>
+              <a className="sk" href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
+                <span>LinkedIn</span>
+                <span>linkedin.com/in/vaaheesan-s</span>
+              </a>
+            </li>
+            <li>
+              <a className="sk" href={resumeData.personalInfo.hackerrank} target="_blank" rel="noopener noreferrer">
+                <span>HackerRank</span>
+                <span>hackerrank.com/profile/vaahee21</span>
+              </a>
+            </li>
+            <li>
+              <a className="sk" href={resumeData.personalInfo.leetcode} target="_blank" rel="noopener noreferrer">
+                <span>LeetCode</span>
+                <span>leetcode.com/u/VAAHEESAN</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
   );
 };

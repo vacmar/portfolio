@@ -1,212 +1,275 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useScrolled, useMenuToggle, useSmoothScroll, useIsMobile, useScrollLock } from '../hooks';
-import { NAV_ITEMS, ANIMATION_VARIANTS, TRANSITIONS } from '../constants';
+import React, { useEffect, useState } from 'react';
+import { LuSun, LuCloudRain, LuSunset, LuMoon, LuPenTool, LuX } from 'react-icons/lu';
 import './Header.css';
 
-const Header: React.FC = () => {
-  const isScrolled = useScrolled(50);
-  const { isOpen: isMenuOpen, toggleMenu, closeMenu } = useMenuToggle();
-  const { scrollToElement } = useSmoothScroll();
-  const { lockScroll, unlockScroll } = useScrollLock();
-  const [activeSection, setActiveSection] = useState('home'); // Fixed: Changed from 'hero' to 'home'
+interface HeaderProps {
+  onWeatherChange?: (weather: 'sunny' | 'rainy' | 'sunset' | 'midnight') => void;
+  activeWeather?: string;
+}
+
+const WEATHER_MODES = [
+  { id: 'sunny', icon: <LuSun className="weather-icon-svg" />, label: 'sunny' },
+  { id: 'rainy', icon: <LuCloudRain className="weather-icon-svg" />, label: 'rainy' },
+  { id: 'sunset', icon: <LuSunset className="weather-icon-svg" />, label: 'sunset' },
+  { id: 'midnight', icon: <LuMoon className="weather-icon-svg" />, label: 'midnight' }
+] as const;
+
+const SIDE_SECTIONS = [
+  { id: 'home', num: '01. ', word: 'Hero' },
+  { id: 'about', num: '02. ', word: 'About' },
+  { id: 'journey', num: '03. ', word: 'Journey' },
+  { id: 'stack', num: '04. ', word: 'Stack' },
+  { id: 'certs', num: '05. ', word: 'Certs' },
+  { id: 'projects', num: '06. ', word: 'Projects' },
+  { id: 'experience', num: '07. ', word: 'Experiences' },
+  { id: 'scribble', num: '08. ', word: 'Doodle' },
+  { id: 'puzzle', num: '09. ', word: 'Puzzle' },
+  { id: 'contact', num: '10. ', word: 'Contact' }
+];
+
+const Header: React.FC<HeaderProps> = ({ onWeatherChange, activeWeather = 'sunny' }) => {
+  const [activeSection, setActiveSection] = useState('home');
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Typewriter effect state for center header display
+  const [typedNum, setTypedNum] = useState('01. ');
+  const [typedWord, setTypedWord] = useState('Hero');
+  const [showCursor, setShowCursor] = useState(true);
+
+  // Blinking cursor interval
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 530);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      }
+    }
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+  useEffect(() => {
+    const current = SIDE_SECTIONS.find((s) => s.id === activeSection) || SIDE_SECTIONS[0];
+    const targetNum = current.num;
+    const targetWord = current.word;
+
+    let isCancelled = false;
+    let timeoutIds: ReturnType<typeof setTimeout>[] = [];
+
+    // Reset initially
+    setTypedNum('');
+    setTypedWord('');
+
+    // Step 1: Type the number ("01. ") quickly left-to-right
+    for (let i = 1; i <= targetNum.length; i++) {
+      const t = setTimeout(() => {
+        if (!isCancelled) setTypedNum(targetNum.slice(0, i));
+      }, i * 40);
+      timeoutIds.push(t);
+    }
+
+    // Step 2: Immediately continue typing the word without delay
+    const numFinishDelay = targetNum.length * 40;
+    for (let j = 1; j <= targetWord.length; j++) {
+      const t = setTimeout(() => {
+        if (!isCancelled) setTypedWord(targetWord.slice(0, j));
+      }, numFinishDelay + j * 40);
+      timeoutIds.push(t);
+    }
+
+    return () => {
+      isCancelled = true;
+      timeoutIds.forEach((t) => clearTimeout(t));
+    };
+  }, [activeSection]);
 
   useEffect(() => {
-    // Detect active section based on scroll position
-    let ticking = false;
-    
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const sections = NAV_ITEMS.map(item => item.id);
-          
-          // Special handling for home section when at top
-          if (window.scrollY < 200) {
-            setActiveSection('home');
-            ticking = false;
-            return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0) {
+        setScrollProgress(Math.min(1, Math.max(0, window.scrollY / max)));
+      }
+
+      const sections = ['home', 'about', 'journey', 'stack', 'certs', 'projects', 'experience', 'scribble', 'puzzle', 'contact'];
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 140) {
+            setActiveSection(sections[i]);
+            break;
           }
-          
-          // Find the section that's currently in the "active zone"
-          let currentSection = null;
-          
-          sections.forEach(sectionId => {
-            const element = document.getElementById(sectionId);
-            if (element) {
-              const rect = element.getBoundingClientRect();
-              const headerHeight = 60; // Reduced from 100 to 60
-              
-              // A section is active if its content area is in the viewport
-              // We want the section to be active when its content starts showing below the header
-              const sectionTop = rect.top;
-              const sectionBottom = rect.bottom;
-              
-              // Section is active if:
-              // 1. Section top is above the header and bottom is below the header (section spans the trigger point)
-              // 2. Or section top is within a reasonable distance below the header (about to become visible)
-              if ((sectionTop <= headerHeight && sectionBottom >= headerHeight) ||
-                  (sectionTop > headerHeight && sectionTop <= headerHeight + 50)) {
-                currentSection = sectionId;
-              }
-            }
-          });
-          
-          if (currentSection) {
-            setActiveSection(currentSection);
-          }
-          
-          ticking = false;
-        });
-        ticking = true;
+        }
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial check
     handleScroll();
-    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock/unlock scroll when mobile menu is open
-  useEffect(() => {
-    if (isMenuOpen) {
-      lockScroll();
-    } else {
-      unlockScroll();
-    }
-
-    // Cleanup on unmount
-    return () => {
-      unlockScroll();
-    };
-  }, [isMenuOpen, lockScroll, unlockScroll]);
-
   const handleNavClick = (id: string) => {
-    // Set active section immediately to show correct state
     setActiveSection(id);
-    
-    // Close menu immediately (synchronously)
-    closeMenu();
-    
-    // Use requestAnimationFrame to ensure DOM updates before scrolling
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        scrollToElement(id, 60); // Reduced offset from 100 to 60
-      }, isMenuOpen ? 100 : 0); // Longer delay if menu is open
-    });
-  };
-
-  const downloadResume = () => {
-    // Close mobile menu immediately if it's open
-    closeMenu();
-    
-    try {
-      const link = document.createElement('a');
-      link.href = '/Vaaheesan-Resume.pdf';
-      link.download = 'Vaaheesan-Resume.pdf';
-      link.style.display = 'none'; // Hide the link
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      window.open('/Vaaheesan-Resume.pdf', '_blank');
-    }
+    setMobileMenuOpen(false);
+    // Allow body scroll lock to release before scrolling
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   return (
-    <>
-      <motion.header 
-        className={`header ${isScrolled ? 'scrolled' : ''}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="header-content">
-          <motion.div 
-            className="logo" 
-            onClick={() => handleNavClick('home')}
-            whileHover={{ scale: 1.05 }}
-          >
-            <img src="/VACMAR_LOGO.png" alt="VACMAR Portfolio" />
-          </motion.div>
+    <header className="nav">
+      <div className="nav-in">
+        <a className="brand" href="#home" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}>
+          vaaheesan<span>'s sketchbook</span>
+        </a>
 
-          {/* Desktop Navigation */}
-          <nav className="nav-desktop">
-            {NAV_ITEMS.map((item) => (
-              <motion.button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+        {/* Center Section Indicator with typewriter effect - hidden on small phone screens to prevent collision */}
+        <div className="center-section-display" aria-live="polite">
+          <span className="center-section-num">{typedNum}</span>
+          <span className="center-section-word">{typedWord}</span>
+          <span className={`center-section-cursor ${showCursor ? 'visible' : ''}`}>|</span>
+        </div>
+
+        {/* Right-aligned Controls: Weather Palette Selector & Animated Mobile Hamburger */}
+        <div className="nav-controls">
+          <div className="weather-toggle-group" role="group" aria-label="Weather mood theme">
+            {WEATHER_MODES.map((w) => (
+              <button
+                key={w.id}
+                type="button"
+                className={`btn-weather ${activeWeather === w.id ? 'active' : ''}`}
+                title={`${w.label} mood`}
+                onClick={() => onWeatherChange && onWeatherChange(w.id)}
               >
-                {item.label}
-              </motion.button>
+                {w.icon}
+              </button>
             ))}
-            <motion.button 
-              className="resume-btn" 
-              onClick={downloadResume}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+          </div>
+
+          {/* Sketchy Animated Hamburger Button for Mobile */}
+          <button
+            type="button"
+            className={`sketch-hamburger-btn ${mobileMenuOpen ? 'open' : ''}`}
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle navigation drawer"
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className="ham-line ham-line-1" />
+            <span className="ham-line ham-line-2" />
+            <span className="ham-line ham-line-3" />
+          </button>
+        </div>
+      </div>
+
+      <span
+        className="bar"
+        id="bar"
+        aria-hidden="true"
+        style={{ transform: `scaleX(${scrollProgress})` }}
+      />
+
+      {/* Full-Screen Sketch Drawer for Mobile View */}
+      <div
+        className={`mobile-sketch-drawer ${mobileMenuOpen ? 'active' : ''}`}
+        aria-hidden={!mobileMenuOpen}
+      >
+        <div className="drawer-inner">
+          <div className="drawer-header">
+            <span className="drawer-title">Chapters & Destinations</span>
+            <button
+              type="button"
+              className="drawer-close-btn"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
             >
-              Resume
-            </motion.button>
+              <LuX />
+            </button>
+          </div>
+
+          <nav className="drawer-nav-list" aria-label="Mobile Navigation">
+            {SIDE_SECTIONS.map((sec, idx) => {
+              const isActive = activeSection === sec.id;
+              return (
+                <button
+                  key={sec.id}
+                  type="button"
+                  className={`drawer-nav-item ${isActive ? 'active' : ''}`}
+                  style={{ animationDelay: `${idx * 45}ms` }}
+                  onClick={() => handleNavClick(sec.id)}
+                >
+                  <span className="drawer-item-num">{sec.num}</span>
+                  <span className="drawer-item-name">{sec.word}</span>
+                  {isActive && <span className="drawer-active-tag">current</span>}
+                </button>
+              );
+            })}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <motion.button 
-            className="menu-toggle"
-            onClick={toggleMenu}
-            whileTap={{ scale: 0.9 }}
-          >
-            <span className={isMenuOpen ? 'open' : ''}></span>
-            <span className={isMenuOpen ? 'open' : ''}></span>
-            <span className={isMenuOpen ? 'open' : ''}></span>
-          </motion.button>
+          <div className="drawer-footer-note">
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <LuPenTool style={{ fontSize: '0.95rem', color: 'var(--accent)' }} />
+              tap anywhere or choose a chapter to jump
+            </span>
+          </div>
         </div>
-      </motion.header>
-
-      {/* Mobile Navigation */}
-      <motion.div 
-        className={`nav-mobile ${isMenuOpen ? 'open' : ''}`}
-        initial={{ opacity: 0, y: -20 }}
-        animate={isMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-        transition={{ 
-          duration: isMenuOpen ? 0.4 : 0.15,
-          ease: isMenuOpen ? [0.68, -0.55, 0.265, 1.55] : "easeOut"
-        }}
-      >
-        {NAV_ITEMS.map((item) => (
-          <motion.button
-            key={item.id}
-            onClick={() => handleNavClick(item.id)}
-            className={`nav-link-mobile ${activeSection === item.id ? 'active' : ''}`}
-            whileHover={{ x: 10 }}
-          >
-            {item.label}
-          </motion.button>
-        ))}
-        <motion.button 
-          className="resume-btn-mobile" 
-          onClick={downloadResume}
-          whileHover={{ y: -2 }}
-        >
-          Download Resume
-        </motion.button>
-      </motion.div>
-
-      {/* Overlay */}
-      {isMenuOpen && (
-        <motion.div 
-          className="overlay" 
-          onClick={closeMenu}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <div
+          className="drawer-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
         />
-      )}
-    </>
+      </div>
+
+      {/* Floating Right-Side Chapter / Section Gauge (GetArtCraft style) with typewriter synced labels */}
+      <aside className="artcraft-side-nav" aria-label="Quick section navigation">
+        <div className="artcraft-side-track">
+          {SIDE_SECTIONS.map((sec) => {
+            const isActive = activeSection === sec.id;
+            return (
+              <button
+                key={sec.id}
+                type="button"
+                className={`artcraft-side-item ${isActive ? 'active' : ''}`}
+                onClick={() => handleNavClick(sec.id)}
+                aria-label={`Jump to ${sec.word}`}
+                title={`${sec.num}${sec.word}`}
+              >
+                <span className="artcraft-side-num">{sec.num.trim()}</span>
+                <span className="artcraft-side-tick" />
+                <span className="artcraft-side-label">
+                  {isActive ? typedWord : sec.word}
+                  {isActive && <span className={`side-cursor ${showCursor ? 'visible' : ''}`}>|</span>}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </aside>
+    </header>
   );
 };
 

@@ -1,148 +1,91 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { resumeData } from '../data/resumeData';
+import { LuStar } from 'react-icons/lu';
+import { resumeData, Experience as ExperienceType } from '../data/resumeData';
+import GlitchUnpredictable from './GlitchUnpredictable';
 import './Experience.css';
 
 const Experience: React.FC = () => {
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
-    }
-  };
-
-  const cardVariants: Variants = {
-    hidden: { x: -50, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
-    }
-  };
-
   return (
-    <section id="experience" className="experience" ref={ref}>
-      <motion.div
-        className="experience-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-      >
-        <motion.div className="experience-header" variants={itemVariants}>
-          <h2 className="section-title">Professional Experience</h2>
-          <p className="section-subtitle">
-            Building expertise through hands-on development experience
-          </p>
-        </motion.div>
+    <section id="experience" className="experience-section">
+      <div className="sh">
+        <span className="note-label">experiences</span>
+        <h2>Where I've built & broken things</h2>
+        <p>Production engineering across fintech payment gateways, high-concurrency microservices, and multi-tenant architectures.</p>
+      </div>
 
-        <div className="experience-timeline">
-          {resumeData.experience.map((exp, index) => (
-            <motion.div
-              key={exp.id}
-              className="experience-item"
-              variants={cardVariants}
-              whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-            >
-              <div className="experience-timeline-marker">
-                <div className="timeline-dot"></div>
-                <div className="timeline-line"></div>
+      <ul className="jobs">
+        {resumeData.experience.map((j: ExperienceType, idx: number) => {
+          const pastelColors = ['pastel-blue', 'pastel-pink', 'pastel-yellow', 'pastel-mint'];
+          const colorClass = pastelColors[idx % pastelColors.length];
+
+          return (
+            <li key={j.id} className={`job sk ${colorClass}`}>
+              <i className="washi-tape-strip" aria-hidden="true" />
+              
+              <div className="job-badge-row">
+                <span className="note-label">internship</span>
+                <span className="job-date">{j.startDate} – {j.endDate}</span>
               </div>
+              
+              <h3>{j.company}</h3>
+              <p className="job-role">{j.position} • {j.location}</p>
+              
+              {j.note && (
+                <p className="job-note" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <LuStar style={{ fontSize: '0.85rem', color: 'var(--accent)' }} />
+                  <span>{j.note}</span>
+                </p>
+              )}
 
-              <div className="experience-content">
-                <div className="experience-header-info">
-                  <div className="experience-title-section">
-                    <h3 className="experience-position">{exp.position}</h3>
-                    <h4 className="experience-company">{exp.company}</h4>
-                    <p className="experience-location">{exp.location}</p>
-                  </div>
-                  <div className="experience-duration">
-                    <span className="duration-badge">
-                      {exp.startDate} - {exp.endDate}
-                    </span>
-                  </div>
-                </div>
+              <p className="job-desc">{j.description}</p>
 
-                <p className="experience-description">{exp.description}</p>
+              {j.achievements && j.achievements.length > 0 && (
+                <ul className="job-achievements">
+                  {j.achievements.map((ach, aIdx) => (
+                    <li key={aIdx}>{ach}</li>
+                  ))}
+                </ul>
+              )}
 
-                <div className="experience-achievements">
-                  <h5>Key Achievements:</h5>
-                  <ul>
-                    {exp.achievements.map((achievement, idx) => (
-                      <motion.li
-                        key={idx}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                        transition={{ delay: index * 0.2 + idx * 0.1 }}
-                      >
-                        {achievement}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="experience-technologies">
-                  <h5>Technologies Used:</h5>
-                  <div className="tech-tags">
-                    {exp.technologies.map((tech, idx) => (
-                      <motion.span
-                        key={idx}
-                        className="tech-tag"
-                        initial={{ scale: 0 }}
-                        animate={inView ? { scale: 1 } : { scale: 0 }}
-                        transition={{ delay: index * 0.2 + idx * 0.05 }}
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        {tech}
-                      </motion.span>
-                    ))}
-                  </div>
-                </div>
+              <div className="job-tech">
+                {j.technologies.map((t) => (
+                  <span key={t} className="tech-pill">{t}</span>
+                ))}
               </div>
-            </motion.div>
-          ))}
+            </li>
+          );
+        })}
+
+        {/* Coming Soon Dashed Experience Box with Scrambled Future Text */}
+        <li className="job exp-coming-soon-card sk">
+          <i className="washi-tape-strip" aria-hidden="true" />
+          <GlitchUnpredictable
+            badgeText="NEXT CHAPTER"
+            arrowText="something big is brewing..."
+          />
+        </li>
+      </ul>
+
+      {/* Studying / Education Notebook Card */}
+      <div className="edu sk">
+        <i className="washi-tape-strip" aria-hidden="true" />
+        <span className="note-label">school days</span>
+        <h3>{resumeData.education[0].degree}</h3>
+        <p>
+          <strong>{resumeData.education[0].school}</strong> ({resumeData.education[0].graduationDate})
+        </p>
+        <p className="edu-gpa">Academic Record: <strong>{resumeData.education[0].gpa}</strong></p>
+        <p className="edu-scores">{resumeData.education[0].scores}</p>
+        
+        <div className="edu-courses">
+          <span className="course-label">Key Highlights & Certifications:</span>
+          <div className="courses-list">
+            {resumeData.education[0].relevantCourses.map((c) => (
+              <span key={c} className="course-chip">{c}</span>
+            ))}
+          </div>
         </div>
-
-        <motion.div className="experience-cta" variants={itemVariants}>
-          <p>Looking for opportunities to grow and contribute to innovative projects</p>
-          <motion.button
-            className="cta-button"
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 0 25px var(--lavender-glow)"
-            }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            Let's Connect
-          </motion.button>
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };

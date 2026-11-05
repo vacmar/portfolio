@@ -1,238 +1,66 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import React from 'react';
+import { LuFileText } from 'react-icons/lu';
 import { resumeData } from '../data/resumeData';
 import './About.css';
 
 const About: React.FC = () => {
-  const [visibleSkills, setVisibleSkills] = useState<Set<string>>(new Set());
-  const skillsRef = useRef<HTMLDivElement>(null);
-  
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
-
-  // Individual skill group visibility tracking
-  useEffect(() => {
-    const observerOptions = {
-      threshold: 0.5,
-      rootMargin: '50px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const skillGroup = entry.target.getAttribute('data-skill-group') || '';
-        if (entry.isIntersecting) {
-          setVisibleSkills(prev => new Set([...prev, skillGroup]));
-        } else {
-          setVisibleSkills(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(skillGroup);
-            return newSet;
-          });
-        }
-      });
-    }, observerOptions);
-
-    if (skillsRef.current) {
-      const skillGroups = skillsRef.current.querySelectorAll('.skill-group');
-      skillGroups.forEach((group) => {
-        observer.observe(group);
-      });
-    }
-
-    return () => {
-      if (skillsRef.current) {
-        const skillGroups = skillsRef.current.querySelectorAll('.skill-group');
-        skillGroups.forEach(group => observer.unobserve(group));
-      }
-    };
-  }, [inView]);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
-    }
-  };
-
   return (
-    <section id="about" className="about" ref={ref}>
-      <motion.div
-        className="about-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-      >
-        <motion.div className="about-header" variants={itemVariants}>
-          <h2 className="section-title">About Me</h2>
-          <p className="section-subtitle">
-            Computer Science Engineering student with hands-on full-stack & backend experience
+    <section id="about" className="about-section">
+      <div className="sh">
+        <span className="note-label">about</span>
+        <h2>I like things that <span className="hl">hold up</span> under real use.</h2>
+        <p>A builder's perspective on backend performance, reliability, and full-stack software.</p>
+      </div>
+
+      <div className="about-layout">
+        <div className="about-bio">
+          <p>
+            I'm a Computer Science Engineering student at Velammal Engineering College with a strong academic record (CGPA: 8.33) and a habit of learning by building. Most of what I know about shipping software came from making apps with real sign-in, several user roles and relational data.
           </p>
-        </motion.div>
-
-        <div className="about-content">
-          <motion.div className="about-summary" variants={itemVariants}>
-            <h3>Summary</h3>
-            <p>
-              {resumeData.summary}
-            </p>
-            
-            <div className="resume-download-section">
-              <motion.button
-                className="resume-download-btn"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  try {
-                    const link = document.createElement('a');
-                    link.href = '/Vaaheesan-Resume.pdf';
-                    link.download = 'Vaaheesan-Resume.pdf';
-                    link.target = '_blank';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  } catch (error) {
-                    console.error('Error downloading resume:', error);
-                    window.open('/Vaaheesan-Resume.pdf', '_blank');
-                  }
-                }}
-              >
-                Download Resume
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7,10 12,15 17,10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-              </motion.button>
-            </div>
-          </motion.div>
-
-          <motion.div className="skills-section" variants={itemVariants}>
-            <h3>Technical Skills</h3>
-            
-            <div className="skills-container" ref={skillsRef}>
-              <div className="skills-scroll">
-                {Object.entries(resumeData.skills).map(([category, skillList]) => {
-                  const isVisible = visibleSkills.has(category);
-                  
-                  return (
-                    <motion.div 
-                      key={category} 
-                      className="skill-group"
-                      data-skill-group={category}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                    >
-                      <h4 className="skill-group-title">
-                        {category === 'aiml' ? 'AI / ML' : category === 'devops' ? 'DevOps & Cloud' : category.charAt(0).toUpperCase() + category.slice(1)}
-                      </h4>
-                      <div className="skill-badges">
-                        {skillList.map((skill, index) => (
-                          <motion.div 
-                            key={skill} 
-                            className="skill-badge"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                            transition={{ 
-                              delay: index * 0.08,
-                              duration: 0.3,
-                              ease: "easeOut"
-                            }}
-                          >
-                            {skill}
-                          </motion.div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div className="education-section" variants={itemVariants}>
-            <h3>Education</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {resumeData.education.map((edu) => (
-                <div key={edu.id} className="education-card">
-                  <div className="education-info">
-                    <h4>{edu.degree}</h4>
-                    <p className="college-name">{edu.school}</p>
-                    <p className="duration">{edu.graduationDate}</p>
-                    <p className="cgpa">{edu.gpa}</p>
-                  </div>
-                  {edu.relevantCourses && edu.relevantCourses.length > 0 && (
-                    <div className="coursework">
-                      <h5>Relevant Courses & Certifications:</h5>
-                      <div className="coursework-tags">
-                        {edu.relevantCourses.map((course) => (
-                          <span key={course} className="coursework-tag">{course}</span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div className="achievements-section" variants={itemVariants}>
-            <h3>Achievements</h3>
-            <div className="achievements-list">
-              {resumeData.achievements.map((achievement, index) => (
-                <motion.div
-                  key={index}
-                  className="achievement-item"
-                  initial={{ x: -50, opacity: 0 }}
-                  animate={inView ? { x: 0, opacity: 1 } : { x: -50, opacity: 0 }}
-                  transition={{ delay: index * 0.07 }}
-                >
-                  <span className="achievement-bullet">🏆</span>
-                  <span>{achievement}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div className="interests-section" variants={itemVariants}>
-            <h3>Interests</h3>
-            <div className="interests-list">
-              {resumeData.interests.map((interest, index) => (
-                <motion.div
-                  key={index}
-                  className="interest-item"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={inView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <span className="interest-bullet">✨</span>
-                  <span>{interest}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          <p>
+            I've interned in backend and web development across four companies: <strong>Hexaware Technologies</strong>, <strong>Infotak Solutions</strong>, <strong>J7 Technology Solutions</strong>, and <strong>GameChanger4u</strong>. At Infotak Solutions I picked up a database optimization on my own, which is my favourite kind of work: find the slow part, understand why, fix it properly.
+          </p>
+          <p>
+            Lately that backend habit meets AI. My recent projects use multi-agent pipelines (LangGraph, FastAPI, pgvector, Redis) with deterministic guards around the model, so its actions stay inside clear limits.
+          </p>
+          
+          <div className="bio-actions">
+            <a 
+              className="btn primary small" 
+              href="/Vaaheesan-Resume.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              download="Vaaheesan_Resume.pdf"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <LuFileText />
+              <span>Download Resume</span>
+            </a>
+            <a className="btn small" href="#journey">
+              Follow Blob's Journey ↓
+            </a>
+          </div>
         </div>
-      </motion.div>
+
+        <div className="pins">
+          <div className="pin sk">
+            <h3>funded</h3>
+            <p>Selected for the MSME 5.0 Government Funding Scheme with MindSync+ (2026).</p>
+          </div>
+          <div className="pin sk">
+            <h3>competitions</h3>
+            <p>1st Place in QR Debugging (2026) & 2nd Place in App Development (2025).</p>
+          </div>
+          <div className="pin sk">
+            <h3>brainstorming & crafting</h3>
+            <p>Love to brainstorm architectures and engineer practical solutions out of messy problem statements.</p>
+          </div>
+          <div className="pin sk">
+            <h3>off the keyboard & travel</h3>
+            <p>Loves to travel to new cities, play badminton, and read deep tech blogs on systems architecture.</p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

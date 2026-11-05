@@ -1,892 +1,446 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import type { Variants } from 'framer-motion';
-import { useIsMobile } from '../hooks';
-import { useScrollLock } from '../hooks';
-import { ANIMATION_VARIANTS, TRANSITIONS } from '../constants';
+import React, { useEffect, useRef, useState } from 'react';
+import { LuSparkles, LuPartyPopper } from 'react-icons/lu';
+import { resumeData, TrailStop } from '../data/resumeData';
 import './Roadmaps.css';
 
-interface TimelineItem {
-  id: number;
-  title: string;
-  description: string;
-  status: 'completed' | 'current' | 'planned';
-  type: 'learning' | 'project';
-  category: string;
-  skills: string[];
-  duration: string;
-  date: string;
-  progress?: number;
-  features?: string[];
-  techStack?: string[];
-  github?: string;
-  demo?: string;
-  position: { x: number; y: number };
-  connections: number[];
+interface RoadConfetti {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  baseSize: number;
+  size: number;
+  color: string;
+  rotation: number;
+  vRot: number;
+  shape: 'rect' | 'circle' | 'star' | 'heart' | 'ribbon';
+  life: number;
+  maxLife: number;
 }
 
+const CONFETTI_PALETTE = [
+  '#f87171', // pastel coral
+  '#fbbf24', // pastel sunflower
+  '#34d399', // pastel mint
+  '#60a5fa', // pastel sky blue
+  '#a78bfa', // pastel lavender
+  '#f472b6', // pastel pink
+  '#ffd166', // warm pastel gold
+  '#38bdf8'  // neon starlight cyan
+];
+
 const Roadmaps: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
-  const [hoveredItem, setHoveredItem] = useState<number | null>(null);
-  const [filter, setFilter] = useState<'all' | 'learning' | 'project'>('all');
-  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
-  const { lockScroll, unlockScroll } = useScrollLock();
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const trailRef = useRef<HTMLDivElement>(null);
+  const walkerRef = useRef<HTMLDivElement>(null);
+  const pathBaseRef = useRef<SVGPathElement>(null);
+  const pathFillRef = useRef<SVGPathElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const stopRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const finishRef = useRef<HTMLDivElement>(null);
+  const confettiCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
+  const [activeChapter, setActiveChapter] = useState(0);
+  const [completedStops, setCompletedStops] = useState<boolean[]>(
+    new Array(resumeData.journeyStops.length).fill(false)
+  );
 
-  const pathProgress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const [isBoxZoomed, setIsBoxZoomed] = useState(false);
+  const [hasCelebrated, setHasCelebrated] = useState(false);
+  const hasCelebratedRef = useRef(false);
+  const isRestockedRef = useRef(false);
+  const confettiPiecesRef = useRef<RoadConfetti[]>([]);
+  const animationFrameRef = useRef<number | null>(null);
 
-  // Handle filter change with auto-scroll
-  const handleFilterChange = (newFilter: 'all' | 'learning' | 'project') => {
-    setFilter(newFilter);
-    // Scroll to canvas after a short delay
-    setTimeout(() => {
-      if (canvasRef.current) {
-        canvasRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
+  // Confetti explosion from the finish box where particles get bigger as they burst out
+  const fireBoxConfetti = () => {
+    const trail = trailRef.current;
+    const canvas = confettiCanvasRef.current;
+    if (!trail || !canvas) return;
+
+    canvas.width = trail.clientWidth;
+    canvas.height = trail.offsetHeight;
+
+    const finishEl = finishRef.current;
+    const startX = finishEl ? finishEl.offsetLeft + finishEl.offsetWidth / 2 : trail.clientWidth / 2;
+    const startY = finishEl ? finishEl.offsetTop + 10 : trail.offsetHeight - 55;
+
+    // Trigger box zoom animation
+    setIsBoxZoomed(true);
+    setTimeout(() => setIsBoxZoomed(false), 1300);
+
+    // Spawn 50 celebratory confetti pieces
+    const newPieces: RoadConfetti[] = [];
+    const shapes: ('rect' | 'circle' | 'star' | 'heart' | 'ribbon')[] = [
+      'rect',
+      'circle',
+      'star',
+      'heart',
+      'ribbon'
+    ];
+
+    for (let i = 0; i < 52; i++) {
+      const angle = (Math.PI * 1.05) + Math.random() * (Math.PI * 0.9); // upward arc
+      const speed = 4 + Math.random() * 8.5;
+
+      newPieces.push({
+        x: startX + (Math.random() - 0.5) * 50,
+        y: startY + (Math.random() - 0.5) * 16,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 3.5,
+        baseSize: 4.5 + Math.random() * 4,
+        size: 4.5,
+        color: CONFETTI_PALETTE[Math.floor(Math.random() * CONFETTI_PALETTE.length)],
+        rotation: Math.random() * 360,
+        vRot: (Math.random() - 0.5) * 18,
+        shape: shapes[Math.floor(Math.random() * shapes.length)],
+        life: 0,
+        maxLife: 60 + Math.random() * 35
+      });
+    }
+
+    confettiPiecesRef.current = newPieces;
+
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const renderConfetti = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      confettiPiecesRef.current.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.26; // gravity
+        p.vx *= 0.98; // air drag
+        p.rotation += p.vRot;
+        p.life++;
+
+        const progress = p.life / p.maxLife;
+
+        // Confetti gets bigger as it blows out from the box!
+        const growth =
+          progress < 0.4
+            ? 0.6 + (progress / 0.4) * 1.8 // expands up to 2.4x its original size
+            : 2.4 * Math.max(0.4, 1 - (progress - 0.4) * 0.6);
+        p.size = p.baseSize * growth;
+
+        const alpha = Math.max(0, 1 - Math.pow(progress, 1.8));
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.strokeStyle = p.color;
+        ctx.globalAlpha = alpha;
+
+        if (p.shape === 'rect') {
+          ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.7);
+        } else if (p.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (p.shape === 'star') {
+          ctx.beginPath();
+          for (let s = 0; s < 5; s++) {
+            ctx.lineTo(
+              Math.cos(((18 + s * 72) * Math.PI) / 180) * p.size,
+              -Math.sin(((18 + s * 72) * Math.PI) / 180) * p.size
+            );
+            ctx.lineTo(
+              Math.cos(((54 + s * 72) * Math.PI) / 180) * (p.size * 0.45),
+              -Math.sin(((54 + s * 72) * Math.PI) / 180) * (p.size * 0.45)
+            );
+          }
+          ctx.closePath();
+          ctx.fill();
+        } else if (p.shape === 'heart') {
+          ctx.beginPath();
+          ctx.moveTo(0, p.size * 0.3);
+          ctx.bezierCurveTo(-p.size * 0.7, -p.size * 0.5, -p.size, p.size * 0.4, 0, p.size);
+          ctx.bezierCurveTo(p.size, p.size * 0.4, p.size * 0.7, -p.size * 0.5, 0, p.size * 0.3);
+          ctx.fill();
+        } else {
+          // ribbon
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.moveTo(-p.size, -p.size * 0.3);
+          ctx.quadraticCurveTo(0, p.size * 0.6, p.size, -p.size * 0.3);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      });
+
+      confettiPiecesRef.current = confettiPiecesRef.current.filter((p) => p.life < p.maxLife);
+
+      if (confettiPiecesRef.current.length > 0) {
+        animationFrameRef.current = requestAnimationFrame(renderConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
-    }, 100);
-  };
-
-  // Individual item visibility tracking
-  useEffect(() => {
-    const observerOptions = {
-      threshold: 0.3,
-      rootMargin: '50px'
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const itemId = parseInt(entry.target.getAttribute('data-item-id') || '0');
-        if (entry.isIntersecting) {
-          setVisibleItems(prev => new Set([...prev, itemId]));
-        }
-      });
-    }, observerOptions);
+    animationFrameRef.current = requestAnimationFrame(renderConfetti);
+  };
 
-    // Create invisible markers for each timeline item
-    const filteredItems = filter === 'all' ? timelineItems : timelineItems.filter(item => item.type === filter);
-    
-    const markers: HTMLElement[] = [];
-    filteredItems.forEach(item => {
-      const marker = document.createElement('div');
-      marker.setAttribute('data-item-id', item.id.toString());
-      marker.style.position = 'absolute';
-      marker.style.left = `${item.position.x}%`;
-      marker.style.top = `${item.position.y}%`;
-      marker.style.width = '1px';
-      marker.style.height = '1px';
-      marker.style.pointerEvents = 'none';
-      marker.style.opacity = '0';
-      
-      if (canvasRef.current) {
-        canvasRef.current.appendChild(marker);
-        observer.observe(marker);
-        markers.push(marker);
+  // Restock confetti button toggles state to re-activate and immediately blasts celebration
+  const handleRestockConfetti = () => {
+    hasCelebratedRef.current = false;
+    isRestockedRef.current = true;
+    setHasCelebrated(false);
+    fireBoxConfetti();
+  };
+
+  useEffect(() => {
+    const trail = trailRef.current;
+    const walker = walkerRef.current;
+    const base = pathBaseRef.current;
+    const fill = pathFillRef.current;
+    const svg = svgRef.current;
+    if (!trail || !walker || !base || !fill || !svg) return;
+
+    let samples: [number, number, number][] = [];
+    let totalLen = 1;
+    let yStart = 0;
+    let yEnd = 1;
+    let curY: number | null = null;
+    let raf = 0;
+
+    const layout = () => {
+      const W = trail.clientWidth;
+      const H = trail.offsetHeight;
+      const isWide = window.innerWidth >= 740;
+      const cx = isWide ? W / 2 : 40;
+      const amp = isWide ? 140 : 36;
+      yStart = 70;
+      const finishEl = finishRef.current;
+      const finishTop = finishEl && finishEl.offsetTop > 0 ? finishEl.offsetTop : H - 110;
+      // Blob perches cleanly on top of the finish box, never going underneath or inside
+      yEnd = Math.max(finishTop - 10, yStart + 100);
+      const finishX = finishEl && finishEl.offsetWidth > 0 ? finishEl.offsetLeft + finishEl.offsetWidth / 2 : cx;
+
+      const pts: { x: number; y: number }[] = [{ x: cx, y: yStart }];
+
+      resumeData.journeyStops.forEach((_, i) => {
+        const el = stopRefs.current[i];
+        const y = el ? el.offsetTop + 40 : yStart + (i + 1) * 110;
+        pts.push({ x: cx, y });
+      });
+
+      pts.push({ x: isWide ? cx : finishX, y: yEnd });
+
+      let d = `M${pts[0].x} ${pts[0].y}`;
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1];
+        const b = pts[i];
+        const dy = b.y - a.y;
+        d += ` C${a.x + amp} ${a.y + dy / 3} ${b.x - amp} ${a.y + (dy * 2) / 3} ${b.x} ${b.y}`;
       }
-    });
+
+      base.setAttribute('d', d);
+      fill.setAttribute('d', d);
+      svg.setAttribute('width', String(W));
+      svg.setAttribute('height', String(H));
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+      totalLen = base.getTotalLength();
+      fill.style.strokeDasharray = `${totalLen} ${totalLen}`;
+
+      samples = [];
+      const N = 600;
+      for (let k = 0; k <= N; k++) {
+        const len = (totalLen * k) / N;
+        const p = base.getPointAtLength(len);
+        samples.push([p.y, p.x, len]);
+      }
+
+      curY = null;
+      kick();
+    };
+
+    const atY = (y: number) => {
+      if (samples.length === 0) return { x: 40, len: 0, dx: 0, dy: 1 };
+      let lo = 0;
+      let hi = samples.length - 1;
+      while (hi - lo > 1) {
+        const m = (lo + hi) >> 1;
+        if (samples[m][0] < y) lo = m;
+        else hi = m;
+      }
+      const a = samples[lo];
+      const b = samples[hi];
+      const t = b[0] === a[0] ? 0 : Math.max(0, Math.min(1, (y - a[0]) / (b[0] - a[0])));
+      return {
+        x: a[1] + (b[1] - a[1]) * t,
+        len: a[2] + (b[2] - a[2]) * t,
+        dx: b[1] - a[1],
+        dy: b[0] - a[0]
+      };
+    };
+
+    const place = (y: number) => {
+      const p = atY(y);
+      const lean = p.dy > 0 ? (Math.atan2(p.dx, p.dy) * 180) / Math.PI : 0;
+      const clampedLean = Math.max(-14, Math.min(14, lean * 0.8));
+      const h = walker.offsetHeight || 60;
+
+      walker.style.transform = `translate(${(p.x - 28).toFixed(1)}px, ${(y - h + 8).toFixed(1)}px) rotate(${clampedLean.toFixed(1)}deg)`;
+      fill.style.strokeDashoffset = String(totalLen - p.len);
+
+      let doneCount = 0;
+      const updated = resumeData.journeyStops.map((_, i) => {
+        const stopEl = stopRefs.current[i];
+        if (!stopEl) return false;
+        const stopY = stopEl.offsetTop + 40;
+        // Dot activates when Blob reaches and crosses through the dot
+        const isDone = y >= stopY;
+        if (isDone) doneCount++;
+        return isDone;
+      });
+
+      setCompletedStops(updated);
+      setActiveChapter(doneCount);
+
+      // Check if Blob has reached the path's end (standing on top of the finish box)
+      const atPathEnd = y >= yEnd - 8;
+      if (atPathEnd) {
+        if (!hasCelebratedRef.current || isRestockedRef.current) {
+          hasCelebratedRef.current = true;
+          isRestockedRef.current = false;
+          setHasCelebrated(true);
+          fireBoxConfetti();
+        }
+      }
+    };
+
+    const target = () => {
+      const r = trail.getBoundingClientRect();
+      return Math.max(yStart, Math.min(yEnd, window.innerHeight * 0.55 - r.top));
+    };
+
+    const tick = () => {
+      raf = 0;
+      const t = target();
+      if (curY === null) curY = t;
+      else curY += (t - curY) * 0.12;
+
+      const moving = Math.abs(t - curY) > 0.8;
+      if (!moving) curY = t;
+
+      place(curY);
+      walker.classList.toggle('moving', moving);
+      const v = walker.querySelector('.vee');
+      if (v) v.classList.toggle('walking', moving);
+
+      if (moving) raf = requestAnimationFrame(tick);
+    };
+
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', layout);
+
+    layout();
+    const timer = setTimeout(layout, 300);
 
     return () => {
-      markers.forEach(marker => {
-        observer.unobserve(marker);
-        if (marker.parentNode) {
-          marker.parentNode.removeChild(marker);
-        }
-      });
+      window.removeEventListener('scroll', kick);
+      window.removeEventListener('resize', layout);
+      clearTimeout(timer);
+      if (raf) cancelAnimationFrame(raf);
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [filter, inView]);
-
-  // Reset visible items when filter changes
-  useEffect(() => {
-    setVisibleItems(new Set());
-  }, [filter]);
-
-  // Disable body scrolling when modal is open
-  useEffect(() => {
-    if (selectedItem) {
-      lockScroll();
-    } else {
-      unlockScroll();
-    }
-
-    // Cleanup on unmount
-    return () => {
-      unlockScroll();
-    };
-  }, [selectedItem, lockScroll, unlockScroll]);
-
-  const timelineItems: TimelineItem[] = [
-    // Learning Journey
-    {
-      id: 1,
-      title: "Frontend Foundations",
-      description: "Mastered HTML, CSS, JavaScript fundamentals and responsive design principles",
-      status: 'completed',
-      type: 'learning',
-      category: 'Frontend',
-      skills: ['HTML5', 'CSS3', 'JavaScript', 'Responsive Design', 'Flexbox', 'Grid'],
-      duration: '10 months',
-      date: 'Jan 2024',
-      position: { x: 15, y: 10 },
-      connections: [2, 3]
-    },
-    {
-      id: 2,
-      title: "React Ecosystem",
-      description: "Deep dive into React development with hooks, context, and state management",
-      status: 'completed',
-      type: 'learning',
-      category: 'Frontend',
-      skills: ['React.js', 'Redux', 'React Router', 'Hooks', 'Context API', 'Vite'],
-      duration: '4 months',
-      date: 'Nov 2024',
-      position: { x: 35, y: 15 },
-      connections: [4, 5]
-    },
-    {
-      id: 3,
-      title: "Styling & Animation",
-      description: "Advanced CSS techniques, animations, and modern styling frameworks",
-      status: 'completed',
-      type: 'learning',
-      category: 'Design',
-      skills: ['Tailwind CSS', 'Framer Motion', 'SCSS', 'CSS Animations'],
-      duration: '2 months',
-      date: 'Jan 2025',
-      position: { x: 25, y: 25 },
-      connections: [4]
-    },
-    {
-      id: 4,
-      title: "TypeScript Mastery",
-      description: "Type-safe JavaScript development with advanced TypeScript features",
-      status: 'completed',
-      type: 'learning',
-      category: 'Language',
-      skills: ['TypeScript', 'Type Systems', 'Generics', 'Interfaces'],
-      duration: '3 months',
-      date: 'Mar 2025',
-      position: { x: 55, y: 20 },
-      connections: [6, 7]
-    },
-    {
-      id: 5,
-      title: "Backend Development",
-      description: "Server-side development with Node.js, Express.js, and FastAPI frameworks",
-      status: 'completed',
-      type: 'learning',
-      category: 'Backend',
-      skills: ['Node.js', 'Express.js', 'FastAPI', 'REST APIs', 'JWT Auth'],
-      duration: '6 months',
-      date: 'Jun 2025',
-      position: { x: 15, y: 40 },
-      connections: [8, 9]
-    },
-    {
-      id: 6,
-      title: "Database Systems",
-      description: "SQL and NoSQL databases, data modeling, and optimization techniques",
-      status: 'completed',
-      type: 'learning',
-      category: 'Database',
-      skills: ['PostgreSQL', 'MongoDB', 'MySQL', 'Database Design', 'Indexing'],
-      duration: '4 months',
-      date: 'Nov 2024',
-      position: { x: 75, y: 35 },
-      connections: [9, 10]
-    },
-
-    // Major Projects
-    {
-      id: 7,
-      title: "Elevatr",
-      description: "Two-sided job and internship portal with role-based dashboards connecting students and recruiters",
-      status: 'completed',
-      type: 'project',
-      category: 'Full-Stack App',
-      skills: ['Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Tailwind CSS'],
-      techStack: ['Next.js', 'TypeScript', 'FastAPI', 'PostgreSQL', 'Tailwind CSS', 'PBKDF2-SHA256'],
-      features: ['Student Dashboard', 'Recruiter Dashboard', 'Pipeline Stage tracking', 'Optimistic UI updates'],
-      duration: 'Completed',
-      date: 'Mar 2026',
-      progress: 100,
-      github: 'https://github.com/vacmar/Elevatr',
-      position: { x: 45, y: 50 },
-      connections: [8, 11]
-    },
-    {
-      id: 8,
-      title: "Spendly",
-      description: "Smart personal expense tracking and budget management application",
-      status: 'completed',
-      type: 'project',
-      category: 'Financial App',
-      skills: ['React 18', 'Vite', 'Node.js', 'Express.js', 'MongoDB'],
-      techStack: ['React 18', 'Vite', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS', 'Framer Motion'],
-      features: ['Expense Tracking', 'Budget limits', 'Dual Authentication', 'JWT & Google OAuth'],
-      duration: 'Completed',
-      date: 'Jan 2026',
-      progress: 100,
-      github: 'https://github.com/vacmar/Spendly',
-      position: { x: 25, y: 65 },
-      connections: [9, 12]
-    },
-    {
-      id: 9,
-      title: "MindSync+",
-      description: "AI-powered mental health support platform selected for MSME 5.0 funding",
-      status: 'current',
-      type: 'project',
-      category: 'AI Platform',
-      skills: ['Python', 'React.js', 'Node.js', 'FastAPI', 'LLMs'],
-      techStack: ['Python', 'React.js', 'Node.js', 'FastAPI', 'LLMs', 'LangChain', 'LangSmith'],
-      features: ['MSME 5.0 Funded', 'AI Chatbot fallback', 'Empathy matching', 'Multilingual support'],
-      duration: 'Ongoing',
-      date: '2026',
-      progress: 0,
-      position: { x: 65, y: 70 },
-      connections: [10, 13]
-    },
-
-    // Advanced Learning & Experience
-    {
-      id: 10,
-      title: "DevOps & Cloud",
-      description: "CI/CD pipelines, containerization, and production monitoring",
-      status: 'current',
-      type: 'learning',
-      category: 'DevOps',
-      skills: ['Docker', 'AWS', 'CI/CD', 'GitHub Actions', 'Monitoring'],
-      duration: 'Ongoing',
-      date: '2026',
-      position: { x: 85, y: 55 },
-      connections: [11, 12]
-    },
-    {
-      id: 11,
-      title: "School CRM Platform",
-      description: "Digitalized school operations across 7 user roles and relational workflows",
-      status: 'completed',
-      type: 'learning',
-      category: 'Full-Stack App',
-      skills: ['Next.js', 'Node.js', 'Express.js', 'MongoDB', 'AWS'],
-      duration: 'Completed',
-      date: 'Sept 2025',
-      position: { x: 35, y: 80 },
-      connections: [13]
-    },
-    {
-      id: 12,
-      title: "Hexaware Intern",
-      description: "Backend Lead Intern - leading backend sub-team, designing REST APIs, and building async AI pipelines",
-      status: 'current',
-      type: 'learning',
-      category: 'Backend',
-      skills: ['Python', 'FastAPI', 'Redis', 'Alembic', 'Ruff', 'asyncio'],
-      duration: 'Feb 2026 - Present',
-      date: 'Feb 2026',
-      position: { x: 55, y: 85 },
-      connections: [13]
-    },
-    {
-      id: 13,
-      title: "System Architecture",
-      description: "Scalable system design, async task queues, and versioned database migrations",
-      status: 'current',
-      type: 'learning',
-      category: 'Architecture',
-      skills: ['System Design', 'Redis Queues', 'FastAPI', 'Alembic', 'Ruff'],
-      duration: 'Ongoing',
-      date: '2026',
-      position: { x: 75, y: 90 },
-      connections: []
-    }
-  ];
-
-
-  const filteredItems = filter === 'all' ? timelineItems : timelineItems.filter(item => item.type === filter);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return '#10B981';
-      case 'current': return '#8B5CF6';
-      case 'planned': return '#6B7280';
-      default: return '#6B7280';
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    return type === 'project' ? '#F59E0B' : '#3B82F6';
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colors: { [key: string]: string } = {
-      'Frontend': '#3B82F6',
-      'Backend': '#EF4444',
-      'Database': '#F59E0B',
-      'DevOps': '#06B6D4',
-      'Design': '#EC4899',
-      'Language': '#8B5CF6',
-      'Mobile': '#6366F1',
-      'Architecture': '#84CC16',
-      'AI/ML': '#F43F5E',
-      'Full-Stack App': '#10B981',
-      'Financial App': '#F97316',
-      'AI Platform': '#8B5CF6'
-    };
-    return colors[category] || '#6B7280';
-  };
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const nodeVariants: Variants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
-    }
-  };
+  }, []);
 
   return (
-    <section id="roadmaps" className="roadmaps" ref={containerRef}>
-      <motion.div
-        className="roadmaps-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        ref={ref}
-      >
-        <motion.div className="roadmaps-header" variants={nodeVariants}>
-          <h2 className="section-title">Learning Journey & Project Timeline</h2>
-          <p className="section-subtitle">
-            My development path from foundations to full-stack mastery, plus the exciting projects bringing it all together
-          </p>
-          <p className="section-instruction" style={{ fontSize: '0.9rem', color: 'var(--lavender)', marginTop: '0.5rem', fontStyle: 'italic' }}>
-            💡 Tap on the dots to know more
-          </p>
-        </motion.div>
+    <section id="journey" className="journey-section">
+      <div className="sh">
+        <span className="note-label">journey</span>
+        <h2>Follow Blob down the page</h2>
+        <p>
+          Blob walks as you scroll down the sketchbook path.{' '}
+          <span className="chapter" id="chapter">
+            chapter {activeChapter} of {resumeData.journeyStops.length}
+          </span>
+        </p>
+      </div>
 
-        {/* Filter Tabs */}
-        <motion.div className="filter-tabs" variants={nodeVariants}>
-          <button 
-            className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => handleFilterChange('all')}
-          >
-            All Items
-          </button>
-          <button 
-            className={`filter-tab ${filter === 'learning' ? 'active' : ''}`}
-            onClick={() => handleFilterChange('learning')}
-          >
-            Learning Path
-          </button>
-          <button 
-            className={`filter-tab ${filter === 'project' ? 'active' : ''}`}
-            onClick={() => handleFilterChange('project')}
-          >
-            Major Projects
-          </button>
-        </motion.div>
+      <div className="trail" ref={trailRef} id="trail">
+        <svg className="route" ref={svgRef} aria-hidden="true">
+          <path className="base" ref={pathBaseRef} />
+          <path className="fill" ref={pathFillRef} />
+        </svg>
 
-        <motion.div className="roadmap-stats" variants={nodeVariants}>
-          <div className="stat-item">
-            <motion.div
-              className="stat-content"
-              initial={{ scale: 0 }}
-              animate={inView ? { scale: 1 } : { scale: 0 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
-            >
-              <span className="stat-number">{timelineItems.filter(n => n.status === 'completed').length}</span>
-              <span className="stat-label">Completed</span>
-            </motion.div>
+        {/* Confetti canvas for celebratory blast */}
+        <canvas ref={confettiCanvasRef} className="roadmaps-confetti-canvas" aria-hidden="true" />
+
+        <div className="walker" ref={walkerRef} id="walker" aria-hidden="true">
+          <div className="walker-chapter-bubble">
+            ch. {activeChapter}/{resumeData.journeyStops.length}
           </div>
-          <div className="stat-item">
-            <motion.div
-              className="stat-content"
-              initial={{ scale: 0 }}
-              animate={inView ? { scale: 1 } : { scale: 0 }}
-              transition={{ delay: 0.7, type: "spring", stiffness: 100 }}
-            >
-              <span className="stat-number current">{timelineItems.filter(n => n.status === 'current').length}</span>
-              <span className="stat-label">In Progress</span>
-            </motion.div>
-          </div>
-          <div className="stat-item">
-            <motion.div
-              className="stat-content"
-              initial={{ scale: 0 }}
-              animate={inView ? { scale: 1 } : { scale: 0 }}
-              transition={{ delay: 0.9, type: "spring", stiffness: 100 }}
-            >
-              <span className="stat-number planned">{timelineItems.filter(n => n.status === 'planned').length}</span>
-              <span className="stat-label">Planned</span>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        <motion.div className="roadmap-canvas" variants={nodeVariants} ref={canvasRef}>
-          <svg className="roadmap-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-            {/* Background Grid */}
-            <defs>
-              <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(139, 92, 246, 0.1)" strokeWidth="0.5"/>
-              </pattern>
-              <linearGradient id="projectGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.8"/>
-                <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.8"/>
-              </linearGradient>
-            </defs>
-            <rect width="100" height="100" fill="url(#grid)" opacity="0.3"/>
-            
-            {/* Animated Connections */}
-            {filteredItems.map(item =>
-              item.connections.map(targetId => {
-                const targetItem = filteredItems.find(n => n.id === targetId);
-                if (!targetItem) return null;
-                
-                const isVisible = visibleItems.has(item.id) && visibleItems.has(targetId);
-                
-                return (
-                  <motion.line
-                    key={`${item.id}-${targetId}`}
-                    x1={item.position.x}
-                    y1={item.position.y}
-                    x2={targetItem.position.x}
-                    y2={targetItem.position.y}
-                    stroke={item.type === 'project' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(139, 92, 246, 0.3)'}
-                    strokeWidth={item.type === 'project' ? '0.3' : '0.2'}
-                    strokeDasharray={item.type === 'project' ? '2 1' : '1 0.5'}
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={{ 
-                      pathLength: isVisible ? 1 : 0, 
-                      opacity: isVisible ? 1 : 0 
-                    }}
-                    transition={{ 
-                      duration: 1.5, 
-                      delay: 0.3,
-                      ease: "easeInOut"
-                    }}
-                  />
-                );
-              })
-            )}
-
-            {/* Timeline Items */}
-            {filteredItems.map((item, index) => {
-              const isVisible = visibleItems.has(item.id);
-              const animationDelay = index * 0.1;
-
-              return (
-                <g key={item.id} className="roadmap-node" data-status={item.status}>
-                  {/* Glow Effect for Projects */}
-                  {item.type === 'project' && (
-                    <motion.circle
-                      cx={item.position.x}
-                      cy={item.position.y}
-                      r="3"
-                      fill="url(#projectGradient)"
-                      opacity="0.2"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ 
-                        scale: isVisible ? 1 : 0,
-                        opacity: isVisible ? 0.2 : 0
-                      }}
-                      transition={{ 
-                        delay: animationDelay,
-                        duration: 0.8,
-                        type: "spring",
-                        stiffness: 100
-                      }}
-                    />
-                  )}
-                  
-                  {/* Main Node */}
-                  <motion.circle
-                    cx={item.position.x}
-                    cy={item.position.y}
-                    r="1.2"
-                    fill={getStatusColor(item.status)}
-                    stroke={item.type === 'project' ? getTypeColor(item.type) : getCategoryColor(item.category)}
-                    strokeWidth={item.type === 'project' ? '0.4' : '0.3'}
-                    data-status={item.status}
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ 
-                      scale: isVisible ? 1 : 0,
-                      opacity: isVisible ? 1 : 0
-                    }}
-                    transition={{ 
-                      delay: animationDelay,
-                      duration: 0.6,
-                      type: "spring",
-                      stiffness: 120,
-                      damping: 15
-                    }}
-                    whileHover={{ 
-                      scale: 1.5,
-                      transition: { duration: 0.2 }
-                    }}
-                    onClick={() => setSelectedItem(item.id)}
-                    onMouseEnter={() => setHoveredItem(item.id)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                    style={{ cursor: 'pointer' }}
-                  />
-
-                  {/* Progress Ring for Projects */}
-                  {item.type === 'project' && item.progress !== undefined && (
-                    <motion.circle
-                      cx={item.position.x}
-                      cy={item.position.y}
-                      r="2.2"
-                      fill="none"
-                      stroke="rgba(245, 158, 11, 0.3)"
-                      strokeWidth="0.2"
-                      strokeDasharray={`${2 * Math.PI * 2.2 * (item.progress / 100)} ${2 * Math.PI * 2.2}`}
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={{ 
-                        pathLength: isVisible ? 1 : 0,
-                        opacity: isVisible ? 1 : 0
-                      }}
-                      transition={{ delay: animationDelay + 0.5, duration: 1.5 }}
-                      transform={`rotate(-90 ${item.position.x} ${item.position.y})`}
-                    />
-                  )}
-
-                  {/* Pulse Animation for Current Items */}
-                  {item.status === 'current' && isVisible && (
-                    <motion.circle
-                      cx={item.position.x}
-                      cy={item.position.y}
-                      r="1.2"
-                      fill="none"
-                      stroke={getStatusColor(item.status)}
-                      strokeWidth="0.2"
-                      initial={{ scale: 1, opacity: 1 }}
-                      animate={{ 
-                        scale: [1, 2, 1], 
-                        opacity: [1, 0, 1] 
-                      }}
-                      transition={{ 
-                        duration: 2,
-                        repeat: Infinity,
-                        delay: animationDelay + 0.8
-                      }}
-                    />
-                  )}
-
-                  {/* Type Indicator */}
-                  <motion.text
-                    x={item.position.x}
-                    y={item.position.y + 0.15}
-                    textAnchor="middle"
-                    fill="rgba(255, 255, 255, 0.8)"
-                    fontSize={item.type === 'project' ? '0.06' : '0.05'}
-                    fontWeight="600"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isVisible ? 1 : 0 }}
-                    transition={{ delay: animationDelay + 0.8, duration: 0.5 }}
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    {item.type === 'project' ? '★' : index + 1}
-                  </motion.text>
-
-                  {/* Hover Label - Always visible on mobile/tablet */}
-                  {(hoveredItem === item.id || isMobile) && isVisible && (
-                    <g>
-                      <motion.text
-                        x={item.position.x < 20 ? item.position.x + 3 : item.position.x > 80 ? item.position.x - 3 : item.position.x}
-                        y={item.position.y - 4}
-                        textAnchor={item.position.x < 20 ? "start" : item.position.x > 80 ? "end" : "middle"}
-                        fill="rgba(255, 255, 255, 0.95)"
-                        fontSize="0.15"
-                        fontWeight="600"
-                        className={`roadmap-label ${isMobile ? 'mobile-visible' : ''}`}
-                        initial={{ opacity: 0, scale: isMobile ? 0.9 : 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: isMobile ? 0.3 : 0.2 }}
-                        style={{ pointerEvents: 'none' }}
-                      >
-                        {item.title}
-                      </motion.text>
-                      <motion.text
-                        x={item.position.x < 20 ? item.position.x + 3 : item.position.x > 80 ? item.position.x - 3 : item.position.x}
-                        y={item.position.y - 2.5}
-                        textAnchor={item.position.x < 20 ? "start" : item.position.x > 80 ? "end" : "middle"}
-                        fill={item.type === 'project' ? '#F59E0B' : '#8B5CF6'}
-                        fontSize="0.1"
-                        fontWeight="500"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2, delay: 0.1 }}
-                        style={{ pointerEvents: 'none' }}
-                      >
-                        {item.type === 'project' ? `${item.progress}% Complete` : item.date}
-                      </motion.text>
-                    </g>
-                  )}
-                </g>
-              );
-            })}
-
-            {/* Animated Particles */}
-            {Array.from({ length: 15 }).map((_, i) => (
-              <motion.circle
-                key={`particle-${i}`}
-                r="0.1"
-                fill={i % 3 === 0 ? "rgba(245, 158, 11, 0.6)" : "rgba(139, 92, 246, 0.6)"}
-                initial={{
-                  cx: Math.random() * 100,
-                  cy: Math.random() * 100,
-                  opacity: 0
-                }}
-                animate={{
-                  cx: Math.random() * 100,
-                  cy: Math.random() * 100,
-                  opacity: inView ? [0, 0.8, 0] : 0
-                }}
-                transition={{
-                  duration: Math.random() * 12 + 8,
-                  repeat: Infinity,
-                  delay: Math.random() * 3
-                }}
-              />
-            ))}
+          <svg className="vee" viewBox="0 0 120 160" role="img" aria-label="Blob walking character">
+            <path d="M60 18 L60 8" />
+            <circle className="knob" cx="60" cy="6" r="5" />
+            <path className="fill" d="M24 70 C22 34 40 18 60 18 C82 18 98 34 96 70 C95 100 88 118 60 118 C34 118 25 100 24 70 Z" />
+            <circle className="dot" cx="46" cy="62" r="4.5" />
+            <circle className="dot" cx="74" cy="62" r="4.5" />
+            <path d="M48 80 Q60 92 72 80" />
+            <ellipse className="cheek" cx="37" cy="76" rx="6" ry="4" />
+            <ellipse className="cheek" cx="83" cy="76" rx="6" ry="4" />
+            <path className="arm-l" d="M26 84 Q10 92 8 106" />
+            <path className="arm-r" d="M94 84 Q112 78 114 60" />
+            <path className="leg-l" d="M46 118 L44 144 L34 146" />
+            <path className="leg-r" d="M74 118 L76 144 L86 146" />
           </svg>
-        </motion.div>
+        </div>
 
-        <motion.div className="roadmap-legend" variants={nodeVariants}>
-          <div className="legend-item">
-            <div className="legend-dot completed"></div>
-            <span>Completed</span>
-          </div>
-          <div className="legend-item">
-            <div className="legend-dot current"></div>
-            <span>In Progress</span>
-          </div>
-          <div className="legend-item">
-            <div className="legend-dot planned"></div>
-            <span>Planned</span>
-          </div>
-          <div className="legend-item">
-            <div className="legend-dot project"></div>
-            <span>Major Projects</span>
-          </div>
-        </motion.div>
-      </motion.div>
+        {resumeData.journeyStops.map((stop: TrailStop, index: number) => {
+          const isDone = completedStops[index];
+          const isRight = index % 2 === 1;
 
-      {/* Item Detail Modal */}
-      <AnimatePresence>
-        {selectedItem && (
-          <motion.div
-            className="node-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedItem(null)}
-          >
-            <motion.div
-              className="node-modal"
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              onClick={(e) => e.stopPropagation()}
+          return (
+            <div
+              key={stop.tag}
+              ref={(el) => {
+                stopRefs.current[index] = el;
+              }}
+              className={`stop ${isRight ? 'a right' : ''} ${isDone ? 'done' : ''}`}
             >
-              {timelineItems
-                .filter(item => item.id === selectedItem)
-                .map(item => (
-                  <div key={item.id} className="modal-content">
-                    <div className="modal-header">
-                      <div className="node-info">
-                        <h3>{item.title}</h3>
-                        <div className="node-meta">
-                          <span className={`status-badge ${item.status}`}>
-                            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                          </span>
-                          <span className={`type-badge ${item.type}`}>
-                            {item.type === 'project' ? '★ Project' : '📚 Learning'}
-                          </span>
-                          <span className={`category-badge ${item.category.replace(/[\s\/]/g, '_')}`}>
-                            {item.category}
-                          </span>
-                          <span className="duration-badge">{item.duration}</span>
-                          <span className="date-badge">{item.date}</span>
-                        </div>
-                      </div>
-                      <button
-                        className="close-btn"
-                        onClick={() => setSelectedItem(null)}
-                      >
-                        ×
-                      </button>
-                    </div>
-                    
-                    <div className="modal-body">
-                      <p className="node-description">{item.description}</p>
-                      
-                      {/* Progress Bar for Projects */}
-                      {item.type === 'project' && item.progress !== undefined && (
-                        <div className="progress-section">
-                          <h4>Project Progress</h4>
-                          <div className="progress-bar">
-                            <motion.div 
-                              className="progress-fill"
-                              initial={{ width: 0 }}
-                              animate={{ width: `${item.progress}%` }}
-                              transition={{ duration: 1, delay: 0.2 }}
-                            />
-                            <span className="progress-text">{item.progress}%</span>
-                          </div>
-                        </div>
-                      )}
+              <div className="card sk">
+                <span className="tag">{stop.tag}</span>
+                <h3>{stop.title}</h3>
+                <p>{stop.text}</p>
+              </div>
+              <span className={`dot ${isDone ? 'done' : ''}`} />
+            </div>
+          );
+        })}
 
-                      {/* Project Features */}
-                      {item.features && (
-                        <div className="features-section">
-                          <h4>Key Features</h4>
-                          <div className="features-grid">
-                            {item.features.map((feature, idx) => (
-                              <motion.div
-                                key={idx}
-                                className="feature-tag"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.1 }}
-                              >
-                                {feature}
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+        {/* Path's End: Finish box zooms and blasts expanding confetti, plus Restock button */}
+        <div className="finish-zone" ref={finishRef}>
+          <div className={`finish ${isBoxZoomed ? 'zoomed' : ''}`} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+            <span>there are exciting future plans ahead...</span>
+            <LuSparkles style={{ color: 'var(--accent)' }} />
+          </div>
 
-                      {/* Tech Stack for Projects */}
-                      {item.techStack && (
-                        <div className="techstack-section">
-                          <h4>Technology Stack</h4>
-                          <div className="skills-grid">
-                            {item.techStack.map((tech, idx) => (
-                              <motion.div
-                                key={idx}
-                                className="skill-tag tech-tag"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.1 }}
-                              >
-                                {tech}
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Skills for Learning Items */}
-                      {item.type === 'learning' && (
-                        <div className="skills-section">
-                          <h4>Skills & Technologies</h4>
-                          <div className="skills-grid">
-                            {item.skills.map((skill, idx) => (
-                              <motion.div
-                                key={idx}
-                                className="skill-tag"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.1 }}
-                              >
-                                {skill}
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Project Links */}
-                      {item.type === 'project' && (item.github || item.demo) && (
-                        <div className="project-links">
-                          <h4>Project Links</h4>
-                          <div className="links-container">
-                            {item.github && (
-                              <motion.a
-                                href={item.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link github"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                              >
-                                <span>View Code</span>
-                              </motion.a>
-                            )}
-                            {item.demo && (
-                              <motion.a
-                                href={item.demo}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-link demo"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                              >
-                                <span>Live Demo</span>
-                              </motion.a>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {item.connections.length > 0 && (
-                        <div className="connections-section">
-                          <h4>Connected To</h4>
-                          <div className="connections-list">
-                            {item.connections.map(connId => {
-                              const connectedItem = timelineItems.find(n => n.id === connId);
-                              return connectedItem ? (
-                                <motion.button
-                                  key={connId}
-                                  className="connection-item"
-                                  onClick={() => setSelectedItem(connId)}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  {connectedItem.type === 'project' ? '★' : '📚'} {connectedItem.title}
-                                </motion.button>
-                              ) : null;
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <button
+            type="button"
+            className="btn-restock-confetti"
+            onClick={handleRestockConfetti}
+            aria-label="Restock and blast confetti celebration"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+          >
+            <span className="restock-icon" style={{ display: 'inline-flex' }}><LuPartyPopper /></span>
+            <span>restock confetti</span>
+            <span className="restock-star" style={{ display: 'inline-flex' }}>{hasCelebrated ? <LuSparkles /> : <LuPartyPopper />}</span>
+          </button>
+        </div>
+      </div>
     </section>
   );
 };
