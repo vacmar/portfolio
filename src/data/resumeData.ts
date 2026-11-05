@@ -254,7 +254,7 @@ export const resumeData = {
       description: "Developed a hybrid ML/LLM complaint triage pipeline using TF-IDF + Logistic Regression with confidence-based routing to HuggingFace Llama-3.1-8B for complex complaints. Implemented technical feature extraction, normalization, and complexity scoring across six telecom dimensions with pgvector and Redis.",
       shortDescription: "Hybrid ML & Llama-3.1 telecom complaint classification & routing.",
       technologies: ["Next.js", "TypeScript", "FastAPI", "PostgreSQL", "pgvector", "Redis", "Llama-3.1"],
-      github: "https://github.com/vacmar",
+      github: "https://github.com/telecom-complaint-intelligence/",
       demo: "",
       features: [
         "Confidence-based routing: TF-IDF + Logistic Regression triage escalating to Llama-3.1-8B.",
@@ -290,7 +290,7 @@ export const resumeData = {
       description: "Built a multi-agent payment recovery system using LangGraph, coordinating Transaction Analyst, Customer Risk, and Strategy Selector agents. Engineered a deterministic ActionGuard validating AI actions against merchant limits, retry thresholds, and risk constraints, with Redis workers, PostgreSQL persistence, exponential backoff, authorization tokens, human escalation, and idempotency.",
       shortDescription: "Payment recovery by AI agents, checked by a deterministic ActionGuard layer.",
       technologies: ["Next.js", "FastAPI", "PostgreSQL", "Redis", "LangGraph", "OpenAI/Gemini"],
-      github: "https://github.com/vacmar",
+      github: "",
       demo: "",
       features: [
         "Multi-agent LangGraph coordination: Analyst, Risk, and Strategy Selector.",
@@ -302,24 +302,6 @@ export const resumeData = {
     },
     {
       id: 4,
-      name: "GameChanger4u SaaS Platform",
-      cat: ["backend", "fullstack"],
-      kind: "multi-tenant sports & turf saas",
-      description: "Architected a multi-tenant microservices platform using FastAPI, PostgreSQL, SQLAlchemy, and Alembic across authentication, academy, billing, turf, and notifications. Implemented tenant isolation with AWS ECS Fargate and Terraform, alongside JWT authentication, Redis caching, and idempotency middleware.",
-      shortDescription: "Multi-tenant sports SaaS with FastAPI microservices and AWS ECS Fargate.",
-      technologies: ["Next.js 14", "TypeScript", "FastAPI", "PostgreSQL", "Redis", "AWS ECS", "Terraform"],
-      github: "https://github.com/vacmar",
-      demo: "",
-      features: [
-        "FastAPI microservices across Auth, Academy, Billing, and Turf modules.",
-        "Tenant isolation using AWS ECS Fargate, Terraform, and tenant header validation.",
-        "Redis caching layer, idempotency middleware, and zero-downtime Alembic migrations."
-      ],
-      status: "Completed",
-      type: "Microservices & Cloud"
-    },
-    {
-      id: 5,
       name: "Spendly",
       cat: ["fullstack"],
       kind: "smart expense tracker",
@@ -337,7 +319,7 @@ export const resumeData = {
       type: "Solo Project"
     },
     {
-      id: 6,
+      id: 5,
       name: "School CRM Platform",
       cat: ["backend", "fullstack"],
       kind: "7-role educational management",
@@ -355,7 +337,7 @@ export const resumeData = {
       type: "Backend Systems"
     },
     {
-      id: 7,
+      id: 6,
       name: "MindSync+",
       cat: ["ai"],
       kind: "msme 5.0 funded ai platform",
