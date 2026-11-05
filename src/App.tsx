@@ -19,19 +19,31 @@ const MusicPlayer = lazy(() => import('./components/MusicPlayer'));
 
 import './App.css';
 
+export type SeasonTheme = 'spring' | 'summer' | 'rainy' | 'autumn' | 'winter';
+
 function App() {
-  const [weatherMood, setWeatherMood] = useState<'sunny' | 'rainy' | 'sunset' | 'midnight'>('sunny');
+  const [weatherMood, setWeatherMood] = useState<SeasonTheme>('spring');
   const [isCalm, setIsCalm] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     try {
       const savedWeather = localStorage.getItem('weather-mood') as any;
-      if (['sunny', 'rainy', 'sunset', 'midnight'].includes(savedWeather)) {
+      if (['spring', 'summer', 'rainy', 'autumn', 'winter'].includes(savedWeather)) {
         setWeatherMood(savedWeather);
         document.documentElement.setAttribute('data-weather', savedWeather);
+      } else if (savedWeather === 'sunny') {
+        setWeatherMood('summer');
+        document.documentElement.setAttribute('data-weather', 'summer');
+      } else if (savedWeather === 'sunset') {
+        setWeatherMood('autumn');
+        document.documentElement.setAttribute('data-weather', 'autumn');
+      } else if (savedWeather === 'midnight') {
+        setWeatherMood('winter');
+        document.documentElement.setAttribute('data-weather', 'winter');
       } else {
-        document.documentElement.setAttribute('data-weather', 'sunny');
+        setWeatherMood('spring');
+        document.documentElement.setAttribute('data-weather', 'spring');
       }
 
       const savedCalm = localStorage.getItem('calm');
@@ -77,7 +89,7 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  const handleWeatherChange = (newWeather: 'sunny' | 'rainy' | 'sunset' | 'midnight') => {
+  const handleWeatherChange = (newWeather: SeasonTheme) => {
     setWeatherMood(newWeather);
     document.documentElement.setAttribute('data-weather', newWeather);
     try {

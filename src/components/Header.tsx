@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { LuSun, LuCloudRain, LuSunset, LuMoon, LuPenTool, LuX } from 'react-icons/lu';
+import { LuFlower2, LuSun, LuCloudRain, LuLeaf, LuSnowflake, LuPenTool, LuX } from 'react-icons/lu';
+import { SeasonTheme } from '../App';
 import './Header.css';
 
 interface HeaderProps {
-  onWeatherChange?: (weather: 'sunny' | 'rainy' | 'sunset' | 'midnight') => void;
+  onWeatherChange?: (weather: SeasonTheme) => void;
   activeWeather?: string;
 }
 
-const WEATHER_MODES = [
-  { id: 'sunny', icon: <LuSun className="weather-icon-svg" />, label: 'sunny' },
-  { id: 'rainy', icon: <LuCloudRain className="weather-icon-svg" />, label: 'rainy' },
-  { id: 'sunset', icon: <LuSunset className="weather-icon-svg" />, label: 'sunset' },
-  { id: 'midnight', icon: <LuMoon className="weather-icon-svg" />, label: 'midnight' }
-] as const;
+const SEASON_MODES: { id: SeasonTheme; icon: React.ReactNode; label: string }[] = [
+  { id: 'spring', icon: <LuFlower2 className="weather-icon-svg" />, label: 'spring' },
+  { id: 'summer', icon: <LuSun className="weather-icon-svg" />, label: 'summer' },
+  { id: 'rainy', icon: <LuCloudRain className="weather-icon-svg" />, label: 'monsoon / rainy' },
+  { id: 'autumn', icon: <LuLeaf className="weather-icon-svg" />, label: 'autumn' },
+  { id: 'winter', icon: <LuSnowflake className="weather-icon-svg" />, label: 'winter' }
+];
 
 const SIDE_SECTIONS = [
   { id: 'home', num: '01. ', word: 'Hero' },
@@ -156,15 +158,15 @@ const Header: React.FC<HeaderProps> = ({ onWeatherChange, activeWeather = 'sunny
           <span className={`center-section-cursor ${showCursor ? 'visible' : ''}`}>|</span>
         </div>
 
-        {/* Right-aligned Controls: Weather Palette Selector & Animated Mobile Hamburger */}
+        {/* Right-aligned Controls: Season Palette Selector & Animated Mobile Hamburger */}
         <div className="nav-controls">
-          <div className="weather-toggle-group" role="group" aria-label="Weather mood theme">
-            {WEATHER_MODES.map((w) => (
+          <div className="weather-toggle-group" role="group" aria-label="Season theme">
+            {SEASON_MODES.map((w) => (
               <button
                 key={w.id}
                 type="button"
                 className={`btn-weather ${activeWeather === w.id ? 'active' : ''}`}
-                title={`${w.label} mood`}
+                title={`${w.label} season theme`}
                 onClick={() => onWeatherChange && onWeatherChange(w.id)}
               >
                 {w.icon}

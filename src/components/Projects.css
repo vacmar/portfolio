@@ -32,6 +32,7 @@
   box-shadow: 0 16px 0 var(--ink), 0 26px 36px var(--shadow);
 }
 
+[data-weather="winter"] .flip:hover .face ,
 [data-weather="midnight"] .flip:hover .face {
   box-shadow: 0 16px 0 #f8fafc, 0 26px 36px rgba(0, 0, 0, 0.85) !important;
 }
@@ -197,7 +198,9 @@
 }
 
 /* Midnight Dark Theme for Govt Funded Card */
+[data-weather="winter"] .face.face-gov,
 [data-weather="midnight"] .face.face-gov,
+[data-weather="winter"] .face.back-gov ,
 [data-weather="midnight"] .face.back-gov {
   background: #201705 !important;
   border-color: #f59e0b !important;
@@ -205,42 +208,56 @@
   color: #fef3c7 !important;
 }
 
+[data-weather="winter"] .flip.flip-gov:hover .face ,
 [data-weather="midnight"] .flip.flip-gov:hover .face {
   box-shadow: 0 16px 0 #f59e0b, 0 26px 36px rgba(245, 158, 11, 0.55) !important;
 }
 
+[data-weather="winter"] .face.face-gov h3,
 [data-weather="midnight"] .face.face-gov h3,
+[data-weather="winter"] .face.back-gov h3 ,
 [data-weather="midnight"] .face.back-gov h3 {
   color: #fde047 !important;
 }
 
+[data-weather="winter"] .face.face-gov .kind ,
 [data-weather="midnight"] .face.face-gov .kind {
   color: #f59e0b !important;
 }
 
+[data-weather="winter"] .face.face-gov p,
 [data-weather="midnight"] .face.face-gov p,
+[data-weather="winter"] .face.back-gov p,
 [data-weather="midnight"] .face.back-gov p,
+[data-weather="winter"] .face.back-gov .features-list ,
 [data-weather="midnight"] .face.back-gov .features-list {
   color: #fef3c7 !important;
 }
 
+[data-weather="winter"] .face.face-gov .tags li,
 [data-weather="midnight"] .face.face-gov .tags li,
+[data-weather="winter"] .face.back-gov .tags li ,
 [data-weather="midnight"] .face.back-gov .tags li {
   background: #382407 !important;
   border-color: #f59e0b !important;
   color: #fde047 !important;
 }
 
+[data-weather="winter"] .face.face-gov .card-actions,
 [data-weather="midnight"] .face.face-gov .card-actions,
+[data-weather="winter"] .face.back-gov .card-actions ,
 [data-weather="midnight"] .face.back-gov .card-actions {
   border-top-color: rgba(245, 158, 11, 0.35) !important;
 }
 
+[data-weather="winter"] .face.face-gov .tap-hint,
 [data-weather="midnight"] .face.face-gov .tap-hint,
+[data-weather="winter"] .face.back-gov .tap-hint ,
 [data-weather="midnight"] .face.back-gov .tap-hint {
   color: #fbbf24 !important;
 }
 
+[data-weather="winter"] .gov-ribbon-badge ,
 [data-weather="midnight"] .gov-ribbon-badge {
   background: #3b2606 !important;
   color: #fde047 !important;
@@ -248,20 +265,25 @@
   box-shadow: 1px 2px 0 rgba(245, 158, 11, 0.3) !important;
 }
 
+[data-weather="winter"] .private-badge.gov-badge ,
 [data-weather="midnight"] .private-badge.gov-badge {
   color: #fde047 !important;
   border-color: #f59e0b !important;
   background: rgba(245, 158, 11, 0.18) !important;
 }
 
+[data-weather="winter"] .face.face-gov .flip-btn,
 [data-weather="midnight"] .face.face-gov .flip-btn,
+[data-weather="winter"] .face.back-gov .flip-btn ,
 [data-weather="midnight"] .face.back-gov .flip-btn {
   background: #3b2606 !important;
   color: #fde047 !important;
   border-color: #f59e0b !important;
 }
 
+[data-weather="winter"] .face.face-gov .flip-btn:hover,
 [data-weather="midnight"] .face.face-gov .flip-btn:hover,
+[data-weather="winter"] .face.back-gov .flip-btn:hover ,
 [data-weather="midnight"] .face.back-gov .flip-btn:hover {
   background: #543708 !important;
   box-shadow: 2px 5px 0 #f59e0b !important;
@@ -332,6 +354,7 @@
   width: 100%;
 }
 
+[data-weather="winter"] .card-actions ,
 [data-weather="midnight"] .card-actions {
   border-top-color: rgba(248, 250, 252, 0.2);
 }
@@ -344,6 +367,7 @@
   user-select: none;
 }
 
+[data-weather="winter"] .tap-hint ,
 [data-weather="midnight"] .tap-hint {
   color: rgba(248, 250, 252, 0.65);
 }
@@ -370,6 +394,7 @@
   background: rgba(0, 0, 0, 0.03);
 }
 
+[data-weather="winter"] .private-badge ,
 [data-weather="midnight"] .private-badge {
   color: rgba(248, 250, 252, 0.75);
   border-color: rgba(248, 250, 252, 0.3);
@@ -392,6 +417,7 @@
   box-shadow: 2px 5px 0 var(--ink);
 }
 
+[data-weather="winter"] .face .btn:hover ,
 [data-weather="midnight"] .face .btn:hover {
   box-shadow: 2px 5px 0 #f8fafc !important;
 }
@@ -429,6 +455,7 @@
   box-shadow: 0 12px 24px var(--shadow);
 }
 
+[data-weather="winter"] .project-coming-soon-card ,
 [data-weather="midnight"] .project-coming-soon-card {
   border-color: rgba(248, 250, 252, 0.45) !important;
   background: rgba(30, 41, 59, 0.6) !important;

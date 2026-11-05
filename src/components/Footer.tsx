@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { LuSun, LuCloudRain, LuSunset, LuMoon } from 'react-icons/lu';
+import { LuFlower2, LuSun, LuCloudRain, LuLeaf, LuSnowflake } from 'react-icons/lu';
+import { SeasonTheme } from '../App';
 import './Footer.css';
 
 interface FooterProps {
   onCalmToggle?: (calm: boolean) => void;
   isCalm?: boolean;
-  onWeatherChange?: (weather: 'sunny' | 'rainy' | 'sunset' | 'midnight') => void;
-  currentWeather?: 'sunny' | 'rainy' | 'sunset' | 'midnight';
+  onWeatherChange?: (weather: SeasonTheme) => void;
+  currentWeather?: SeasonTheme;
 }
 
 const Footer: React.FC<FooterProps> = ({
@@ -68,26 +69,27 @@ const Footer: React.FC<FooterProps> = ({
     setTimeout(() => setPostmanBubble(null), 3200);
   };
 
-  // 3. Cycle weather mode from footer button
+  // 3. Cycle season theme from footer button
   const handleCycleWeather = () => {
     if (!onWeatherChange) return;
-    const weatherOrder: ('sunny' | 'rainy' | 'sunset' | 'midnight')[] = [
-      'sunny',
+    const seasonOrder: SeasonTheme[] = [
+      'spring',
+      'summer',
       'rainy',
-      'sunset',
-      'midnight'
+      'autumn',
+      'winter'
     ];
-    const currentIndex = weatherOrder.indexOf(currentWeather);
-    const nextWeather = weatherOrder[(currentIndex + 1) % weatherOrder.length];
-    onWeatherChange(nextWeather);
+    const currentIndex = seasonOrder.indexOf(currentWeather as SeasonTheme);
+    const nextSeason = seasonOrder[(currentIndex + 1) % seasonOrder.length];
+    onWeatherChange(nextSeason);
   };
 
-  // Concise weather display without "live from Chennai"
-  const weatherDisplayNames: Record<string, string> = {
-    sunny: 'sunny ☀️',
-    rainy: 'rainy 🌧️',
-    sunset: 'sunset 🌅',
-    midnight: 'midnight 🌙'
+  const seasonDisplayNames: Record<string, string> = {
+    spring: 'spring',
+    summer: 'summer',
+    rainy: 'monsoon / rainy',
+    autumn: 'autumn',
+    winter: 'winter'
   };
 
   return (
@@ -495,14 +497,15 @@ const Footer: React.FC<FooterProps> = ({
           className="lift-btn"
           type="button"
           onClick={handleCycleWeather}
-          aria-label={`Current weather: ${currentWeather}. Click to change weather theme.`}
+          aria-label={`Current season: ${currentWeather}. Click to change season theme.`}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
         >
-          <span>weather: {currentWeather}</span>
-          {currentWeather === 'sunny' && <LuSun style={{ color: '#eab308' }} />}
-          {currentWeather === 'rainy' && <LuCloudRain style={{ color: '#38bdf8' }} />}
-          {currentWeather === 'sunset' && <LuSunset style={{ color: '#f97316' }} />}
-          {currentWeather === 'midnight' && <LuMoon style={{ color: '#a855f7' }} />}
+          <span>season: {currentWeather && seasonDisplayNames[currentWeather]}</span>
+          {currentWeather === 'spring' && <LuFlower2 style={{ color: '#ec4899' }} />}
+          {currentWeather === 'summer' && <LuSun style={{ color: '#eab308' }} />}
+          {currentWeather === 'rainy' && <LuCloudRain style={{ color: '#3b82f6' }} />}
+          {currentWeather === 'autumn' && <LuLeaf style={{ color: '#ea580c' }} />}
+          {currentWeather === 'winter' && <LuSnowflake style={{ color: '#38bdf8' }} />}
         </button>
 
         {onCalmToggle && (

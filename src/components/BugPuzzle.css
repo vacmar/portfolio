@@ -101,21 +101,26 @@
 }
 
 /* Midnight Dark Theme Custom Scrollbar */
+[data-weather="winter"] .code ,
 [data-weather="midnight"] .code {
   scrollbar-color: #f472b6 rgba(248, 250, 252, 0.12);
 }
 
+[data-weather="winter"] .code::-webkit-scrollbar-track ,
 [data-weather="midnight"] .code::-webkit-scrollbar-track {
   background: rgba(248, 250, 252, 0.08);
   border-top: 1px dashed rgba(248, 250, 252, 0.3);
 }
 
+[data-weather="winter"] .code::-webkit-scrollbar-thumb ,
 [data-weather="midnight"] .code::-webkit-scrollbar-thumb {
   background: #f472b6;
   border-color: #0b0f19;
 }
 
+[data-weather="winter"] .code::-webkit-scrollbar-thumb:hover,
 [data-weather="midnight"] .code::-webkit-scrollbar-thumb:hover,
+[data-weather="winter"] .code::-webkit-scrollbar-thumb:active ,
 [data-weather="midnight"] .code::-webkit-scrollbar-thumb:active {
   background: #fb7185;
 }

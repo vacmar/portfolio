@@ -61,9 +61,13 @@
   box-shadow: 4px 6px 0 var(--shadow) !important;
 }
 
+[data-weather="winter"] .padwrap,
 [data-weather="midnight"] .padwrap,
+[data-weather="winter"] .padwrap:hover,
 [data-weather="midnight"] .padwrap:hover,
+[data-weather="winter"] .padwrap:active,
 [data-weather="midnight"] .padwrap:active,
+[data-weather="winter"] .padwrap:focus-within ,
 [data-weather="midnight"] .padwrap:focus-within {
   transform: none !important;
   box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.6) !important;

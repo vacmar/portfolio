@@ -74,6 +74,7 @@
   }
 }
 
+[data-weather="winter"] .center-section-display ,
 [data-weather="midnight"] .center-section-display {
   border-color: rgba(248, 250, 252, 0.4);
   background: rgba(30, 41, 59, 0.7);
@@ -176,10 +177,12 @@
   color: var(--accent);
 }
 
+[data-weather="winter"] .weather-icon-svg ,
 [data-weather="midnight"] .weather-icon-svg {
   color: #f8fafc;
 }
 
+[data-weather="winter"] .btn-weather.active .weather-icon-svg ,
 [data-weather="midnight"] .btn-weather.active .weather-icon-svg {
   color: #f472b6;
 }
@@ -229,6 +232,7 @@
   transform-origin: center;
 }
 
+[data-weather="winter"] .ham-line ,
 [data-weather="midnight"] .ham-line {
   background: #f8fafc;
 }
@@ -505,6 +509,7 @@
   pointer-events: none;
 }
 
+[data-weather="winter"] .artcraft-side-track::after ,
 [data-weather="midnight"] .artcraft-side-track::after {
   background: #f8fafc;
   opacity: 0.22;
@@ -543,6 +548,7 @@
   transform-origin: right center;
 }
 
+[data-weather="winter"] .artcraft-side-tick ,
 [data-weather="midnight"] .artcraft-side-tick {
   background: #f8fafc;
   opacity: 0.4;

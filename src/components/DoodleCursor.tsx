@@ -377,14 +377,16 @@ const DoodleCursor: React.FC = () => {
       }
 
       // Dynamic theme color for the dashed flight line
-      const activeWeather = document.documentElement.getAttribute('data-weather') || 'sunny';
-      let trailColor = 'rgba(70, 115, 185, 0.65)'; // Classic blue rule pen line for day/sunny
-      if (activeWeather === 'rainy') {
-        trailColor = 'rgba(96, 165, 250, 0.75)';
-      } else if (activeWeather === 'sunset') {
-        trailColor = 'rgba(248, 113, 113, 0.75)';
-      } else if (activeWeather === 'midnight') {
-        trailColor = 'rgba(244, 114, 182, 0.85)'; // Radiant starlight pink chalk line in dark theme
+      const activeWeather = document.documentElement.getAttribute('data-weather') || 'spring';
+      let trailColor = 'rgba(236, 72, 153, 0.7)'; // Spring petal pink
+      if (activeWeather === 'summer' || activeWeather === 'sunny') {
+        trailColor = 'rgba(70, 115, 185, 0.65)'; // Summer notebook blue
+      } else if (activeWeather === 'rainy') {
+        trailColor = 'rgba(59, 130, 246, 0.75)'; // Monsoon rain blue
+      } else if (activeWeather === 'autumn' || activeWeather === 'sunset') {
+        trailColor = 'rgba(234, 88, 12, 0.75)'; // Autumn amber leaf
+      } else if (activeWeather === 'winter' || activeWeather === 'midnight') {
+        trailColor = 'rgba(56, 189, 248, 0.85)'; // Winter frost cyan
       }
 
       // Record dashed flight path trail

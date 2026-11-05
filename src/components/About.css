@@ -79,6 +79,7 @@
   box-shadow: 0 16px 0 var(--ink), 0 24px 34px var(--shadow) !important;
 }
 
+[data-weather="winter"] .pin:hover ,
 [data-weather="midnight"] .pin:hover {
   box-shadow: 0 16px 0 #f8fafc, 0 24px 34px rgba(0, 0, 0, 0.85) !important;
 }

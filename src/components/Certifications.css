@@ -68,6 +68,7 @@
   box-shadow: 0 16px 0 var(--ink), 0 24px 34px var(--shadow) !important;
 }
 
+[data-weather="winter"] .cert-sticker-card:hover ,
 [data-weather="midnight"] .cert-sticker-card:hover {
   box-shadow: 0 16px 0 #f8fafc, 0 24px 34px rgba(0, 0, 0, 0.85) !important;
 }
@@ -172,6 +173,7 @@
   transform: rotate(0deg) scale(1.02) !important;
 }
 
+[data-weather="winter"] .cert-coming-soon-card ,
 [data-weather="midnight"] .cert-coming-soon-card {
   border-color: rgba(248, 250, 252, 0.45) !important;
   background: rgba(30, 41, 59, 0.6) !important;

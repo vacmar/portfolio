@@ -34,60 +34,130 @@
   color-scheme: light;
 }
 
-/* Weather Themes: Sunny, Rainy, Sunset, Midnight Stars */
-[data-weather="sunny"] {
-  --paper: #f3efe3;
-  --panel: #fbf8ee;
-  --rule: rgba(94, 138, 196, 0.32);
-  --accent: #d96a6a;
+/* Season Themes: Spring, Summer, Monsoon (Rainy), Autumn, Winter */
+[data-weather="spring"] {
+  --paper: #f9f6f0;
+  --panel: #ffffff;
+  --rule: rgba(244, 114, 182, 0.28);
+  --accent: #ec4899; /* Cherry Blossom Pink */
+  --margin-line: #f472b6;
+  --ink: #2b2823;
+  --muted: #6e675f;
+  --hl: rgba(252, 231, 243, 0.9);
+  --washi-tape: rgba(251, 207, 232, 0.75);
+  color-scheme: light;
+}
+
+[data-weather="summer"] {
+  --paper: #f4efe2;
+  --panel: #fcf9f2;
+  --rule: rgba(100, 145, 195, 0.28);
+  --accent: #d96a6a; /* Pastel Coral/Strawberry */
   --margin-line: #d96a6a;
-  --hl: rgba(255, 224, 80, 0.75);
-  --washi-tape: rgba(255, 226, 130, 0.7);
+  --ink: #2b2823;
+  --muted: #6e675f;
+  --hl: rgba(255, 230, 120, 0.78);
+  --washi-tape: rgba(255, 226, 130, 0.75);
+  color-scheme: light;
 }
 
 [data-weather="rainy"] {
   --paper: #eef3f7;
   --panel: #ffffff;
   --rule: rgba(147, 197, 253, 0.4);
-  --accent: #60a5fa;
+  --accent: #3b82f6; /* Monsoon Sky Blue */
   --margin-line: #60a5fa;
   --ink: #1e293b;
   --muted: #64748b;
   --hl: rgba(191, 219, 254, 0.85);
   --washi-tape: rgba(219, 234, 254, 0.85);
+  color-scheme: light;
 }
 
-[data-weather="sunset"] {
-  --paper: #fcf1eb;
+[data-weather="autumn"] {
+  --paper: #fdf5ee;
   --panel: #ffffff;
-  --rule: rgba(244, 162, 97, 0.35);
-  --accent: #f87171;
-  --margin-line: #fb923c;
+  --rule: rgba(249, 115, 22, 0.3);
+  --accent: #ea580c; /* Maple Amber / Rust */
+  --margin-line: #f97316;
+  --ink: #332115;
+  --muted: #7c5c46;
   --hl: rgba(254, 215, 170, 0.85);
-  --washi-tape: rgba(254, 205, 211, 0.85);
+  --washi-tape: rgba(254, 215, 170, 0.8);
+  color-scheme: light;
 }
 
-[data-weather="midnight"] {
+[data-weather="winter"] {
   --paper: #0f141f;
   --panel: #1a2233;
   --rule: rgba(148, 163, 184, 0.18);
   --ink: #f8fafc;
   --muted: #cbd5e1;
-  --accent: #f472b6;
+  --accent: #38bdf8; /* Frost Cyan / Ice Crystal */
   --accent-ink: #0f141f;
   --teal: #38bdf8;
-  --hl: rgba(244, 114, 182, 0.4);
+  --hl: rgba(56, 189, 248, 0.35);
   --shadow: rgba(0, 0, 0, 0.7);
   --hole: #1e293b;
-  --margin-line: #f472b6;
+  --margin-line: #38bdf8;
   --pastel-pink: #2a1824;
   --pastel-yellow: #282414;
   --pastel-blue: #142236;
   --pastel-mint: #102620;
   --pastel-lavender: #231b34;
   --pastel-peach: #2b1d17;
-  --washi-tape: rgba(244, 114, 182, 0.45);
-  --washi-tape-border: rgba(244, 114, 182, 0.6);
+  --washi-tape: rgba(56, 189, 248, 0.35);
+  --washi-tape-border: rgba(56, 189, 248, 0.5);
+  color-scheme: dark;
+}
+
+/* Backward compatibility aliases */
+[data-weather="sunny"] {
+  --paper: #f4efe2;
+  --panel: #fcf9f2;
+  --rule: rgba(100, 145, 195, 0.28);
+  --accent: #d96a6a;
+  --margin-line: #d96a6a;
+  --ink: #2b2823;
+  --muted: #6e675f;
+  --hl: rgba(255, 230, 120, 0.78);
+  --washi-tape: rgba(255, 226, 130, 0.75);
+}
+
+[data-weather="sunset"] {
+  --paper: #fdf5ee;
+  --panel: #ffffff;
+  --rule: rgba(249, 115, 22, 0.3);
+  --accent: #ea580c;
+  --margin-line: #f97316;
+  --ink: #332115;
+  --muted: #7c5c46;
+  --hl: rgba(254, 215, 170, 0.85);
+  --washi-tape: rgba(254, 215, 170, 0.8);
+}
+
+[data-weather="winter"],
+[data-weather="midnight"] {
+  --paper: #0f141f;
+  --panel: #1a2233;
+  --rule: rgba(148, 163, 184, 0.18);
+  --ink: #f8fafc;
+  --muted: #cbd5e1;
+  --accent: #38bdf8;
+  --accent-ink: #0f141f;
+  --teal: #38bdf8;
+  --hl: rgba(56, 189, 248, 0.35);
+  --shadow: rgba(0, 0, 0, 0.7);
+  --hole: #1e293b;
+  --margin-line: #38bdf8;
+  --pastel-pink: #2a1824;
+  --pastel-yellow: #282414;
+  --pastel-blue: #142236;
+  --pastel-mint: #102620;
+  --pastel-lavender: #231b34;
+  --pastel-peach: #2b1d17;
+  --washi-tape: rgba(56, 189, 248, 0.35);
+  --washi-tape-border: rgba(56, 189, 248, 0.5);
   color-scheme: dark;
 }
 
@@ -148,25 +218,42 @@ label {
 }
 
 /* Midnight / Dark Theme In-Device Pencil Cursors (High-Contrast Starlight Outline) */
+[data-weather="winter"] html,
 [data-weather="midnight"] html,
+[data-weather="winter"] body ,
 [data-weather="midnight"] body {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M23 19 L26 22 C27.5 23.5 27.5 25.5 26 27 C24.5 28.5 22.5 28.5 21 27 L19 23 Z' fill='%23f472b6' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M20 16 L23 19 L19 23 L16 20 Z' fill='%23cbd5e1' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cline x1='18' y1='21.5' x2='21.5' y2='18' stroke='%2394a3b8' stroke-width='1.2'/%3E%3Cpath d='M8 4 L20 16 L18 18 L6 6 Z' fill='%23ffd166' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M6 6 L18 18 L16 20 L4 8 Z' fill='%23f59e0b' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M5 3 L8 4 L4 8 L3 5 Z' fill='%23fef3c7' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M2 2 L5 3 L3 5 Z' fill='%23f8fafc'/%3E%3C/svg%3E") 2 2, auto;
 }
 
+[data-weather="winter"] a,
 [data-weather="midnight"] a,
+[data-weather="winter"] button,
 [data-weather="midnight"] button,
+[data-weather="winter"] [role="button"],
 [data-weather="midnight"] [role="button"],
+[data-weather="winter"] input,
 [data-weather="midnight"] input,
+[data-weather="winter"] select,
 [data-weather="midnight"] select,
+[data-weather="winter"] textarea,
 [data-weather="midnight"] textarea,
+[data-weather="winter"] .btn,
 [data-weather="midnight"] .btn,
+[data-weather="winter"] .lift-btn,
 [data-weather="midnight"] .lift-btn,
+[data-weather="winter"] .project-card,
 [data-weather="midnight"] .project-card,
+[data-weather="winter"] .cert-card,
 [data-weather="midnight"] .cert-card,
+[data-weather="winter"] .catbtn,
 [data-weather="midnight"] .catbtn,
+[data-weather="winter"] .weather-toggle-group,
 [data-weather="midnight"] .weather-toggle-group,
+[data-weather="winter"] .btn-weather,
 [data-weather="midnight"] .btn-weather,
+[data-weather="winter"] [tabindex],
 [data-weather="midnight"] [tabindex],
+[data-weather="winter"] label ,
 [data-weather="midnight"] label {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M23 19 L26 22 C27.5 23.5 27.5 25.5 26 27 C24.5 28.5 22.5 28.5 21 27 L19 23 Z' fill='%23f472b6' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M20 16 L23 19 L19 23 L16 20 Z' fill='%23cbd5e1' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cline x1='18' y1='21.5' x2='21.5' y2='18' stroke='%2394a3b8' stroke-width='1.2'/%3E%3Cpath d='M8 4 L20 16 L18 18 L6 6 Z' fill='%23ffd166' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M6 6 L18 18 L16 20 L4 8 Z' fill='%23f59e0b' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M5 3 L8 4 L4 8 L3 5 Z' fill='%23fef3c7' stroke='%23f8fafc' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M2 2 L5 3 L3 5 Z' fill='%23f8fafc'/%3E%3Cpath d='M9 1 L10 2.4 L12 2.8 L10.5 4 L11 5.8 L9.3 4.8 L7.6 5.8 L8.1 4 L6.6 2.8 L8.6 2.4 Z' fill='%2338bdf8' stroke='%23f8fafc' stroke-width='0.8'/%3E%3C/svg%3E") 2 2, pointer !important;
 }
@@ -255,42 +342,54 @@ p {
   border-radius: 4px;
 }
 
+[data-weather="winter"] .sk ,
 [data-weather="midnight"] .sk {
   border-color: rgba(248, 250, 252, 0.4);
   box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.6);
 }
 
+[data-weather="winter"] .chip,
 [data-weather="midnight"] .chip,
+[data-weather="winter"] .tech-pill ,
 [data-weather="midnight"] .tech-pill {
   background: #1e293b !important;
   color: #f8fafc !important;
   border-color: rgba(248, 250, 252, 0.35) !important;
 }
 
+[data-weather="winter"] .job-note ,
 [data-weather="midnight"] .job-note {
   background: rgba(30, 41, 59, 0.85) !important;
   color: #f8fafc !important;
   border-color: #f472b6 !important;
 }
 
+[data-weather="winter"] .course-chip ,
 [data-weather="midnight"] .course-chip {
   background: #1e293b !important;
   color: #f8fafc !important;
   border-color: rgba(248, 250, 252, 0.35) !important;
 }
 
+[data-weather="winter"] .btn ,
 [data-weather="midnight"] .btn {
   border-color: rgba(248, 250, 252, 0.4);
 }
 
+[data-weather="winter"] .sk:not(.padwrap):not(.face):hover,
 [data-weather="midnight"] .sk:not(.padwrap):not(.face):hover,
+[data-weather="winter"] .btn:hover,
 [data-weather="midnight"] .btn:hover,
+[data-weather="winter"] .lift-btn:hover ,
 [data-weather="midnight"] .lift-btn:hover {
   box-shadow: 0 16px 0 #f8fafc, 0 26px 36px rgba(0, 0, 0, 0.85) !important;
 }
 
+[data-weather="winter"] .field input,
 [data-weather="midnight"] .field input,
+[data-weather="winter"] .field textarea,
 [data-weather="midnight"] .field textarea,
+[data-weather="winter"] .code ,
 [data-weather="midnight"] .code {
   background: #161e2e;
   color: #f8fafc;
@@ -531,33 +630,43 @@ p {
 }
 
 /* Invert colors in dark/midnight mode: White limbs & glowing antenna */
+[data-weather="winter"] .vee ,
 [data-weather="midnight"] .vee {
   filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.25));
 }
+[data-weather="winter"] .vee * ,
 [data-weather="midnight"] .vee * {
   stroke: #ffffff !important;
 }
+[data-weather="winter"] .vee .fill ,
 [data-weather="midnight"] .vee .fill {
   fill: #1e293b !important;
   stroke: #ffffff !important;
   stroke-width: 4.5 !important;
 }
+[data-weather="winter"] .vee .dot ,
 [data-weather="midnight"] .vee .dot {
   fill: #ffffff !important;
   stroke: none !important;
 }
+[data-weather="winter"] .vee .cheek ,
 [data-weather="midnight"] .vee .cheek {
   fill: #f472b6 !important;
   stroke: none !important;
   opacity: 0.95 !important;
 }
+[data-weather="winter"] .vee .knob ,
 [data-weather="midnight"] .vee .knob {
   fill: #f472b6 !important;
   stroke: #ffffff !important;
 }
+[data-weather="winter"] .vee .arm-l,
 [data-weather="midnight"] .vee .arm-l,
+[data-weather="winter"] .vee .arm-r,
 [data-weather="midnight"] .vee .arm-r,
+[data-weather="winter"] .vee .leg-l,
 [data-weather="midnight"] .vee .leg-l,
+[data-weather="winter"] .vee .leg-r ,
 [data-weather="midnight"] .vee .leg-r {
   stroke: #ffffff !important;
   stroke-width: 4.5 !important;
