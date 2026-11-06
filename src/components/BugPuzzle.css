@@ -242,9 +242,9 @@
 }
 
 .puz-tab.active {
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
-  border-color: var(--ink);
+  border-color: var(--accent);
   box-shadow: 2px 2px 0 var(--shadow);
 }
 
