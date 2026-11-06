@@ -47,7 +47,7 @@ export interface CodePuzzle {
 export const resumeData = {
   personalInfo: {
     name: "Vaaheesan S",
-    title: "Backend Software Developer • Python • FastAPI • Payments & APIs • React",
+    title: "Software Engineer • Python • FastAPI • Payments & APIs • React",
     email: "vaahee21@gmail.com",
     phone: "+91-9499941994",
     location: "Chennai, Tamil Nadu, India",
@@ -59,7 +59,7 @@ export const resumeData = {
     portfolio: "https://vaaheesan.vercel.app"
   },
 
-  summary: `Backend Software Developer with hands-on experience designing high-concurrency RESTful APIs, schema-driven microservices, multi-agent AI pipelines, and payment gateway architectures. Experienced in building multi-tenant SaaS platforms on AWS ECS Fargate, deterministic safety guards with LangGraph, and optimizing queries.`,
+  summary: `Software Engineer with hands-on experience designing high-concurrency RESTful APIs, schema-driven microservices, multi-agent AI pipelines, and payment gateway architectures. Experienced in building multi-tenant SaaS platforms on AWS ECS Fargate, deterministic safety guards with LangGraph, and optimizing queries.`,
 
   skills: {
     languages: ["Python", "Java", "SQL", "JavaScript", "TypeScript"],

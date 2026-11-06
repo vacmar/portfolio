@@ -147,7 +147,7 @@ const Hero: React.FC = () => {
           </h1>
 
           <p className="hero-role-lead">
-            <strong>Backend Software Developer</strong> building resilient APIs, payment flows, and microservices with Python, FastAPI, PostgreSQL, and AWS ECS Fargate, wrapped in deterministic AI guardrails.
+            <strong>Software Engineer</strong> building resilient APIs, payment flows, and microservices with Python, FastAPI, PostgreSQL, and AWS ECS Fargate, wrapped in deterministic AI guardrails.
           </p>
 
           <div className="competitive-pill-row">
