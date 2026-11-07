@@ -15,7 +15,7 @@ const About: React.FC = () => {
       <div className="about-layout">
         <div className="about-bio">
           <p>
-            I'm a Computer Science Engineering student at Velammal Engineering College with a strong academic record (CGPA: 8.33) and a habit of learning by building. Most of what I know about shipping software came from making apps with real sign-in, several user roles and relational data.
+            I'm a Computer Science Engineering student at Velammal Engineering College with a strong academic record (CGPA: 8.35) and a habit of learning by building. Most of what I know about shipping software came from making apps with real sign-in, several user roles and relational data.
           </p>
           <p>
             I've interned in backend and web development across four companies: <strong>Hexaware Technologies</strong>, <strong>Infotak Solutions</strong>, <strong>J7 Technology Solutions</strong>, and <strong>GameChanger4u</strong>. At Infotak Solutions I picked up a database optimization on my own, which is my favourite kind of work: find the slow part, understand why, fix it properly.

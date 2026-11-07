@@ -193,7 +193,7 @@ export const resumeData = {
       school: "Velammal Engineering College",
       location: "Chennai, India",
       graduationDate: "2023 – 2027",
-      gpa: "CGPA: 8.37",
+      gpa: "CGPA: 8.35",
       scores: "Class XII & Class X: Velammal Vidhyashram, Surapet",
       relevantCourses: [
         "NPTEL – Programming in Modern C++",
@@ -210,7 +210,7 @@ export const resumeData = {
     {
       tag: "velammal",
       title: "B.E. CSE at Velammal Engineering College",
-      text: "Maintaining an 8.37 CGPA while diving deep into systems programming, competitive code, and algorithms.",
+      text: "Maintaining an 8.35 CGPA while diving deep into systems programming, competitive code, and algorithms.",
       icon: "graduation-cap"
     },
     {
